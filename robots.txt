@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://danieleyny.github.io/cyra-management/sitemap.xml
