@@ -11,6 +11,13 @@
   const residenceGrid = document.querySelector("#residence-grid");
   const residenceDialog = document.querySelector("#residence-dialog");
   const form = document.querySelector("#contact-form");
+  const residenceThumbnail = (source) => source.replace(/\.webp$/, "-900.webp");
+  const residenceImageCache = residences.map((residence) => {
+    const image = new Image();
+    image.decoding = "async";
+    image.src = residenceThumbnail(residence.image);
+    return image;
+  });
   let lastFocused = null;
 
   const setContactLinks = () => {
@@ -31,15 +38,13 @@
 
   const createResidenceCard = (residence, index) => {
     const article = document.createElement("article");
-    const smallImage = residence.image.replace(/\.webp$/, "-900.webp");
-    const imageWidth = residence.width || 1800;
-    const imageHeight = residence.height || 1331;
+    const thumbnail = residenceThumbnail(residence.image);
     article.className = `residence-card residence-card--${index + 1} reveal`;
     article.style.setProperty("--card-index", index);
     article.innerHTML = `
       <button class="residence-card__button" type="button" data-residence-id="${residence.id}" aria-label="View details for ${residence.address}">
         <span class="residence-card__image-wrap">
-          <img src="${residence.image}" srcset="${smallImage} 900w, ${residence.image} ${imageWidth}w" sizes="(max-width: 620px) 100vw, (max-width: 1020px) 68vw, 58vw" width="${imageWidth}" height="${imageHeight}" alt="${residence.alt}" loading="lazy" decoding="async" draggable="false">
+          <img src="${thumbnail}" width="900" height="666" alt="${residence.alt}" loading="eager" decoding="async" draggable="false">
           <span class="residence-card__index" aria-hidden="true">${String(index + 1).padStart(2, "0")}</span>
           <span class="residence-card__arrow" aria-hidden="true">↗</span>
         </span>
@@ -48,6 +53,9 @@
           <span class="residence-card__location">${residence.location}</span>
         </span>
       </button>`;
+    article.querySelector("img")?.addEventListener("error", (event) => {
+      event.currentTarget.src = residence.image;
+    }, { once: true });
     return article;
   };
 
