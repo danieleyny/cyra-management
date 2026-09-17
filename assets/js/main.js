@@ -35,10 +35,12 @@
     const imageWidth = residence.width || 1800;
     const imageHeight = residence.height || 1331;
     article.className = `residence-card residence-card--${index + 1} reveal`;
+    article.style.setProperty("--card-index", index);
     article.innerHTML = `
       <button class="residence-card__button" type="button" data-residence-id="${residence.id}" aria-label="View details for ${residence.address}">
         <span class="residence-card__image-wrap">
-          <img src="${residence.image}" srcset="${smallImage} 900w, ${residence.image} ${imageWidth}w" sizes="(max-width: 620px) 100vw, (max-width: 1020px) 68vw, 58vw" width="${imageWidth}" height="${imageHeight}" alt="${residence.alt}" loading="lazy" decoding="async">
+          <img src="${residence.image}" srcset="${smallImage} 900w, ${residence.image} ${imageWidth}w" sizes="(max-width: 620px) 100vw, (max-width: 1020px) 68vw, 58vw" width="${imageWidth}" height="${imageHeight}" alt="${residence.alt}" loading="lazy" decoding="async" draggable="false">
+          <span class="residence-card__index" aria-hidden="true">${String(index + 1).padStart(2, "0")}</span>
           <span class="residence-card__arrow" aria-hidden="true">↗</span>
         </span>
         <span class="residence-card__meta">
@@ -140,6 +142,86 @@
     items.forEach((item) => observer.observe(item));
   };
 
+  const setupHeroMotion = () => {
+    const hero = document.querySelector("[data-hero]");
+    const stage = document.querySelector("[data-hero-stage]");
+    if (!hero || !stage || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    let frame = 0;
+    const updatePointer = (event) => {
+      const rect = hero.getBoundingClientRect();
+      const x = Math.max(0, Math.min(1, (event.clientX - rect.left) / rect.width));
+      const y = Math.max(0, Math.min(1, (event.clientY - rect.top) / rect.height));
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(() => {
+        hero.style.setProperty("--pointer-x", `${x * 100}%`);
+        hero.style.setProperty("--pointer-y", `${y * 100}%`);
+        stage.style.setProperty("--tilt-x", `${(0.5 - y) * 4}deg`);
+        stage.style.setProperty("--tilt-y", `${(x - 0.5) * 5}deg`);
+      });
+    };
+
+    hero.addEventListener("pointermove", updatePointer, { passive: true });
+    hero.addEventListener("pointerleave", () => {
+      stage.style.setProperty("--tilt-x", "0deg");
+      stage.style.setProperty("--tilt-y", "0deg");
+    });
+  };
+
+  const setupResidenceRail = () => {
+    const rail = document.querySelector("#residence-grid");
+    const previous = document.querySelector("[data-residence-prev]");
+    const next = document.querySelector("[data-residence-next]");
+    const progress = document.querySelector("[data-residence-progress]");
+    const current = document.querySelector("[data-residence-current]");
+    if (!rail) return;
+
+    const move = (direction) => {
+      const card = rail.querySelector(".residence-card");
+      const distance = (card?.getBoundingClientRect().width || rail.clientWidth * .8) + 28;
+      rail.scrollBy({ left: direction * distance, behavior: "smooth" });
+    };
+
+    const update = () => {
+      const max = rail.scrollWidth - rail.clientWidth;
+      const ratio = max > 0 ? rail.scrollLeft / max : 0;
+      if (progress) progress.style.transform = `scaleX(${Math.max(.08, ratio)})`;
+      const cards = [...rail.querySelectorAll(".residence-card")];
+      if (current && cards.length) {
+        const railLeft = rail.getBoundingClientRect().left;
+        let closest = 0;
+        let distance = Infinity;
+        cards.forEach((card, index) => {
+          const value = Math.abs(card.getBoundingClientRect().left - railLeft);
+          if (value < distance) { distance = value; closest = index; }
+        });
+        current.textContent = String(closest + 1).padStart(2, "0");
+      }
+    };
+
+    previous?.addEventListener("click", () => move(-1));
+    next?.addEventListener("click", () => move(1));
+    rail.addEventListener("scroll", () => requestAnimationFrame(update), { passive: true });
+    window.addEventListener("resize", () => requestAnimationFrame(update), { passive: true });
+    update();
+  };
+
+  const setupPageAtmosphere = () => {
+    const progress = document.querySelector("[data-page-progress]");
+    let scheduled = false;
+    const update = () => {
+      const max = document.documentElement.scrollHeight - window.innerHeight;
+      const ratio = max > 0 ? window.scrollY / max : 0;
+      if (progress) progress.style.transform = `scaleX(${ratio})`;
+      document.documentElement.style.setProperty("--page-scroll", String(ratio));
+      scheduled = false;
+    };
+    window.addEventListener("scroll", () => {
+      if (!scheduled) { scheduled = true; requestAnimationFrame(update); }
+    }, { passive: true });
+    update();
+  };
+
   const clearFieldError = (field) => {
     field.removeAttribute("aria-invalid");
     const error = document.querySelector(`#${field.id}-error`);
@@ -213,6 +295,9 @@
   renderResidences();
   setContactLinks();
   setupReveals();
+  setupHeroMotion();
+  setupResidenceRail();
+  setupPageAtmosphere();
 
   window.addEventListener("scroll", () => header?.classList.toggle("is-scrolled", window.scrollY > 40), { passive: true });
   menuToggle?.addEventListener("click", () => menu?.classList.contains("is-open") ? closeMenu() : openMenu());
