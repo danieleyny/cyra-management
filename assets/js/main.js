@@ -135,6 +135,7 @@
 
   const setupReveals = () => {
     const items = document.querySelectorAll(".reveal");
+    const standardSection = document.querySelector(".brand-intro");
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches || !("IntersectionObserver" in window)) {
       items.forEach((item) => item.classList.add("is-visible"));
       return;
@@ -148,6 +149,15 @@
       });
     }, { rootMargin: "0px 0px -8%", threshold: 0.12 });
     items.forEach((item) => observer.observe(item));
+
+    if (standardSection) {
+      const motionObserver = new IntersectionObserver(([entry]) => {
+        if (!entry.isIntersecting) return;
+        standardSection.classList.add("is-motion-live");
+        motionObserver.disconnect();
+      }, { rootMargin: "0px 0px 28%", threshold: 0.02 });
+      motionObserver.observe(standardSection);
+    }
   };
 
   const setupHeroMotion = () => {
