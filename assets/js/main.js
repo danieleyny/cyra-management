@@ -201,6 +201,12 @@
 
     previous?.addEventListener("click", () => move(-1));
     next?.addEventListener("click", () => move(1));
+    rail.addEventListener("wheel", (event) => {
+      if (event.ctrlKey || Math.abs(event.deltaY) <= Math.abs(event.deltaX)) return;
+      const unit = event.deltaMode === 1 ? 16 : event.deltaMode === 2 ? window.innerHeight : 1;
+      event.preventDefault();
+      window.scrollBy({ top: event.deltaY * unit, left: 0, behavior: "auto" });
+    }, { passive: false });
     rail.addEventListener("scroll", () => requestAnimationFrame(update), { passive: true });
     window.addEventListener("resize", () => requestAnimationFrame(update), { passive: true });
     update();
