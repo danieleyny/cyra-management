@@ -315,8 +315,9 @@ a { color: inherit; text-decoration: none; }
 }
 
 .button--sun { color: var(--ink); background: var(--sun-light); }
-.button--sun span { font-size: 1rem; transition: transform .3s var(--ease); }
-.button--sun:hover span { transform: translate(3px, 3px); }
+.button--sun .icon { transition: transform .3s var(--ease); }
+.button--sun:hover .icon--arrow-down-right { transform: translate(3px, 3px); }
+.button--sun:hover .icon--arrow-up-right { transform: translate(3px, -3px); }
 
 .text-link {
   display: inline-flex;
@@ -328,8 +329,11 @@ a { color: inherit; text-decoration: none; }
   text-transform: uppercase;
 }
 
-.text-link span { color: var(--sun-light); transition: transform .3s var(--ease); }
-.text-link:hover span { transform: translateX(4px); }
+.text-link .icon { color: var(--sun-light); transition: transform .3s var(--ease); }
+.text-link:hover .icon { transform: translateX(4px); }
+
+.icon { display: block; width: 1rem; height: 1rem; flex: 0 0 auto; overflow: visible; }
+.icon path { fill: none; stroke: currentColor; stroke-width: 1.45; stroke-linecap: round; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
 
 .hero__image-wrap { position: relative; min-width: 0; margin: 0; overflow: hidden; }
 
@@ -842,7 +846,7 @@ a { color: inherit; text-decoration: none; }
   color: var(--ivory);
   background: var(--ink);
 }
-.legal-back { font-size: .7rem; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; }
+.legal-back { display: inline-flex; gap: .55rem; align-items: center; font-size: .7rem; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; }
 .legal-main { width: min(100%, 62rem); margin: 0 auto; padding: clamp(6rem, 11vw, 10rem) var(--page-pad); }
 .legal-main .eyebrow { margin-bottom: 1.2rem; }
 .legal-main .eyebrow { color: #744b17; }
@@ -999,7 +1003,7 @@ a { color: inherit; text-decoration: none; }
 
 .hero__ticker { position: absolute; z-index: 4; right: 0; bottom: 0; left: 0; padding: .86rem 0; overflow: hidden; color: rgba(242,239,232,.48); border-top: 1px solid rgba(255,255,255,.12); background: rgba(7,16,24,.42); font-size: .62rem; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; backdrop-filter: blur(12px); }
 .hero__ticker div { display: flex; width: max-content; gap: 2.2rem; align-items: center; animation: ticker 25s linear infinite; }
-.hero__ticker i { color: var(--peach); font-size: .55rem; font-style: normal; }
+.hero__ticker i { display: block; width: .3rem; aspect-ratio: 1; flex: 0 0 auto; background: var(--peach); transform: rotate(45deg); }
 .scroll-cue { bottom: 3.9rem; }
 
 @keyframes beam-drift { to { transform: translate3d(-5rem, 2rem, 0) rotate(27deg) scale(1.08); } }

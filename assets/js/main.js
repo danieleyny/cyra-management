@@ -429,7 +429,7 @@
         <span class="residence-card__image-wrap">
           <img src="${thumbnail}" width="900" height="666" alt="${residence.alt}" loading="eager" decoding="async" draggable="false">
           <span class="residence-card__index" aria-hidden="true">${String(index + 1).padStart(2, "0")}</span>
-          <span class="residence-card__arrow" aria-hidden="true">↗</span>
+          <span class="residence-card__arrow" aria-hidden="true"><svg class="icon icon--arrow-up-right" viewBox="0 0 16 16"><path d="M3 13L13 3M7 3h6v6"/></svg></span>
         </span>
         <span class="residence-card__meta">
           <span><small>${residence.region}</small><strong>${residence.address}</strong></span>
