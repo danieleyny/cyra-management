@@ -20,6 +20,41 @@
   });
   let lastFocused = null;
 
+  const setupSiteIntro = () => {
+    const intro = document.querySelector("[data-site-intro]");
+    const root = document.documentElement;
+    if (!intro || !root.classList.contains("intro-pending")) {
+      intro?.remove();
+      return;
+    }
+
+    let finished = false;
+    const finish = () => {
+      if (finished) return;
+      finished = true;
+      try { sessionStorage.setItem("cyra-intro-v1", "seen"); } catch (error) { /* Storage may be unavailable. */ }
+      intro.classList.add("is-exiting");
+      root.classList.remove("intro-pending");
+      root.classList.add("intro-revealing");
+      window.setTimeout(() => {
+        intro.remove();
+        root.classList.remove("intro-revealing");
+      }, 1100);
+    };
+
+    const heroArt = document.querySelector(".hero-art__image");
+    const artReady = !heroArt || heroArt.complete
+      ? Promise.resolve()
+      : new Promise((resolve) => {
+          heroArt.addEventListener("load", resolve, { once: true });
+          heroArt.addEventListener("error", resolve, { once: true });
+        });
+    const minimumPlaytime = new Promise((resolve) => window.setTimeout(resolve, 1450));
+
+    Promise.all([minimumPlaytime, artReady]).then(finish);
+    window.setTimeout(finish, 2800);
+  };
+
   const setContactLinks = () => {
     if (!config) return;
     document.querySelectorAll("[data-contact-email]").forEach((link) => {
@@ -316,6 +351,7 @@
     }
   };
 
+  setupSiteIntro();
   renderResidences();
   setContactLinks();
   setupReveals();
