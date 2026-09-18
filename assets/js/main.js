@@ -666,7 +666,7 @@
     const status = form.querySelector("[data-form-status]");
     const submitButton = form.querySelector("button[type='submit']");
     if (!validateForm()) {
-      status.textContent = "Please review the highlighted fields.";
+      status.textContent = "Please check the highlighted fields.";
       status.dataset.state = "error";
       return;
     }
@@ -690,10 +690,10 @@
       });
       if (!response.ok) throw new Error("Submission failed");
       form.reset();
-      status.textContent = "Thank you. Your message has been sent to Cyra Management.";
+      status.textContent = "Thanks—your message has been sent.";
       status.dataset.state = "success";
     } catch (error) {
-      status.textContent = `We could not send your message. Your details are still here; please try again or email ${config.contact.email}.`;
+      status.textContent = `We couldn’t send your message. Please try again or email ${config.contact.email}.`;
       status.dataset.state = "error";
     } finally {
       submitButton.disabled = false;
