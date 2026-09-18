@@ -44,20 +44,21 @@
     let sequenceReady = false;
     let artIsReady = false;
     let lasersStarted = false;
+    let blastingStarted = false;
 
     const finish = () => {
       if (finished) return;
       finished = true;
       cancelAnimationFrame(frame);
       window.removeEventListener("resize", resizeCanvas);
-      try { sessionStorage.setItem("cyra-intro-v2", "seen"); } catch (error) { /* Storage may be unavailable. */ }
+      try { sessionStorage.setItem("cyra-intro-v3", "seen"); } catch (error) { /* Storage may be unavailable. */ }
       intro.classList.add("is-exiting");
       root.classList.remove("intro-pending");
       root.classList.add("intro-revealing");
       window.setTimeout(() => {
         intro.remove();
         root.classList.remove("intro-revealing");
-      }, 950);
+      }, 720);
     };
 
     const heroArt = document.querySelector(".hero-art__image");
@@ -101,6 +102,21 @@
       const step = width < 600 ? 2 : 3;
       const paint = [];
       const mist = [];
+      const addMotion = (point) => {
+        const angle = Math.atan2(point.y - centerY, point.x - centerX);
+        const fragment = Math.floor(((angle + Math.PI) / (Math.PI * 2)) * 8);
+        const fragmentAngle = ((fragment + .5) / 8) * Math.PI * 2 - Math.PI;
+        const blastAngle = angle + (Math.random() - .5) * .72;
+        const blastDistance = Math.max(width, height) * (.24 + Math.random() * .56);
+        return {
+          ...point,
+          sliceX: Math.cos(fragmentAngle) * (6 + Math.random() * 7),
+          sliceY: Math.sin(fragmentAngle) * (6 + Math.random() * 7),
+          blastX: Math.cos(blastAngle) * blastDistance,
+          blastY: Math.sin(blastAngle) * blastDistance,
+          trail: Math.random()
+        };
+      };
 
       try {
         const pixels = maskContext.getImageData(left, top, sampleWidth, sampleHeight).data;
@@ -110,24 +126,24 @@
             const xRatio = x / sampleWidth;
             const color = Math.random() < .08 ? 3 : xRatio < .34 ? 0 : xRatio < .68 ? 1 : 2;
             const phase = clamp(xRatio + (Math.random() - .5) * .22);
-            const point = {
+            const point = addMotion({
               x: left + x + (Math.random() - .5) * step * 1.35,
               y: top + y + (Math.random() - .5) * step * 1.35,
               radius: .45 + Math.random() * (width < 600 ? 1.15 : 1.55),
               color,
               phase
-            };
+            });
             paint.push(point);
             if (Math.random() < .075) {
               const angle = Math.random() * Math.PI * 2;
               const distance = 5 + Math.random() * Math.min(32, fontSize * .18);
-              mist.push({
+              mist.push(addMotion({
                 x: point.x + Math.cos(angle) * distance,
                 y: point.y + Math.sin(angle) * distance,
                 radius: .25 + Math.random() * .75,
                 color,
                 phase: clamp(phase + (Math.random() - .5) * .08)
-              });
+              }));
             }
           }
         }
@@ -154,19 +170,26 @@
       buildPaintMap();
     };
 
-    const drawPaint = (progress) => {
+    const drawPaint = (progress, sliceProgress, blastProgress) => {
       if (!context || !particles.length) return;
       const palette = ["#ff9e74", "#b98cff", "#66e6db", "#fff6ed"];
       const paintProgress = easeOut(progress);
+      const sliceAmount = easeOut(sliceProgress) * (1 - blastProgress);
+      const blastAmount = Math.pow(easeOut(blastProgress), 1.12);
+      const blastAlpha = Math.pow(1 - blastProgress, 1.55);
+      const positionPoint = (point) => ({
+        x: point.x + point.sliceX * sliceAmount + point.blastX * blastAmount,
+        y: point.y + point.sliceY * sliceAmount + point.blastY * blastAmount
+      });
       context.save();
       context.globalCompositeOperation = "lighter";
 
-      if (paintProgress > .5) {
+      if (paintProgress > .5 && blastProgress <= 0) {
         const gradient = context.createLinearGradient(textStyle.left, 0, textStyle.right, 0);
         gradient.addColorStop(0, palette[0]);
         gradient.addColorStop(.52, palette[1]);
         gradient.addColorStop(1, palette[2]);
-        context.globalAlpha = clamp((paintProgress - .5) * .3, 0, .15);
+        context.globalAlpha = clamp((paintProgress - .5) * .3, 0, .15) * (1 - sliceAmount);
         context.font = textStyle.font;
         context.textAlign = "center";
         context.textBaseline = "middle";
@@ -175,27 +198,46 @@
       }
 
       palette.forEach((color, colorIndex) => {
+        if (blastProgress > 0) {
+          context.beginPath();
+          particles.forEach((point) => {
+            if (point.phase > paintProgress || point.color !== colorIndex || point.trail > .13) return;
+            const position = positionPoint(point);
+            context.moveTo(position.x - point.blastX * blastAmount * .035, position.y - point.blastY * blastAmount * .035);
+            context.lineTo(position.x, position.y);
+          });
+          context.lineWidth = width < 600 ? .7 : 1;
+          context.strokeStyle = color;
+          context.globalAlpha = .38 * blastAlpha;
+          context.shadowColor = color;
+          context.shadowBlur = 10;
+          context.stroke();
+        }
+
         context.beginPath();
         particles.forEach((point) => {
           if (point.phase > paintProgress || point.color !== colorIndex) return;
-          context.moveTo(point.x + point.radius, point.y);
-          context.arc(point.x, point.y, point.radius, 0, Math.PI * 2);
+          const position = positionPoint(point);
+          const radius = point.radius * (1 + blastAmount * .7);
+          context.moveTo(position.x + radius, position.y);
+          context.arc(position.x, position.y, radius, 0, Math.PI * 2);
         });
-        context.globalAlpha = colorIndex === 3 ? .82 : .72;
+        context.globalAlpha = (colorIndex === 3 ? .82 : .72) * blastAlpha;
         context.fillStyle = color;
         context.fill();
 
         context.beginPath();
         overspray.forEach((point) => {
           if (point.phase > paintProgress || point.color !== colorIndex) return;
-          context.moveTo(point.x + point.radius, point.y);
-          context.arc(point.x, point.y, point.radius, 0, Math.PI * 2);
+          const position = positionPoint(point);
+          context.moveTo(position.x + point.radius, position.y);
+          context.arc(position.x, position.y, point.radius, 0, Math.PI * 2);
         });
-        context.globalAlpha = .28;
+        context.globalAlpha = .28 * blastAlpha;
         context.fill();
       });
 
-      if (paintProgress < .98) {
+      if (paintProgress < .98 && sliceProgress <= 0 && blastProgress <= 0) {
         const nozzleX = textStyle.left + (textStyle.right - textStyle.left) * paintProgress;
         const nozzleY = textStyle.centerY + Math.sin(paintProgress * Math.PI * 5) * textStyle.fontSize * .08;
         const cloud = context.createRadialGradient(nozzleX, nozzleY, 0, nozzleX, nozzleY, textStyle.fontSize * .26);
@@ -216,6 +258,27 @@
         [.82, -.08, .25, 1.08], [-.08, .43, 1.08, .61], [.48, -.08, .58, 1.08], [1.08, .28, -.08, .72]
       ];
       const colors = ["#ff9e74", "#66e6db", "#b98cff"];
+
+      context.save();
+      context.globalCompositeOperation = "destination-out";
+      context.lineCap = "round";
+      beams.forEach((beam, index) => {
+        const local = clamp((progress - index * .065) / .58);
+        if (local <= .08) return;
+        const cutHead = easeOut(clamp((local - .08) / .52));
+        const startX = beam[0] * width;
+        const startY = beam[1] * height;
+        const endX = beam[2] * width;
+        const endY = beam[3] * height;
+        context.beginPath();
+        context.moveTo(startX, startY);
+        context.lineTo(startX + (endX - startX) * cutHead, startY + (endY - startY) * cutHead);
+        context.lineWidth = width < 600 ? 3.5 : 6;
+        context.strokeStyle = "rgba(0,0,0,.96)";
+        context.stroke();
+      });
+      context.restore();
+
       context.save();
       context.globalCompositeOperation = "lighter";
       beams.forEach((beam, index) => {
@@ -266,18 +329,57 @@
       context.restore();
     };
 
+    const drawExplosion = (progress) => {
+      if (!context || progress <= 0) return;
+      const blast = easeOut(progress);
+      const radius = Math.min(width, height);
+      context.save();
+      context.globalCompositeOperation = "lighter";
+
+      const flareAlpha = Math.pow(1 - progress, 2);
+      const flare = context.createRadialGradient(width / 2, height / 2, 0, width / 2, height / 2, radius * (.08 + blast * .34));
+      flare.addColorStop(0, `rgba(255,255,255,${.94 * flareAlpha})`);
+      flare.addColorStop(.08, `rgba(224,199,255,${.72 * flareAlpha})`);
+      flare.addColorStop(.34, `rgba(102,230,219,${.3 * flareAlpha})`);
+      flare.addColorStop(1, "rgba(255,158,116,0)");
+      context.fillStyle = flare;
+      context.fillRect(0, 0, width, height);
+
+      context.beginPath();
+      context.arc(width / 2, height / 2, radius * blast * .58, 0, Math.PI * 2);
+      context.lineWidth = width < 600 ? 1.5 : 2.5;
+      context.strokeStyle = `rgba(255,255,255,${.72 * (1 - progress)})`;
+      context.shadowColor = "#b98cff";
+      context.shadowBlur = 28;
+      context.stroke();
+
+      context.beginPath();
+      context.arc(width / 2, height / 2, radius * blast * .42, 0, Math.PI * 2);
+      context.lineWidth = 1;
+      context.strokeStyle = `rgba(102,230,219,${.55 * (1 - progress)})`;
+      context.stroke();
+      context.restore();
+    };
+
     const drawFrame = (time) => {
       if (!context || finished) return;
       const elapsed = time - startedAt;
       context.clearRect(0, 0, width, height);
-      drawPaint(clamp((elapsed - 80) / 1500));
-      const laserProgress = clamp((elapsed - 1420) / 900);
+      const laserProgress = clamp((elapsed - 1350) / 820);
+      const sliceProgress = clamp((elapsed - 1530) / 600);
+      const blastProgress = clamp((elapsed - 2150) / 720);
+      drawPaint(clamp((elapsed - 80) / 1500), sliceProgress, blastProgress);
       if (laserProgress > 0 && !lasersStarted) {
         lasersStarted = true;
         intro.classList.add("is-laser-live");
       }
       drawLasers(laserProgress);
-      if (elapsed >= 2420 && !sequenceReady) {
+      if (blastProgress > 0 && !blastingStarted) {
+        blastingStarted = true;
+        intro.classList.add("is-blasting");
+      }
+      drawExplosion(blastProgress);
+      if (elapsed >= 2870 && !sequenceReady) {
         sequenceReady = true;
         maybeFinish();
       }
@@ -298,7 +400,7 @@
 
     const fontReady = document.fonts?.ready || Promise.resolve();
     Promise.race([fontReady, new Promise((resolve) => window.setTimeout(resolve, 240))]).then(startAnimation);
-    window.setTimeout(finish, 3400);
+    window.setTimeout(finish, 3800);
   };
 
   const setContactLinks = () => {

@@ -25,7 +25,7 @@
           const forceIntro = new URLSearchParams(location.search).has("intro");
           const isHomeEntry = !location.hash || location.hash === "#top";
           const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
-          if (isHomeEntry && !reduceMotion && (forceIntro || !sessionStorage.getItem("cyra-intro-v2"))) {
+          if (isHomeEntry && !reduceMotion && (forceIntro || !sessionStorage.getItem("cyra-intro-v3"))) {
             document.documentElement.classList.add("intro-pending");
             setTimeout(() => document.documentElement.classList.remove("intro-pending"), 4500);
           }
@@ -34,13 +34,14 @@
         }
       })();
     </script>
-    <link rel="stylesheet" href="./assets/css/styles.css?v=20260918-3">
+    <link rel="stylesheet" href="./assets/css/styles.css?v=20260918-4">
   </head>
   <body>
     <div class="site-intro" data-site-intro aria-hidden="true">
       <canvas class="site-intro__canvas" data-intro-canvas></canvas>
       <strong class="site-intro__fallback">CYRA</strong>
       <i class="site-intro__laser-flash"></i>
+      <i class="site-intro__blast"></i>
     </div>
 
     <a class="skip-link" href="#main-content">Skip to content</a>
@@ -390,6 +391,6 @@
     </script>
     <script src="./assets/js/config.js"></script>
     <script src="./assets/js/data.js?v=20260918-1"></script>
-    <script src="./assets/js/main.js?v=20260918-3"></script>
+    <script src="./assets/js/main.js?v=20260918-4"></script>
   </body>
 </html>

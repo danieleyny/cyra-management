@@ -66,7 +66,7 @@ html.intro-pending { overflow: hidden; }
 
 .intro-pending .site-intro,
 .site-intro.is-exiting { display: grid; }
-.site-intro.is-exiting { animation: intro-laser-open .9s cubic-bezier(.76,0,.24,1) forwards; }
+.site-intro.is-exiting { animation: intro-blast-open .68s var(--ease) forwards; }
 
 .site-intro::before {
   content: "";
@@ -98,7 +98,9 @@ html.intro-pending { overflow: hidden; }
 .site-intro.is-canvas-ready .site-intro__fallback { opacity: 0; }
 .site-intro__laser-flash { position: absolute; z-index: 3; top: 50%; right: -10%; left: -10%; height: 2px; background: linear-gradient(90deg,transparent,#ffb38e 18%,#fff 50%,#71f3e7 82%,transparent); box-shadow: 0 0 1rem rgba(255,255,255,.9),0 0 3rem rgba(164,139,255,.85); opacity: 0; transform: scaleX(0); }
 .site-intro.is-laser-live .site-intro__laser-flash { animation: intro-laser-flash .68s .18s var(--ease) both; }
-.site-intro.is-exiting .site-intro__laser-flash { animation: intro-laser-cut .9s cubic-bezier(.76,0,.24,1) both; }
+.site-intro.is-exiting .site-intro__laser-flash { animation: intro-laser-cut .68s var(--ease) both; }
+.site-intro__blast { position: absolute; z-index: 4; top: 50%; left: 50%; display: block; width: min(20rem,35vw); aspect-ratio: 1; border: 1px solid rgba(255,255,255,.92); border-radius: 50%; background: radial-gradient(circle,rgba(255,255,255,.98) 0 3%,rgba(211,181,255,.72) 8%,rgba(102,230,219,.3) 21%,rgba(255,158,116,.14) 38%,transparent 68%); box-shadow: 0 0 4rem rgba(255,255,255,.8),0 0 9rem rgba(164,139,255,.68); opacity: 0; transform: translate(-50%,-50%) scale(.06); }
+.site-intro.is-blasting .site-intro__blast { animation: intro-blast-wave .78s cubic-bezier(.16,.84,.31,1) both; }
 
 .intro-pending .hero *,
 .intro-pending .site-header * { animation-play-state: paused !important; }
@@ -106,8 +108,9 @@ html.intro-pending { overflow: hidden; }
 .intro-revealing .site-header { animation: intro-header-in .85s .22s both var(--ease); }
 
 @keyframes intro-laser-flash { 0% { opacity: 0; transform: scaleX(0); } 45% { opacity: 1; transform: scaleX(1); } 100% { opacity: .14; transform: translateX(22%) scaleX(.48); } }
-@keyframes intro-laser-cut { 0% { opacity: .25; transform: scaleX(.5); } 35% { height: 3px; opacity: 1; transform: scaleX(1); } 100% { height: 34vh; opacity: 0; transform: scaleX(1.08); } }
-@keyframes intro-laser-open { 0% { opacity: 1; clip-path: inset(0 0 0 0); } 58% { opacity: 1; } 100% { opacity: 0; clip-path: inset(50% 0 50% 0); } }
+@keyframes intro-laser-cut { 0% { opacity: .22; transform: scaleX(.48); } 32% { opacity: .85; transform: scaleX(1.12); } 100% { opacity: 0; transform: scaleX(1.55); } }
+@keyframes intro-blast-wave { 0% { opacity: 0; transform: translate(-50%,-50%) scale(.06); } 16% { opacity: 1; } 58% { opacity: .68; } 100% { opacity: 0; transform: translate(-50%,-50%) scale(8); } }
+@keyframes intro-blast-open { 0% { opacity: 1; transform: scale(1); filter: brightness(1); } 24% { opacity: 1; filter: brightness(1.8); } 100% { opacity: 0; transform: scale(1.08); filter: brightness(1.2); } }
 @keyframes intro-header-in { from { opacity: 0; transform: translateY(-1rem); } to { opacity: 1; transform: translateY(0); } }
 
 a { color: inherit; text-decoration: none; }
