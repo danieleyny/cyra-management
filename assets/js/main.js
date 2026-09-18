@@ -28,18 +28,36 @@
       return;
     }
 
+    const canvas = intro.querySelector("[data-intro-canvas]");
+    const context = canvas?.getContext("2d", { alpha: true });
+    const clamp = (value, min = 0, max = 1) => Math.min(max, Math.max(min, value));
+    const easeOut = (value) => 1 - Math.pow(1 - clamp(value), 3);
     let finished = false;
+    let frame = 0;
+    let startedAt = 0;
+    let width = 0;
+    let height = 0;
+    let pixelRatio = 1;
+    let particles = [];
+    let overspray = [];
+    let textStyle = {};
+    let sequenceReady = false;
+    let artIsReady = false;
+    let lasersStarted = false;
+
     const finish = () => {
       if (finished) return;
       finished = true;
-      try { sessionStorage.setItem("cyra-intro-v1", "seen"); } catch (error) { /* Storage may be unavailable. */ }
+      cancelAnimationFrame(frame);
+      window.removeEventListener("resize", resizeCanvas);
+      try { sessionStorage.setItem("cyra-intro-v2", "seen"); } catch (error) { /* Storage may be unavailable. */ }
       intro.classList.add("is-exiting");
       root.classList.remove("intro-pending");
       root.classList.add("intro-revealing");
       window.setTimeout(() => {
         intro.remove();
         root.classList.remove("intro-revealing");
-      }, 1100);
+      }, 950);
     };
 
     const heroArt = document.querySelector(".hero-art__image");
@@ -49,10 +67,238 @@
           heroArt.addEventListener("load", resolve, { once: true });
           heroArt.addEventListener("error", resolve, { once: true });
         });
-    const minimumPlaytime = new Promise((resolve) => window.setTimeout(resolve, 1450));
+    const maybeFinish = () => {
+      if (sequenceReady && artIsReady) finish();
+    };
+    artReady.then(() => {
+      artIsReady = true;
+      maybeFinish();
+    });
 
-    Promise.all([minimumPlaytime, artReady]).then(finish);
-    window.setTimeout(finish, 2800);
+    const buildPaintMap = () => {
+      if (!context) return;
+      const mask = document.createElement("canvas");
+      mask.width = Math.max(1, Math.round(width));
+      mask.height = Math.max(1, Math.round(height));
+      const maskContext = mask.getContext("2d", { willReadFrequently: true });
+      if (!maskContext) return;
+
+      const fontSize = Math.min(width < 600 ? width * .285 : width * .19, height * .32, 250);
+      const font = `700 ${fontSize}px Manrope, Arial, sans-serif`;
+      const centerX = width / 2;
+      const centerY = height * .5;
+      maskContext.font = font;
+      maskContext.textAlign = "center";
+      maskContext.textBaseline = "middle";
+      maskContext.fillStyle = "#fff";
+      maskContext.fillText("CYRA", centerX, centerY);
+
+      const measuredWidth = maskContext.measureText("CYRA").width;
+      const left = Math.max(0, Math.floor(centerX - measuredWidth / 2 - fontSize * .08));
+      const top = Math.max(0, Math.floor(centerY - fontSize * .62));
+      const sampleWidth = Math.min(mask.width - left, Math.ceil(measuredWidth + fontSize * .16));
+      const sampleHeight = Math.min(mask.height - top, Math.ceil(fontSize * 1.24));
+      const step = width < 600 ? 2 : 3;
+      const paint = [];
+      const mist = [];
+
+      try {
+        const pixels = maskContext.getImageData(left, top, sampleWidth, sampleHeight).data;
+        for (let y = 0; y < sampleHeight; y += step) {
+          for (let x = 0; x < sampleWidth; x += step) {
+            if (pixels[((y * sampleWidth + x) * 4) + 3] < 72 || Math.random() < .22) continue;
+            const xRatio = x / sampleWidth;
+            const color = Math.random() < .08 ? 3 : xRatio < .34 ? 0 : xRatio < .68 ? 1 : 2;
+            const phase = clamp(xRatio + (Math.random() - .5) * .22);
+            const point = {
+              x: left + x + (Math.random() - .5) * step * 1.35,
+              y: top + y + (Math.random() - .5) * step * 1.35,
+              radius: .45 + Math.random() * (width < 600 ? 1.15 : 1.55),
+              color,
+              phase
+            };
+            paint.push(point);
+            if (Math.random() < .075) {
+              const angle = Math.random() * Math.PI * 2;
+              const distance = 5 + Math.random() * Math.min(32, fontSize * .18);
+              mist.push({
+                x: point.x + Math.cos(angle) * distance,
+                y: point.y + Math.sin(angle) * distance,
+                radius: .25 + Math.random() * .75,
+                color,
+                phase: clamp(phase + (Math.random() - .5) * .08)
+              });
+            }
+          }
+        }
+      } catch (error) {
+        particles = [];
+        overspray = [];
+        return;
+      }
+
+      particles = paint.sort((a, b) => a.phase - b.phase).slice(0, 18000);
+      overspray = mist.sort((a, b) => a.phase - b.phase).slice(0, 1800);
+      textStyle = { centerX, centerY, font, left, right: left + sampleWidth, fontSize };
+      if (particles.length) intro.classList.add("is-canvas-ready");
+    };
+
+    const resizeCanvas = () => {
+      if (!canvas || !context) return;
+      width = window.innerWidth;
+      height = window.innerHeight;
+      pixelRatio = Math.min(window.devicePixelRatio || 1, 1.5);
+      canvas.width = Math.round(width * pixelRatio);
+      canvas.height = Math.round(height * pixelRatio);
+      context.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
+      buildPaintMap();
+    };
+
+    const drawPaint = (progress) => {
+      if (!context || !particles.length) return;
+      const palette = ["#ff9e74", "#b98cff", "#66e6db", "#fff6ed"];
+      const paintProgress = easeOut(progress);
+      context.save();
+      context.globalCompositeOperation = "lighter";
+
+      if (paintProgress > .5) {
+        const gradient = context.createLinearGradient(textStyle.left, 0, textStyle.right, 0);
+        gradient.addColorStop(0, palette[0]);
+        gradient.addColorStop(.52, palette[1]);
+        gradient.addColorStop(1, palette[2]);
+        context.globalAlpha = clamp((paintProgress - .5) * .3, 0, .15);
+        context.font = textStyle.font;
+        context.textAlign = "center";
+        context.textBaseline = "middle";
+        context.fillStyle = gradient;
+        context.fillText("CYRA", textStyle.centerX, textStyle.centerY);
+      }
+
+      palette.forEach((color, colorIndex) => {
+        context.beginPath();
+        particles.forEach((point) => {
+          if (point.phase > paintProgress || point.color !== colorIndex) return;
+          context.moveTo(point.x + point.radius, point.y);
+          context.arc(point.x, point.y, point.radius, 0, Math.PI * 2);
+        });
+        context.globalAlpha = colorIndex === 3 ? .82 : .72;
+        context.fillStyle = color;
+        context.fill();
+
+        context.beginPath();
+        overspray.forEach((point) => {
+          if (point.phase > paintProgress || point.color !== colorIndex) return;
+          context.moveTo(point.x + point.radius, point.y);
+          context.arc(point.x, point.y, point.radius, 0, Math.PI * 2);
+        });
+        context.globalAlpha = .28;
+        context.fill();
+      });
+
+      if (paintProgress < .98) {
+        const nozzleX = textStyle.left + (textStyle.right - textStyle.left) * paintProgress;
+        const nozzleY = textStyle.centerY + Math.sin(paintProgress * Math.PI * 5) * textStyle.fontSize * .08;
+        const cloud = context.createRadialGradient(nozzleX, nozzleY, 0, nozzleX, nozzleY, textStyle.fontSize * .26);
+        cloud.addColorStop(0, "rgba(255,255,255,.2)");
+        cloud.addColorStop(.28, "rgba(185,140,255,.12)");
+        cloud.addColorStop(1, "rgba(102,230,219,0)");
+        context.globalAlpha = .9;
+        context.fillStyle = cloud;
+        context.fillRect(nozzleX - textStyle.fontSize * .3, nozzleY - textStyle.fontSize * .3, textStyle.fontSize * .6, textStyle.fontSize * .6);
+      }
+      context.restore();
+    };
+
+    const drawLasers = (progress) => {
+      if (!context || progress <= 0) return;
+      const beams = [
+        [-.08, .12, 1.08, .88], [-.08, .84, 1.08, .16], [.16, -.08, .84, 1.08],
+        [.82, -.08, .25, 1.08], [-.08, .43, 1.08, .61], [.48, -.08, .58, 1.08], [1.08, .28, -.08, .72]
+      ];
+      const colors = ["#ff9e74", "#66e6db", "#b98cff"];
+      context.save();
+      context.globalCompositeOperation = "lighter";
+      beams.forEach((beam, index) => {
+        const local = clamp((progress - index * .065) / .58);
+        if (local <= 0 || local >= 1) return;
+        const head = easeOut(local);
+        const tail = easeOut(clamp((local - .28) / .72));
+        const startX = beam[0] * width;
+        const startY = beam[1] * height;
+        const endX = beam[2] * width;
+        const endY = beam[3] * height;
+        const x1 = startX + (endX - startX) * tail;
+        const y1 = startY + (endY - startY) * tail;
+        const x2 = startX + (endX - startX) * head;
+        const y2 = startY + (endY - startY) * head;
+        const color = colors[index % colors.length];
+
+        context.beginPath();
+        context.moveTo(x1, y1);
+        context.lineTo(x2, y2);
+        context.lineWidth = width < 600 ? 2.2 : 3;
+        context.strokeStyle = color;
+        context.shadowColor = color;
+        context.shadowBlur = 24;
+        context.globalAlpha = .82;
+        context.stroke();
+
+        context.beginPath();
+        context.moveTo(x1, y1);
+        context.lineTo(x2, y2);
+        context.lineWidth = .75;
+        context.strokeStyle = "#fff";
+        context.shadowBlur = 8;
+        context.globalAlpha = .9;
+        context.stroke();
+      });
+
+      if (progress > .45 && progress < .95) {
+        const flareStrength = Math.sin(clamp((progress - .45) / .5) * Math.PI);
+        const flare = context.createRadialGradient(width / 2, height / 2, 0, width / 2, height / 2, Math.min(width, height) * .24);
+        flare.addColorStop(0, `rgba(255,255,255,${.28 * flareStrength})`);
+        flare.addColorStop(.18, `rgba(185,140,255,${.2 * flareStrength})`);
+        flare.addColorStop(1, "rgba(102,230,219,0)");
+        context.fillStyle = flare;
+        context.globalAlpha = 1;
+        context.fillRect(0, 0, width, height);
+      }
+      context.restore();
+    };
+
+    const drawFrame = (time) => {
+      if (!context || finished) return;
+      const elapsed = time - startedAt;
+      context.clearRect(0, 0, width, height);
+      drawPaint(clamp((elapsed - 80) / 1500));
+      const laserProgress = clamp((elapsed - 1420) / 900);
+      if (laserProgress > 0 && !lasersStarted) {
+        lasersStarted = true;
+        intro.classList.add("is-laser-live");
+      }
+      drawLasers(laserProgress);
+      if (elapsed >= 2420 && !sequenceReady) {
+        sequenceReady = true;
+        maybeFinish();
+      }
+      frame = requestAnimationFrame(drawFrame);
+    };
+
+    const startAnimation = () => {
+      if (!canvas || !context || finished) {
+        sequenceReady = true;
+        maybeFinish();
+        return;
+      }
+      resizeCanvas();
+      window.addEventListener("resize", resizeCanvas, { passive: true });
+      startedAt = performance.now();
+      frame = requestAnimationFrame(drawFrame);
+    };
+
+    const fontReady = document.fonts?.ready || Promise.resolve();
+    Promise.race([fontReady, new Promise((resolve) => window.setTimeout(resolve, 240))]).then(startAnimation);
+    window.setTimeout(finish, 3400);
   };
 
   const setContactLinks = () => {
