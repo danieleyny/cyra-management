@@ -20,6 +20,69 @@
   });
   let lastFocused = null;
 
+  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const stardustPalette = ["#ffad87", "#c9a8ff", "#72e9df", "#fff8ef"];
+  const createSeededRandom = (seed) => () => {
+    seed = (seed * 1664525 + 1013904223) >>> 0;
+    return seed / 4294967296;
+  };
+
+  const createStardustMap = (width, height) => {
+    const seed = 9167 + Math.round(width / 8) * 31 + Math.round(height / 8) * 17;
+    const random = createSeededRandom(seed);
+    const count = width < 600 ? 54 : 104;
+    const stars = [];
+    for (let index = 0; index < count; index += 1) {
+      const edgeBias = random();
+      const x = edgeBias < .48 ? Math.pow(random(), .72) : 1 - Math.pow(random(), .72);
+      const y = Math.pow(random(), .9);
+      stars.push({
+        x,
+        y,
+        radius: .45 + Math.pow(random(), 2.3) * 1.75,
+        color: Math.floor(random() * stardustPalette.length),
+        phase: random() * Math.PI * 2,
+        speed: .42 + random() * .9,
+        glow: .35 + random() * .65
+      });
+    }
+    return stars;
+  };
+
+  const paintStardust = (context, stars, width, height, time, alpha = 1) => {
+    if (!context || !stars.length || alpha <= 0) return;
+    context.save();
+    context.globalCompositeOperation = "lighter";
+    stars.forEach((star) => {
+      const shimmer = .48 + .52 * Math.pow((Math.sin(time * .001 * star.speed + star.phase) + 1) / 2, 2.6);
+      const opacity = alpha * (.22 + shimmer * .72) * star.glow;
+      const x = star.x * width;
+      const y = star.y * height;
+      const radius = star.radius * (.82 + shimmer * .34);
+      const color = stardustPalette[star.color];
+      context.beginPath();
+      context.arc(x, y, radius, 0, Math.PI * 2);
+      context.fillStyle = color;
+      context.globalAlpha = opacity;
+      context.shadowColor = color;
+      context.shadowBlur = 5 + radius * 6;
+      context.fill();
+      if (star.radius > 1.45 && shimmer > .78) {
+        const ray = radius * (2.5 + shimmer * 2.2);
+        context.beginPath();
+        context.moveTo(x - ray, y);
+        context.lineTo(x + ray, y);
+        context.moveTo(x, y - ray);
+        context.lineTo(x, y + ray);
+        context.lineWidth = .45;
+        context.strokeStyle = color;
+        context.globalAlpha = opacity * .56;
+        context.stroke();
+      }
+    });
+    context.restore();
+  };
+
   const setupSiteIntro = () => {
     const intro = document.querySelector("[data-site-intro]");
     const root = document.documentElement;
@@ -40,6 +103,7 @@
     let pixelRatio = 1;
     let particles = [];
     let overspray = [];
+    let settledStars = [];
     let textStyle = {};
     let sequenceReady = false;
     let artIsReady = false;
@@ -172,6 +236,7 @@
       canvas.height = Math.round(height * pixelRatio);
       context.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
       buildPaintMap();
+      settledStars = createStardustMap(width, height);
     };
 
     const drawPaint = (progress, sliceProgress, blastProgress) => {
@@ -381,6 +446,7 @@
         intro.classList.add("is-blasting");
       }
       drawExplosion(blastProgress);
+      paintStardust(context, settledStars, width, height, time, easeOut(clamp((blastProgress - .12) / .74)) * .72);
       if (elapsed >= 3070 && !sequenceReady) {
         sequenceReady = true;
         maybeFinish();
@@ -516,6 +582,194 @@
       event.preventDefault();
       first.focus();
     }
+  };
+
+  const setupHeroStardust = () => {
+    const hero = document.querySelector("[data-hero]");
+    const canvas = document.querySelector("[data-hero-stardust]");
+    const context = canvas?.getContext("2d", { alpha: true });
+    if (!hero || !canvas || !context) return;
+
+    let width = 0;
+    let height = 0;
+    let stars = [];
+    let frame = 0;
+    let visible = true;
+    let lastDrawn = 0;
+
+    const render = (time = 0) => {
+      frame = 0;
+      if (!visible) return;
+      if (!reducedMotion && time - lastDrawn < 34) {
+        frame = requestAnimationFrame(render);
+        return;
+      }
+      lastDrawn = time;
+      context.clearRect(0, 0, width, height);
+      paintStardust(context, stars, width, height, time, .66);
+      if (!reducedMotion) frame = requestAnimationFrame(render);
+    };
+
+    const resize = () => {
+      const bounds = canvas.getBoundingClientRect();
+      const ratio = Math.min(window.devicePixelRatio || 1, 1.5);
+      width = Math.max(1, bounds.width);
+      height = Math.max(1, bounds.height);
+      canvas.width = Math.round(width * ratio);
+      canvas.height = Math.round(height * ratio);
+      context.setTransform(ratio, 0, 0, ratio, 0, 0);
+      stars = createStardustMap(width, height);
+      if (reducedMotion) render(0);
+    };
+
+    resize();
+    window.addEventListener("resize", resize, { passive: true });
+    if (reducedMotion) return;
+
+    const observer = new IntersectionObserver(([entry]) => {
+      visible = entry.isIntersecting;
+      if (visible && !frame) frame = requestAnimationFrame(render);
+      if (!visible && frame) {
+        cancelAnimationFrame(frame);
+        frame = 0;
+      }
+    }, { threshold: 0 });
+    observer.observe(hero);
+    frame = requestAnimationFrame(render);
+  };
+
+  const setupHeroFlow = () => {
+    const hero = document.querySelector("[data-hero]");
+    const canvas = document.querySelector("[data-hero-flow]");
+    const context = canvas?.getContext("2d", { alpha: true });
+    if (!hero || !canvas || !context) return;
+
+    let width = 0;
+    let height = 0;
+    let frame = 0;
+    let visible = true;
+    let lastDrawn = 0;
+    const colors = ["#ff9e74", "#a48bff", "#66e6db"];
+    const waveY = (x, layer, time) => {
+      const base = height * (.32 + layer * .18);
+      const slow = Math.sin(x * Math.PI * (1.8 + layer * .22) + time * .00018 * (layer % 2 ? -1 : 1) + layer * 1.7);
+      const detail = Math.sin(x * Math.PI * 4.2 - time * .00011 + layer) * .35;
+      return base + (slow + detail) * height * (.1 - layer * .012);
+    };
+
+    const render = (time = 0) => {
+      frame = 0;
+      if (!visible) return;
+      if (!reducedMotion && time - lastDrawn < 34) {
+        frame = requestAnimationFrame(render);
+        return;
+      }
+      lastDrawn = time;
+      context.clearRect(0, 0, width, height);
+      context.save();
+      context.globalCompositeOperation = "lighter";
+
+      for (let layer = 0; layer < 3; layer += 1) {
+        const gradient = context.createLinearGradient(0, 0, width, 0);
+        gradient.addColorStop(0, "rgba(255,158,116,0)");
+        gradient.addColorStop(.2, `${colors[layer]}55`);
+        gradient.addColorStop(.52, `${colors[(layer + 1) % colors.length]}72`);
+        gradient.addColorStop(.8, `${colors[(layer + 2) % colors.length]}48`);
+        gradient.addColorStop(1, "rgba(102,230,219,0)");
+        context.beginPath();
+        for (let x = 0; x <= width; x += 8) {
+          const normalized = x / width;
+          const y = waveY(normalized, layer, time);
+          if (x === 0) context.moveTo(x, y);
+          else context.lineTo(x, y);
+        }
+        context.strokeStyle = gradient;
+        context.lineWidth = layer === 1 ? 1.1 : .7;
+        context.globalAlpha = layer === 1 ? .52 : .34;
+        context.shadowColor = colors[layer];
+        context.shadowBlur = layer === 1 ? 13 : 7;
+        context.stroke();
+      }
+
+      for (let index = 0; index < 11; index += 1) {
+        const layer = index % 3;
+        const progress = ((time / (7300 + layer * 1150)) + index * .137) % 1;
+        const x = progress * width;
+        const y = waveY(progress, layer, time);
+        const pulse = .72 + Math.sin(time * .002 + index) * .28;
+        context.beginPath();
+        context.arc(x, y, .9 + pulse * 1.25, 0, Math.PI * 2);
+        context.fillStyle = colors[layer];
+        context.globalAlpha = .46 + pulse * .38;
+        context.shadowColor = colors[layer];
+        context.shadowBlur = 11 + pulse * 13;
+        context.fill();
+      }
+      context.restore();
+      if (!reducedMotion) frame = requestAnimationFrame(render);
+    };
+
+    const resize = () => {
+      const bounds = canvas.getBoundingClientRect();
+      const ratio = Math.min(window.devicePixelRatio || 1, 1.5);
+      width = Math.max(1, bounds.width);
+      height = Math.max(1, bounds.height);
+      canvas.width = Math.round(width * ratio);
+      canvas.height = Math.round(height * ratio);
+      context.setTransform(ratio, 0, 0, ratio, 0, 0);
+      if (reducedMotion) render(0);
+    };
+
+    resize();
+    window.addEventListener("resize", resize, { passive: true });
+    if (reducedMotion) return;
+
+    const observer = new IntersectionObserver(([entry]) => {
+      visible = entry.isIntersecting;
+      if (visible && !frame) frame = requestAnimationFrame(render);
+      if (!visible && frame) {
+        cancelAnimationFrame(frame);
+        frame = 0;
+      }
+    }, { threshold: 0 });
+    observer.observe(hero);
+    frame = requestAnimationFrame(render);
+  };
+
+  const setupCareConstellation = () => {
+    const constellation = document.querySelector("[data-care-constellation]");
+    const points = [...(constellation?.querySelectorAll("li") || [])];
+    if (!constellation || !points.length || reducedMotion) return;
+
+    let activeIndex = 0;
+    let timer = 0;
+    const activate = (index) => {
+      activeIndex = index;
+      points.forEach((point, pointIndex) => point.classList.toggle("is-active", pointIndex === activeIndex));
+    };
+    const stop = () => {
+      window.clearInterval(timer);
+      timer = 0;
+    };
+    const start = () => {
+      if (timer) return;
+      timer = window.setInterval(() => activate((activeIndex + 1) % points.length), 2200);
+    };
+
+    points.forEach((point, index) => {
+      point.addEventListener("pointerenter", () => {
+        stop();
+        activate(index);
+      });
+      point.addEventListener("pointerleave", start);
+      point.addEventListener("pointerdown", () => activate(index), { passive: true });
+    });
+
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) start();
+      else stop();
+    }, { threshold: .2 });
+    observer.observe(constellation);
   };
 
   const setupReveals = () => {
@@ -704,6 +958,9 @@
   setupSiteIntro();
   renderResidences();
   setContactLinks();
+  setupHeroStardust();
+  setupHeroFlow();
+  setupCareConstellation();
   setupReveals();
   setupHeroMotion();
   setupResidenceRail();
