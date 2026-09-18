@@ -66,7 +66,7 @@ html.intro-pending { overflow: hidden; }
 
 .intro-pending .site-intro,
 .site-intro.is-exiting { display: grid; }
-.site-intro.is-exiting { animation: intro-blast-open .68s var(--ease) forwards; }
+.site-intro.is-exiting { animation: intro-blast-open 1.15s cubic-bezier(.22,.72,.2,1) forwards; will-change: opacity, transform; }
 
 .site-intro::before {
   content: "";
@@ -105,12 +105,14 @@ html.intro-pending { overflow: hidden; }
 .intro-pending .hero *,
 .intro-pending .site-header * { animation-play-state: paused !important; }
 .intro-pending .site-header { opacity: 0; transform: translateY(-1rem); }
-.intro-revealing .site-header { animation: intro-header-in .85s .22s both var(--ease); }
+.intro-revealing .site-header { animation: intro-header-in 1.05s .14s both var(--ease); }
+.intro-revealing .hero { transform-origin: 50% 50%; animation: intro-hero-reveal 1.2s both cubic-bezier(.16,.76,.24,1); }
 
 @keyframes intro-laser-flash { 0% { opacity: 0; transform: scaleX(0); } 45% { opacity: 1; transform: scaleX(1); } 100% { opacity: .14; transform: translateX(22%) scaleX(.48); } }
 @keyframes intro-laser-cut { 0% { opacity: .22; transform: scaleX(.48); } 32% { opacity: .85; transform: scaleX(1.12); } 100% { opacity: 0; transform: scaleX(1.55); } }
 @keyframes intro-blast-wave { 0% { opacity: 0; transform: translate(-50%,-50%) scale(.06); } 16% { opacity: 1; } 58% { opacity: .68; } 100% { opacity: 0; transform: translate(-50%,-50%) scale(8); } }
-@keyframes intro-blast-open { 0% { opacity: 1; transform: scale(1); filter: brightness(1); } 24% { opacity: 1; filter: brightness(1.8); } 100% { opacity: 0; transform: scale(1.08); filter: brightness(1.2); } }
+@keyframes intro-blast-open { 0%,14% { opacity: 1; transform: scale(1); } 42% { opacity: .8; transform: scale(1.012); } 72% { opacity: .34; } 100% { opacity: 0; transform: scale(1.035); } }
+@keyframes intro-hero-reveal { 0% { opacity: .38; transform: scale(1.035); filter: blur(7px) brightness(.68); } 38% { opacity: .72; filter: blur(3px) brightness(.86); } 100% { opacity: 1; transform: scale(1); filter: blur(0) brightness(1); } }
 @keyframes intro-header-in { from { opacity: 0; transform: translateY(-1rem); } to { opacity: 1; transform: translateY(0); } }
 
 a { color: inherit; text-decoration: none; }

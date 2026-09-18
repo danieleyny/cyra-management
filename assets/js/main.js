@@ -51,14 +51,14 @@
       finished = true;
       cancelAnimationFrame(frame);
       window.removeEventListener("resize", resizeCanvas);
-      try { sessionStorage.setItem("cyra-intro-v3", "seen"); } catch (error) { /* Storage may be unavailable. */ }
+      try { sessionStorage.setItem("cyra-intro-v4", "seen"); } catch (error) { /* Storage may be unavailable. */ }
       intro.classList.add("is-exiting");
       root.classList.remove("intro-pending");
       root.classList.add("intro-revealing");
       window.setTimeout(() => {
         intro.remove();
         root.classList.remove("intro-revealing");
-      }, 720);
+      }, 1260);
     };
 
     const heroArt = document.querySelector(".hero-art__image");
