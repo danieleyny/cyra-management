@@ -195,19 +195,6 @@
       context.save();
       context.globalCompositeOperation = "lighter";
 
-      if (paintProgress > .5 && blastProgress <= 0) {
-        const gradient = context.createLinearGradient(textStyle.left, 0, textStyle.right, 0);
-        gradient.addColorStop(0, palette[0]);
-        gradient.addColorStop(.52, palette[1]);
-        gradient.addColorStop(1, palette[2]);
-        context.globalAlpha = clamp((paintProgress - .5) * .3, 0, .15) * (1 - sliceAmount);
-        context.font = textStyle.font;
-        context.textAlign = "center";
-        context.textBaseline = "middle";
-        context.fillStyle = gradient;
-        context.fillText("CYRA", textStyle.centerX, textStyle.centerY);
-      }
-
       palette.forEach((color, colorIndex) => {
         if (blastProgress > 0) {
           context.beginPath();
