@@ -94,6 +94,7 @@ html.intro-pending { overflow: hidden; }
 }
 
 .site-intro__canvas { position: absolute; z-index: 1; inset: 0; display: block; width: 100%; height: 100%; }
+.site-intro.is-slicing .site-intro__canvas { animation: intro-cut-shudder .34s linear both; }
 .site-intro__fallback { position: relative; z-index: 1; color: transparent; background: linear-gradient(100deg,#ffad86,#c89bff 52%,#6ce8de); background-clip: text; -webkit-background-clip: text; font-size: clamp(4.5rem,18vw,13rem); font-weight: 700; letter-spacing: -.08em; line-height: .8; opacity: .8; filter: blur(.5px) drop-shadow(0 0 2rem rgba(164,139,255,.25)); transition: opacity .18s ease; }
 .site-intro.is-canvas-ready .site-intro__fallback { opacity: 0; }
 .site-intro__laser-flash { position: absolute; z-index: 3; top: 50%; right: -10%; left: -10%; height: 2px; background: linear-gradient(90deg,transparent,#ffb38e 18%,#fff 50%,#71f3e7 82%,transparent); box-shadow: 0 0 1rem rgba(255,255,255,.9),0 0 3rem rgba(164,139,255,.85); opacity: 0; transform: scaleX(0); }
@@ -109,6 +110,7 @@ html.intro-pending { overflow: hidden; }
 .intro-revealing .hero { transform-origin: 50% 50%; animation: intro-hero-reveal 1.2s both cubic-bezier(.16,.76,.24,1); }
 
 @keyframes intro-laser-flash { 0% { opacity: 0; transform: scaleX(0); } 45% { opacity: 1; transform: scaleX(1); } 100% { opacity: .14; transform: translateX(22%) scaleX(.48); } }
+@keyframes intro-cut-shudder { 0%,100% { transform: translate3d(0,0,0); } 18% { transform: translate3d(-4px,2px,0); } 36% { transform: translate3d(5px,-3px,0); } 54% { transform: translate3d(-3px,-1px,0); } 72% { transform: translate3d(2px,2px,0); } }
 @keyframes intro-laser-cut { 0% { opacity: .22; transform: scaleX(.48); } 32% { opacity: .85; transform: scaleX(1.12); } 100% { opacity: 0; transform: scaleX(1.55); } }
 @keyframes intro-blast-wave { 0% { opacity: 0; transform: translate(-50%,-50%) scale(.06); } 16% { opacity: 1; } 58% { opacity: .68; } 100% { opacity: 0; transform: translate(-50%,-50%) scale(8); } }
 @keyframes intro-blast-open { 0%,14% { opacity: 1; transform: scale(1); } 42% { opacity: .8; transform: scale(1.012); } 72% { opacity: .34; } 100% { opacity: 0; transform: scale(1.035); } }

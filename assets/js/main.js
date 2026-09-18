@@ -44,6 +44,7 @@
     let sequenceReady = false;
     let artIsReady = false;
     let lasersStarted = false;
+    let slicingStarted = false;
     let blastingStarted = false;
 
     const finish = () => {
@@ -51,7 +52,7 @@
       finished = true;
       cancelAnimationFrame(frame);
       window.removeEventListener("resize", resizeCanvas);
-      try { sessionStorage.setItem("cyra-intro-v4", "seen"); } catch (error) { /* Storage may be unavailable. */ }
+      try { sessionStorage.setItem("cyra-intro-v5", "seen"); } catch (error) { /* Storage may be unavailable. */ }
       intro.classList.add("is-exiting");
       root.classList.remove("intro-pending");
       root.classList.add("intro-revealing");
@@ -106,12 +107,15 @@
         const angle = Math.atan2(point.y - centerY, point.x - centerX);
         const fragment = Math.floor(((angle + Math.PI) / (Math.PI * 2)) * 8);
         const fragmentAngle = ((fragment + .5) / 8) * Math.PI * 2 - Math.PI;
+        const fragmentSpin = [-.045, .032, -.038, .048, -.042, .035, -.05, .04][fragment];
+        const sliceDistance = (width < 600 ? 12 : 18) + Math.random() * (width < 600 ? 12 : 18);
         const blastAngle = angle + (Math.random() - .5) * .72;
         const blastDistance = Math.max(width, height) * (.24 + Math.random() * .56);
         return {
           ...point,
-          sliceX: Math.cos(fragmentAngle) * (6 + Math.random() * 7),
-          sliceY: Math.sin(fragmentAngle) * (6 + Math.random() * 7),
+          sliceX: Math.cos(fragmentAngle) * sliceDistance,
+          sliceY: Math.sin(fragmentAngle) * sliceDistance,
+          sliceSpin: fragmentSpin,
           blastX: Math.cos(blastAngle) * blastDistance,
           blastY: Math.sin(blastAngle) * blastDistance,
           trail: Math.random()
@@ -177,10 +181,17 @@
       const sliceAmount = easeOut(sliceProgress) * (1 - blastProgress);
       const blastAmount = Math.pow(easeOut(blastProgress), 1.12);
       const blastAlpha = Math.pow(1 - blastProgress, 1.55);
-      const positionPoint = (point) => ({
-        x: point.x + point.sliceX * sliceAmount + point.blastX * blastAmount,
-        y: point.y + point.sliceY * sliceAmount + point.blastY * blastAmount
-      });
+      const positionPoint = (point) => {
+        const rotation = point.sliceSpin * sliceAmount;
+        const cosine = Math.cos(rotation);
+        const sine = Math.sin(rotation);
+        const relativeX = point.x - textStyle.centerX;
+        const relativeY = point.y - textStyle.centerY;
+        return {
+          x: textStyle.centerX + relativeX * cosine - relativeY * sine + point.sliceX * sliceAmount + point.blastX * blastAmount,
+          y: textStyle.centerY + relativeX * sine + relativeY * cosine + point.sliceY * sliceAmount + point.blastY * blastAmount
+        };
+      };
       context.save();
       context.globalCompositeOperation = "lighter";
 
@@ -273,7 +284,7 @@
         context.beginPath();
         context.moveTo(startX, startY);
         context.lineTo(startX + (endX - startX) * cutHead, startY + (endY - startY) * cutHead);
-        context.lineWidth = width < 600 ? 3.5 : 6;
+        context.lineWidth = width < 600 ? 5.5 : 10;
         context.strokeStyle = "rgba(0,0,0,.96)";
         context.stroke();
       });
@@ -299,10 +310,10 @@
         context.beginPath();
         context.moveTo(x1, y1);
         context.lineTo(x2, y2);
-        context.lineWidth = width < 600 ? 2.2 : 3;
+        context.lineWidth = width < 600 ? 2.8 : 4;
         context.strokeStyle = color;
         context.shadowColor = color;
-        context.shadowBlur = 24;
+        context.shadowBlur = 34;
         context.globalAlpha = .82;
         context.stroke();
 
@@ -365,21 +376,25 @@
       if (!context || finished) return;
       const elapsed = time - startedAt;
       context.clearRect(0, 0, width, height);
-      const laserProgress = clamp((elapsed - 1350) / 820);
-      const sliceProgress = clamp((elapsed - 1530) / 600);
-      const blastProgress = clamp((elapsed - 2150) / 720);
+      const laserProgress = clamp((elapsed - 1280) / 980);
+      const sliceProgress = clamp((elapsed - 1430) / 720);
+      const blastProgress = clamp((elapsed - 2350) / 720);
       drawPaint(clamp((elapsed - 80) / 1500), sliceProgress, blastProgress);
       if (laserProgress > 0 && !lasersStarted) {
         lasersStarted = true;
         intro.classList.add("is-laser-live");
       }
       drawLasers(laserProgress);
+      if (sliceProgress > .18 && !slicingStarted) {
+        slicingStarted = true;
+        intro.classList.add("is-slicing");
+      }
       if (blastProgress > 0 && !blastingStarted) {
         blastingStarted = true;
         intro.classList.add("is-blasting");
       }
       drawExplosion(blastProgress);
-      if (elapsed >= 2870 && !sequenceReady) {
+      if (elapsed >= 3070 && !sequenceReady) {
         sequenceReady = true;
         maybeFinish();
       }
@@ -400,7 +415,7 @@
 
     const fontReady = document.fonts?.ready || Promise.resolve();
     Promise.race([fontReady, new Promise((resolve) => window.setTimeout(resolve, 240))]).then(startAnimation);
-    window.setTimeout(finish, 3800);
+    window.setTimeout(finish, 4100);
   };
 
   const setContactLinks = () => {
