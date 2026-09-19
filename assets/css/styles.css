@@ -94,6 +94,8 @@ html.intro-pending { overflow: hidden; }
 }
 
 .site-intro__canvas { position: absolute; z-index: 1; inset: 0; display: block; width: 100%; height: 100%; }
+.site-intro__stardust { position: absolute; z-index: 2; inset: 0; display: block; width: 100%; height: 100%; opacity: 0; pointer-events: none; transition: opacity .62s ease-out; -webkit-mask-image: linear-gradient(to bottom,#000 0%,#000 72%,transparent 100%); mask-image: linear-gradient(to bottom,#000 0%,#000 72%,transparent 100%); }
+.site-intro.is-blasting .site-intro__stardust { opacity: .72; }
 .site-intro.is-slicing .site-intro__canvas { animation: intro-cut-shudder .34s linear both; }
 .site-intro__fallback { position: relative; z-index: 1; color: transparent; background: linear-gradient(100deg,#ffad86,#c89bff 52%,#6ce8de); background-clip: text; -webkit-background-clip: text; font-size: clamp(4.5rem,18vw,13rem); font-weight: 700; letter-spacing: -.08em; line-height: .8; opacity: .8; filter: blur(.5px) drop-shadow(0 0 2rem rgba(164,139,255,.25)); transition: opacity .18s ease; }
 .site-intro.is-canvas-ready .site-intro__fallback { display: none; }

@@ -87,6 +87,8 @@
 
     const canvas = intro.querySelector("[data-intro-canvas]");
     const context = canvas?.getContext("2d", { alpha: true });
+    const stardustCanvas = intro.querySelector("[data-intro-stardust]");
+    const stardustContext = stardustCanvas?.getContext("2d", { alpha: true });
     const clamp = (value, min = 0, max = 1) => Math.min(max, Math.max(min, value));
     const easeOut = (value) => 1 - Math.pow(1 - clamp(value), 3);
     let finished = false;
@@ -99,7 +101,6 @@
     let overspray = [];
     let particleGroups = [[], [], [], []];
     let oversprayGroups = [[], [], [], []];
-    let settledStars = [];
     let textStyle = {};
     let sequenceReady = false;
     let artIsReady = false;
@@ -236,7 +237,12 @@
       canvas.height = Math.round(height * pixelRatio);
       context.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
       buildPaintMap();
-      settledStars = createStardustMap(width, height);
+      if (stardustCanvas && stardustContext) {
+        stardustCanvas.width = Math.round(width * pixelRatio);
+        stardustCanvas.height = Math.round(height * pixelRatio);
+        stardustContext.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
+        paintStardust(stardustContext, createStardustMap(width, height), width, height, 1200, .66);
+      }
     };
 
     const drawPaint = (progress, sliceProgress, blastProgress) => {
@@ -436,7 +442,7 @@
         lasersStarted = true;
         intro.classList.add("is-laser-live");
       }
-      drawLasers(laserProgress);
+      if (blastProgress <= 0) drawLasers(laserProgress);
       if (sliceProgress > .18 && !slicingStarted) {
         slicingStarted = true;
         intro.classList.add("is-slicing");
@@ -446,7 +452,6 @@
         intro.classList.add("is-blasting");
       }
       drawExplosion(blastProgress);
-      paintStardust(context, settledStars, width, height, time, easeOut(clamp((blastProgress - .12) / .74)) * .72);
       if (elapsed >= 3070 && !sequenceReady) {
         sequenceReady = true;
         maybeFinish();
