@@ -12,12 +12,6 @@
   const residenceDialog = document.querySelector("#residence-dialog");
   const form = document.querySelector("#contact-form");
   const residenceThumbnail = (source) => source.replace(/\.webp$/, "-900.webp");
-  const residenceImageCache = residences.map((residence) => {
-    const image = new Image();
-    image.decoding = "async";
-    image.src = residenceThumbnail(residence.image);
-    return image;
-  });
   let lastFocused = null;
 
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -103,6 +97,8 @@
     let pixelRatio = 1;
     let particles = [];
     let overspray = [];
+    let particleGroups = [[], [], [], []];
+    let oversprayGroups = [[], [], [], []];
     let settledStars = [];
     let textStyle = {};
     let sequenceReady = false;
@@ -164,7 +160,7 @@
       const top = Math.max(0, Math.floor(centerY - fontSize * .62));
       const sampleWidth = Math.min(mask.width - left, Math.ceil(measuredWidth + fontSize * .16));
       const sampleHeight = Math.min(mask.height - top, Math.ceil(fontSize * 1.24));
-      const step = width < 600 ? 2 : 3;
+      const step = width < 600 ? 3 : 4;
       const paint = [];
       const mist = [];
       const addMotion = (point) => {
@@ -197,7 +193,7 @@
             const point = addMotion({
               x: left + x + (Math.random() - .5) * step * 1.35,
               y: top + y + (Math.random() - .5) * step * 1.35,
-              radius: .45 + Math.random() * (width < 600 ? 1.15 : 1.55),
+              radius: .6 + Math.random() * (width < 600 ? 1.4 : 1.8),
               color,
               phase
             });
@@ -221,8 +217,12 @@
         return;
       }
 
-      particles = paint.sort((a, b) => a.phase - b.phase).slice(0, 18000);
-      overspray = mist.sort((a, b) => a.phase - b.phase).slice(0, 1800);
+      particles = paint.sort((a, b) => a.phase - b.phase).slice(0, 9000);
+      overspray = mist.sort((a, b) => a.phase - b.phase).slice(0, 900);
+      particleGroups = [[], [], [], []];
+      oversprayGroups = [[], [], [], []];
+      particles.forEach((point) => particleGroups[point.color].push(point));
+      overspray.forEach((point) => oversprayGroups[point.color].push(point));
       textStyle = { centerX, centerY, font, left, right: left + sampleWidth, fontSize };
       if (particles.length) intro.classList.add("is-canvas-ready");
     };
@@ -263,8 +263,8 @@
       palette.forEach((color, colorIndex) => {
         if (blastProgress > 0) {
           context.beginPath();
-          particles.forEach((point) => {
-            if (point.phase > paintProgress || point.color !== colorIndex || point.trail > .13) return;
+          particleGroups[colorIndex].forEach((point) => {
+            if (point.phase > paintProgress || point.trail > .13) return;
             const position = positionPoint(point);
             context.moveTo(position.x - point.blastX * blastAmount * .035, position.y - point.blastY * blastAmount * .035);
             context.lineTo(position.x, position.y);
@@ -278,8 +278,8 @@
         }
 
         context.beginPath();
-        particles.forEach((point) => {
-          if (point.phase > paintProgress || point.color !== colorIndex) return;
+        particleGroups[colorIndex].forEach((point) => {
+          if (point.phase > paintProgress) return;
           const position = positionPoint(point);
           const radius = point.radius * (1 + blastAmount * .7);
           context.moveTo(position.x + radius, position.y);
@@ -290,8 +290,8 @@
         context.fill();
 
         context.beginPath();
-        overspray.forEach((point) => {
-          if (point.phase > paintProgress || point.color !== colorIndex) return;
+        oversprayGroups[colorIndex].forEach((point) => {
+          if (point.phase > paintProgress) return;
           const position = positionPoint(point);
           context.moveTo(position.x + point.radius, position.y);
           context.arc(position.x, position.y, point.radius, 0, Math.PI * 2);
@@ -495,7 +495,7 @@
     article.innerHTML = `
       <button class="residence-card__button" type="button" data-residence-id="${residence.id}" aria-label="View details for ${residence.address}">
         <span class="residence-card__image-wrap">
-          <img src="${thumbnail}" width="900" height="666" alt="${residence.alt}" loading="eager" decoding="async" draggable="false">
+          <img src="${thumbnail}" width="900" height="666" alt="${residence.alt}" loading="${index < 2 ? "eager" : "lazy"}" decoding="async" draggable="false">
           <span class="residence-card__index" aria-hidden="true">${String(index + 1).padStart(2, "0")}</span>
           <span class="residence-card__arrow" aria-hidden="true"><svg class="icon icon--arrow-up-right" viewBox="0 0 16 16"><path d="M3 13L13 3M7 3h6v6"/></svg></span>
         </span>
@@ -585,57 +585,45 @@
   };
 
   const setupHeroStardust = () => {
-    const hero = document.querySelector("[data-hero]");
     const canvas = document.querySelector("[data-hero-stardust]");
+    const glints = document.querySelector("[data-hero-glints]");
     const context = canvas?.getContext("2d", { alpha: true });
-    if (!hero || !canvas || !context) return;
+    if (!canvas || !context || !glints) return;
 
     let width = 0;
     let height = 0;
-    let stars = [];
-    let frame = 0;
-    let visible = true;
-    let lastDrawn = 0;
-
-    const render = (time = 0) => {
-      frame = 0;
-      if (!visible) return;
-      if (!reducedMotion && time - lastDrawn < 34) {
-        frame = requestAnimationFrame(render);
-        return;
-      }
-      lastDrawn = time;
-      context.clearRect(0, 0, width, height);
-      paintStardust(context, stars, width, height, time, .66);
-      if (!reducedMotion) frame = requestAnimationFrame(render);
-    };
 
     const resize = () => {
       const bounds = canvas.getBoundingClientRect();
-      const ratio = Math.min(window.devicePixelRatio || 1, 1.5);
-      width = Math.max(1, bounds.width);
-      height = Math.max(1, bounds.height);
+      const ratio = Math.min(window.devicePixelRatio || 1, 1.25);
+      const nextWidth = Math.max(1, Math.round(bounds.width));
+      const nextHeight = Math.max(1, Math.round(bounds.height));
+      if (nextWidth === width && nextHeight === height) return;
+      width = nextWidth;
+      height = nextHeight;
       canvas.width = Math.round(width * ratio);
       canvas.height = Math.round(height * ratio);
       context.setTransform(ratio, 0, 0, ratio, 0, 0);
-      stars = createStardustMap(width, height);
-      if (reducedMotion) render(0);
+      const stars = createStardustMap(width, height);
+      context.clearRect(0, 0, width, height);
+      paintStardust(context, stars, width, height, 1200, .66);
+      if (reducedMotion) return;
+
+      const brightest = stars.filter((star) => star.radius > 1.25).slice(0, width < 600 ? 6 : 10);
+      const nodes = brightest.map((star, index) => {
+        const glint = document.createElement("i");
+        glint.style.left = `${star.x * 100}%`;
+        glint.style.top = `${star.y * 100}%`;
+        glint.style.setProperty("--glint-color", stardustPalette[star.color]);
+        glint.style.animationDelay = `${-index * .68}s`;
+        glint.style.animationDuration = `${3.6 + index * .31}s`;
+        return glint;
+      });
+      glints.replaceChildren(...nodes);
     };
 
     resize();
     window.addEventListener("resize", resize, { passive: true });
-    if (reducedMotion) return;
-
-    const observer = new IntersectionObserver(([entry]) => {
-      visible = entry.isIntersecting;
-      if (visible && !frame) frame = requestAnimationFrame(render);
-      if (!visible && frame) {
-        cancelAnimationFrame(frame);
-        frame = 0;
-      }
-    }, { threshold: 0 });
-    observer.observe(hero);
-    frame = requestAnimationFrame(render);
   };
 
   const setupHeroFlow = () => {
@@ -660,7 +648,7 @@
     const render = (time = 0) => {
       frame = 0;
       if (!visible) return;
-      if (!reducedMotion && time - lastDrawn < 34) {
+      if (!reducedMotion && time - lastDrawn < (width < 740 ? 80 : 50)) {
         frame = requestAnimationFrame(render);
         return;
       }
@@ -677,7 +665,7 @@
         gradient.addColorStop(.8, `${colors[(layer + 2) % colors.length]}48`);
         gradient.addColorStop(1, "rgba(102,230,219,0)");
         context.beginPath();
-        for (let x = 0; x <= width; x += 8) {
+        for (let x = 0; x <= width; x += 16) {
           const normalized = x / width;
           const y = waveY(normalized, layer, time);
           if (x === 0) context.moveTo(x, y);
@@ -687,11 +675,11 @@
         context.lineWidth = layer === 1 ? 1.1 : .7;
         context.globalAlpha = layer === 1 ? .52 : .34;
         context.shadowColor = colors[layer];
-        context.shadowBlur = layer === 1 ? 13 : 7;
+        context.shadowBlur = layer === 1 ? 5 : 0;
         context.stroke();
       }
 
-      for (let index = 0; index < 11; index += 1) {
+      for (let index = 0; index < 8; index += 1) {
         const layer = index % 3;
         const progress = ((time / (7300 + layer * 1150)) + index * .137) % 1;
         const x = progress * width;
@@ -702,7 +690,7 @@
         context.fillStyle = colors[layer];
         context.globalAlpha = .46 + pulse * .38;
         context.shadowColor = colors[layer];
-        context.shadowBlur = 11 + pulse * 13;
+        context.shadowBlur = 7 + pulse * 5;
         context.fill();
       }
       context.restore();
@@ -711,9 +699,12 @@
 
     const resize = () => {
       const bounds = canvas.getBoundingClientRect();
-      const ratio = Math.min(window.devicePixelRatio || 1, 1.5);
-      width = Math.max(1, bounds.width);
-      height = Math.max(1, bounds.height);
+      const ratio = Math.min(window.devicePixelRatio || 1, 1.25);
+      const nextWidth = Math.max(1, Math.round(bounds.width));
+      const nextHeight = Math.max(1, Math.round(bounds.height));
+      if (nextWidth === width && nextHeight === height) return;
+      width = nextWidth;
+      height = nextHeight;
       canvas.width = Math.round(width * ratio);
       canvas.height = Math.round(height * ratio);
       context.setTransform(ratio, 0, 0, ratio, 0, 0);
@@ -726,6 +717,7 @@
 
     const observer = new IntersectionObserver(([entry]) => {
       visible = entry.isIntersecting;
+      hero.classList.toggle("is-offscreen", !visible);
       if (visible && !frame) frame = requestAnimationFrame(render);
       if (!visible && frame) {
         cancelAnimationFrame(frame);
@@ -743,6 +735,7 @@
 
     let activeIndex = 0;
     let timer = 0;
+    let inView = false;
     const activate = (index) => {
       activeIndex = index;
       points.forEach((point, pointIndex) => point.classList.toggle("is-active", pointIndex === activeIndex));
@@ -752,7 +745,7 @@
       timer = 0;
     };
     const start = () => {
-      if (timer) return;
+      if (timer || !inView) return;
       timer = window.setInterval(() => activate((activeIndex + 1) % points.length), 2200);
     };
 
@@ -766,7 +759,8 @@
     });
 
     const observer = new IntersectionObserver(([entry]) => {
-      if (entry.isIntersecting) start();
+      inView = entry.isIntersecting;
+      if (inView) start();
       else stop();
     }, { threshold: .2 });
     observer.observe(constellation);
@@ -774,7 +768,7 @@
 
   const setupReveals = () => {
     const items = document.querySelectorAll(".reveal");
-    const standardSection = document.querySelector(".brand-intro");
+    const motionSections = document.querySelectorAll(".brand-intro, .approach, .promise, .contact");
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches || !("IntersectionObserver" in window)) {
       items.forEach((item) => item.classList.add("is-visible"));
       return;
@@ -789,20 +783,16 @@
     }, { rootMargin: "0px 0px -8%", threshold: 0.12 });
     items.forEach((item) => observer.observe(item));
 
-    if (standardSection) {
-      const motionObserver = new IntersectionObserver(([entry]) => {
-        if (!entry.isIntersecting) return;
-        standardSection.classList.add("is-motion-live");
-        motionObserver.disconnect();
-      }, { rootMargin: "0px 0px 28%", threshold: 0.02 });
-      motionObserver.observe(standardSection);
-    }
+    const motionObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => entry.target.classList.toggle("is-motion-live", entry.isIntersecting));
+    }, { rootMargin: "0px 0px 18% 0px", threshold: 0.01 });
+    motionSections.forEach((section) => motionObserver.observe(section));
   };
 
   const setupHeroMotion = () => {
     const hero = document.querySelector("[data-hero]");
     const stage = document.querySelector("[data-hero-stage]");
-    if (!hero || !stage || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    if (!hero || !stage || reducedMotion || !window.matchMedia("(pointer: fine)").matches) return;
 
     let frame = 0;
     const updatePointer = (event) => {
@@ -811,8 +801,6 @@
       const y = Math.max(0, Math.min(1, (event.clientY - rect.top) / rect.height));
       cancelAnimationFrame(frame);
       frame = requestAnimationFrame(() => {
-        hero.style.setProperty("--pointer-x", `${x * 100}%`);
-        hero.style.setProperty("--pointer-y", `${y * 100}%`);
         stage.style.setProperty("--tilt-x", `${(0.5 - y) * 4}deg`);
         stage.style.setProperty("--tilt-y", `${(x - 0.5) * 5}deg`);
       });
