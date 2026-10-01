@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="utf-8">
@@ -6,41 +6,47 @@
     <title>Cyra Real Estate Property Management</title>
     <meta name="description" content="Responsive residential property management across New York City, the Hudson Valley, and South Florida.">
     <meta name="theme-color" content="#101820">
+    <meta name="color-scheme" content="dark light">
     <meta name="robots" content="index, follow">
-    <link rel="canonical" href="https://danieleyny.github.io/cyra-management/">
+    <link rel="canonical" href="https://cyramgmt.com/">
     <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Cyra Management">
     <meta property="og:title" content="Cyra Real Estate Property Management">
-    <meta property="og:url" content="https://danieleyny.github.io/cyra-management/">
-    <meta property="og:image" content="https://danieleyny.github.io/cyra-management/og.png">
-    <meta property="og:image:secure_url" content="https://danieleyny.github.io/cyra-management/og.png">
+    <meta property="og:description" content="Responsive residential property management across New York City, the Hudson Valley, and South Florida.">
+    <meta property="og:url" content="https://cyramgmt.com/">
+    <meta property="og:image" content="https://cyramgmt.com/og.png">
+    <meta property="og:image:secure_url" content="https://cyramgmt.com/og.png">
     <meta property="og:image:type" content="image/png">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
     <meta property="og:image:alt" content="CYRA in colorful particles with the words Real Estate Property Management">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Cyra Real Estate Property Management">
-    <meta name="twitter:image" content="https://danieleyny.github.io/cyra-management/og.png">
+    <meta name="twitter:description" content="Responsive residential property management across New York City, the Hudson Valley, and South Florida.">
+    <meta name="twitter:image" content="https://cyramgmt.com/og.png">
     <meta name="twitter:image:alt" content="CYRA in colorful particles with the words Real Estate Property Management">
     <link rel="icon" href="./favicon.svg" type="image/svg+xml">
     <link rel="preload" href="./assets/fonts/cormorant-garamond-latin.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="./assets/fonts/manrope-latin.woff2" as="font" type="font/woff2" crossorigin>
-    <link rel="preload" href="./assets/images/cyra-property-world-v2.webp" as="image" type="image/webp" fetchpriority="high">
+    <link rel="preload" href="./assets/images/cyra-property-world-v2-640.webp" as="image" type="image/webp" imagesrcset="./assets/images/cyra-property-world-v2-640.webp 640w, ./assets/images/cyra-property-world-v2-900.webp 900w, ./assets/images/cyra-property-world-v2.webp 1122w" imagesizes="(max-width: 740px) 82vw, 53vw" fetchpriority="high">
     <script>
       (() => {
         try {
           const forceIntro = new URLSearchParams(location.search).has("intro");
           const isHomeEntry = !location.hash || location.hash === "#top";
           const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
-          if (isHomeEntry && !reduceMotion && (forceIntro || !sessionStorage.getItem("cyra-intro-v5"))) {
+          const lastIntro = Number(localStorage.getItem("cyra-intro-v6") || 0);
+          const introIsFresh = Date.now() - lastIntro < 7 * 24 * 60 * 60 * 1000;
+          if (isHomeEntry && !reduceMotion && (forceIntro || !introIsFresh)) {
             document.documentElement.classList.add("intro-pending");
-            setTimeout(() => document.documentElement.classList.remove("intro-pending"), 4500);
+            setTimeout(() => document.documentElement.classList.remove("intro-pending"), 2800);
           }
         } catch (error) {
           document.documentElement.classList.remove("intro-pending");
         }
       })();
     </script>
-    <link rel="stylesheet" href="./assets/css/styles.css?v=20260918-13">
+    <link rel="stylesheet" href="./assets/css/styles.css?v=20260930-1">
   </head>
   <body>
     <div class="site-intro" data-site-intro aria-hidden="true">
@@ -74,7 +80,7 @@
       </button>
     </header>
 
-    <aside class="mobile-menu" id="mobile-menu" aria-hidden="true" aria-label="Mobile navigation">
+    <aside class="mobile-menu" id="mobile-menu" aria-label="Mobile navigation" inert>
       <div class="mobile-menu__top">
         <span class="wordmark__name">CYRA</span>
         <button class="mobile-menu__close" type="button" aria-label="Close menu"><span></span><span></span></button>
@@ -124,8 +130,8 @@
             <i class="hero-art__halo"></i>
             <i class="hero-art__route"></i>
             <div class="hero-art__scene">
-              <img class="hero-art__image" src="./assets/images/cyra-property-world-v2.webp" width="1122" height="1402" alt="" fetchpriority="high">
-              <img class="hero-art__glow-image" src="./assets/images/cyra-property-world-v2.webp" width="1122" height="1402" alt="">
+              <img class="hero-art__image" src="./assets/images/cyra-property-world-v2-640.webp" srcset="./assets/images/cyra-property-world-v2-640.webp 640w, ./assets/images/cyra-property-world-v2-900.webp 900w, ./assets/images/cyra-property-world-v2.webp 1122w" sizes="(max-width: 740px) 82vw, 53vw" width="1122" height="1402" alt="" fetchpriority="high" decoding="async">
+              <img class="hero-art__glow-image" src="./assets/images/cyra-property-world-v2-640.webp" srcset="./assets/images/cyra-property-world-v2-640.webp 640w, ./assets/images/cyra-property-world-v2-900.webp 900w, ./assets/images/cyra-property-world-v2.webp 1122w" sizes="(max-width: 740px) 82vw, 53vw" width="1122" height="1402" alt="" fetchpriority="low" decoding="async">
               <i class="hero-art__beacon hero-art__beacon--city"></i>
               <i class="hero-art__beacon hero-art__beacon--valley"></i>
               <i class="hero-art__beacon hero-art__beacon--south"></i>
@@ -178,7 +184,7 @@
           <h2 class="display-heading" id="residences-title">A selection of<br><em>properties we manage.</em></h2>
           <p>We manage residences in Manhattan, Brooklyn, the Hudson Valley, and South Florida with the same direct approach.</p>
         </div>
-        <div class="residence-controls reveal" aria-label="Property carousel controls">
+        <div class="residence-controls reveal" role="group" aria-label="Property carousel controls">
           <p><span data-residence-current>01</span> / 06 <small>Swipe or use arrows</small></p>
           <div class="residence-progress" aria-hidden="true"><i data-residence-progress></i></div>
           <div>
@@ -245,7 +251,7 @@
             <p class="service-note">Some properties also offer community programs and policies intended to reduce routine viewing, application, move-in, trash-collection, and lease-renewal fees. Terms vary by property.</p>
           </article>
           <article class="service-column service-column--owners reveal">
-            <p class="eyebrow">For owners & boards</p>
+            <p class="eyebrow">For owners &amp; boards</p>
             <h3>Direct management with a long-term view.</h3>
             <ul>
               <li>Direct property oversight</li>
@@ -260,7 +266,7 @@
       </section>
 
       <section class="promise" aria-label="Our service promise">
-        <img src="./assets/images/residence-1830-south-ocean-ai.webp" srcset="./assets/images/residence-1830-south-ocean-ai-900.webp 900w, ./assets/images/residence-1830-south-ocean-ai.webp 1448w" sizes="100vw" width="1448" height="1086" alt="AI-generated visualization of a sunlit South Florida residence with panoramic ocean views" loading="lazy" decoding="async">
+        <img src="./assets/images/residence-1830-south-ocean-ai-640.webp" srcset="./assets/images/residence-1830-south-ocean-ai-640.webp 640w, ./assets/images/residence-1830-south-ocean-ai-900.webp 900w, ./assets/images/residence-1830-south-ocean-ai.webp 1448w" sizes="100vw" width="1448" height="1086" alt="AI-generated visualization of a sunlit South Florida residence with panoramic ocean views" loading="lazy" decoding="async">
         <div class="promise__overlay"></div>
         <div class="promise__halo" aria-hidden="true"><i></i><i></i></div>
         <div class="promise__content reveal">
@@ -279,7 +285,7 @@
             <p>We work directly with residents, owners, boards, and vendors to keep communication clear, resolve issues quickly, and care for each property over the long term.</p>
           </div>
           <figure class="about__image reveal">
-            <img src="./assets/images/residence-923-bedford-ai.webp" srcset="./assets/images/residence-923-bedford-ai-900.webp 900w, ./assets/images/residence-923-bedford-ai.webp 1536w" sizes="(max-width: 620px) 91vw, 60vw" width="1536" height="1024" alt="AI-generated visualization of a warm, furnished Brooklyn apartment interior" loading="lazy" decoding="async">
+            <img src="./assets/images/residence-923-bedford-ai-640.webp" srcset="./assets/images/residence-923-bedford-ai-640.webp 640w, ./assets/images/residence-923-bedford-ai-900.webp 900w, ./assets/images/residence-923-bedford-ai.webp 1536w" sizes="(max-width: 620px) 91vw, 60vw" width="1536" height="1024" alt="AI-generated visualization of a warm, furnished Brooklyn apartment interior" loading="lazy" decoding="async">
             <figcaption><span>Bedford Avenue</span><span>Brooklyn, New York</span></figcaption>
           </figure>
         </div>
@@ -292,16 +298,16 @@
             <h2 class="display-heading" id="contact-title">How can we<br><em>help?</em></h2>
             <p>Looking for a home, need help at your current residence, or want to discuss property management? Send us a message.</p>
             <div class="contact-methods">
-              <a data-contact-phone href="tel:+19174443323">917 444 3323</a>
-              <a data-contact-email href="mailto:eynymgmt@gmail.com">eynymgmt@gmail.com</a>
+              <a data-contact-phone href="tel:+19174443323">917&nbsp;444&nbsp;3323</a>
+              <a data-contact-email href="mailto:d@cyramgmt.com">d@cyramgmt.com</a>
               <p>WhatsApp <a data-contact-whatsapp href="https://wa.me/16464189226">646 418 9226</a></p>
             </div>
             <div class="contact-pulse"><span aria-hidden="true"></span><p>You’ll hear directly from our team.</p></div>
           </div>
 
           <div class="contact__form-wrap reveal">
-            <noscript><p class="noscript-form-message">JavaScript is required for the inquiry form. Please email <a href="mailto:eynymgmt@gmail.com">eynymgmt@gmail.com</a>.</p></noscript>
-            <form class="contact-form" id="contact-form" method="post" action="">
+            <noscript><p class="noscript-form-message">JavaScript is required for the inquiry form. Please email <a href="mailto:d@cyramgmt.com">d@cyramgmt.com</a>.</p></noscript>
+            <form class="contact-form" id="contact-form" method="post" action="https://formspree.io/f/mjvjordw">
               <input type="hidden" name="_subject" value="New Cyra Management website inquiry">
               <div class="honeypot" aria-hidden="true">
                 <label for="company-website">Leave this field empty</label>
@@ -339,7 +345,7 @@
               </div>
               <div class="field">
                 <label for="property">Property or address <span>Optional</span></label>
-                <input id="property" name="property" type="text" autocomplete="street-address" aria-describedby="property-error">
+                <input id="property" name="property" type="text" autocomplete="address-line1" aria-describedby="property-error">
                 <span class="field-error" id="property-error" aria-live="polite"></span>
               </div>
               <div class="field">
@@ -371,7 +377,7 @@
       </div>
       <div class="site-footer__links">
         <div><p>Explore</p><a href="#residences">Properties</a><a href="#approach">Approach</a><a href="#services">Services</a><a href="#about">About</a></div>
-        <div><p>Contact</p><a data-contact-phone href="tel:+19174443323">917 444 3323</a><a data-contact-email href="mailto:eynymgmt@gmail.com">eynymgmt@gmail.com</a><a href="#contact" data-resident-support>Resident support</a></div>
+        <div><p>Contact</p><a data-contact-phone href="tel:+19174443323">917&nbsp;444&nbsp;3323</a><a data-contact-email href="mailto:d@cyramgmt.com">d@cyramgmt.com</a><a href="#contact" data-resident-support>Resident support</a></div>
         <div><p>Regions</p><span>New York City</span><span>Hudson Valley</span><span>South Florida</span></div>
       </div>
       <div class="site-footer__bottom">
@@ -383,11 +389,11 @@
     <dialog class="residence-dialog" id="residence-dialog" aria-labelledby="dialog-title">
       <button class="residence-dialog__close" type="button" data-dialog-close aria-label="Close residence details"><span></span><span></span></button>
       <div class="residence-dialog__image-wrap">
-        <img data-dialog-image src="./assets/images/residence-400-whitfield-ai.webp" width="1448" height="1086" alt="">
+        <img data-dialog-image src="./assets/images/residence-400-whitfield-ai-640.webp" width="1448" height="1086" alt="" loading="lazy" decoding="async">
       </div>
       <div class="residence-dialog__content">
         <p class="eyebrow" data-dialog-region></p>
-        <h2 id="dialog-title" data-dialog-title></h2>
+        <h2 id="dialog-title" data-dialog-title>Property details</h2>
         <p class="dialog-location" data-dialog-location></p>
         <div class="dialog-types">
           <p>Residence details</p>
@@ -403,14 +409,20 @@
         "@context": "https://schema.org",
         "@type": "Organization",
         "name": "Cyra Management",
-        "url": "https://danieleyny.github.io/cyra-management/",
-        "email": "eynymgmt@gmail.com",
+        "url": "https://cyramgmt.com/",
+        "email": "d@cyramgmt.com",
         "telephone": "+1-917-444-3323",
-        "areaServed": ["New York City", "Hudson Valley", "South Florida"]
+        "areaServed": ["New York City", "Hudson Valley", "South Florida"],
+        "contactPoint": {
+          "@type": "ContactPoint",
+          "contactType": "customer service",
+          "telephone": "+1-917-444-3323",
+          "email": "d@cyramgmt.com"
+        }
       }
     </script>
     <script src="./assets/js/config.js"></script>
-    <script src="./assets/js/data.js?v=20260918-1"></script>
-    <script src="./assets/js/main.js?v=20260918-13"></script>
+    <script src="./assets/js/data.js?v=20260930-1"></script>
+    <script src="./assets/js/main.js?v=20260930-1"></script>
   </body>
 </html>

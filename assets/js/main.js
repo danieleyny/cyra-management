@@ -12,6 +12,7 @@
   const residenceDialog = document.querySelector("#residence-dialog");
   const form = document.querySelector("#contact-form");
   const residenceThumbnail = (source) => source.replace(/\.webp$/, "-900.webp");
+  const residenceSmall = (source) => source.replace(/\.webp$/, "-640.webp");
   let lastFocused = null;
 
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -107,20 +108,21 @@
     let lasersStarted = false;
     let slicingStarted = false;
     let blastingStarted = false;
+    let lastDrawn = 0;
 
     const finish = () => {
       if (finished) return;
       finished = true;
       cancelAnimationFrame(frame);
       window.removeEventListener("resize", resizeCanvas);
-      try { sessionStorage.setItem("cyra-intro-v5", "seen"); } catch (error) { /* Storage may be unavailable. */ }
+      try { localStorage.setItem("cyra-intro-v6", String(Date.now())); } catch (error) { /* Storage may be unavailable. */ }
       intro.classList.add("is-exiting");
       root.classList.remove("intro-pending");
       root.classList.add("intro-revealing");
       window.setTimeout(() => {
         intro.remove();
         root.classList.remove("intro-revealing");
-      }, 1260);
+      }, 760);
     };
 
     const heroArt = document.querySelector(".hero-art__image");
@@ -161,7 +163,7 @@
       const top = Math.max(0, Math.floor(centerY - fontSize * .62));
       const sampleWidth = Math.min(mask.width - left, Math.ceil(measuredWidth + fontSize * .16));
       const sampleHeight = Math.min(mask.height - top, Math.ceil(fontSize * 1.24));
-      const step = width < 600 ? 3 : 4;
+      const step = width < 600 ? 4 : 5;
       const paint = [];
       const mist = [];
       const addMotion = (point) => {
@@ -218,8 +220,9 @@
         return;
       }
 
-      particles = paint.sort((a, b) => a.phase - b.phase).slice(0, 9000);
-      overspray = mist.sort((a, b) => a.phase - b.phase).slice(0, 900);
+      const particleLimit = width < 600 ? 2600 : 4200;
+      particles = paint.sort((a, b) => a.phase - b.phase).slice(0, particleLimit);
+      overspray = mist.sort((a, b) => a.phase - b.phase).slice(0, width < 600 ? 220 : 360);
       particleGroups = [[], [], [], []];
       oversprayGroups = [[], [], [], []];
       particles.forEach((point) => particleGroups[point.color].push(point));
@@ -432,12 +435,17 @@
 
     const drawFrame = (time) => {
       if (!context || finished) return;
+      if (lastDrawn && time - lastDrawn < 28) {
+        frame = requestAnimationFrame(drawFrame);
+        return;
+      }
+      lastDrawn = time;
       const elapsed = time - startedAt;
       context.clearRect(0, 0, width, height);
-      const laserProgress = clamp((elapsed - 1280) / 980);
-      const sliceProgress = clamp((elapsed - 1430) / 720);
-      const blastProgress = clamp((elapsed - 2350) / 720);
-      drawPaint(clamp((elapsed - 80) / 1500), sliceProgress, blastProgress);
+      const laserProgress = clamp((elapsed - 650) / 650);
+      const sliceProgress = clamp((elapsed - 780) / 500);
+      const blastProgress = clamp((elapsed - 1270) / 560);
+      drawPaint(clamp((elapsed - 40) / 850), sliceProgress, blastProgress);
       if (laserProgress > 0 && !lasersStarted) {
         lasersStarted = true;
         intro.classList.add("is-laser-live");
@@ -452,7 +460,7 @@
         intro.classList.add("is-blasting");
       }
       drawExplosion(blastProgress);
-      if (elapsed >= 3070 && !sequenceReady) {
+      if (elapsed >= 1850 && !sequenceReady) {
         sequenceReady = true;
         maybeFinish();
       }
@@ -473,7 +481,7 @@
 
     const fontReady = document.fonts?.ready || Promise.resolve();
     Promise.race([fontReady, new Promise((resolve) => window.setTimeout(resolve, 240))]).then(startAnimation);
-    window.setTimeout(finish, 4100);
+    window.setTimeout(finish, 2600);
   };
 
   const setContactLinks = () => {
@@ -495,12 +503,13 @@
   const createResidenceCard = (residence, index) => {
     const article = document.createElement("article");
     const thumbnail = residenceThumbnail(residence.image);
+    const small = residenceSmall(residence.image);
     article.className = `residence-card residence-card--${index + 1} reveal`;
     article.style.setProperty("--card-index", index);
     article.innerHTML = `
       <button class="residence-card__button" type="button" data-residence-id="${residence.id}" aria-label="View details for ${residence.address}">
         <span class="residence-card__image-wrap">
-          <img src="${thumbnail}" width="900" height="666" alt="${residence.alt}" loading="${index < 2 ? "eager" : "lazy"}" decoding="async" draggable="false">
+          <img src="${small}" srcset="${small} 640w, ${thumbnail} 900w, ${residence.image} ${residence.width}w" sizes="(max-width: 740px) 84vw, (max-width: 1020px) 68vw, 51vw" width="${residence.width}" height="${residence.height}" alt="${residence.alt}" loading="lazy" decoding="async" draggable="false">
           <span class="residence-card__index" aria-hidden="true">${String(index + 1).padStart(2, "0")}</span>
           <span class="residence-card__arrow" aria-hidden="true"><svg class="icon icon--arrow-up-right" viewBox="0 0 16 16"><path d="M3 13L13 3M7 3h6v6"/></svg></span>
         </span>
@@ -510,6 +519,7 @@
         </span>
       </button>`;
     article.querySelector("img")?.addEventListener("error", (event) => {
+      event.currentTarget.removeAttribute("srcset");
       event.currentTarget.src = residence.image;
     }, { once: true });
     return article;
@@ -530,7 +540,9 @@
     residenceDialog.querySelector("[data-dialog-title]").textContent = residence.address;
     residenceDialog.querySelector("[data-dialog-location]").textContent = residence.location;
     const image = residenceDialog.querySelector("[data-dialog-image]");
-    image.src = residence.image;
+    image.src = residenceSmall(residence.image);
+    image.srcset = `${residenceSmall(residence.image)} 640w, ${residenceThumbnail(residence.image)} 900w, ${residence.image} ${residence.width}w`;
+    image.sizes = "(max-width: 620px) calc(100vw - 1rem), 54vw";
     image.alt = residence.alt;
     image.width = residence.width || 1800;
     image.height = residence.height || 1331;
@@ -552,7 +564,7 @@
     if (!menu || !menuToggle) return;
     lastFocused = document.activeElement;
     menu.classList.add("is-open");
-    menu.setAttribute("aria-hidden", "false");
+    menu.removeAttribute("inert");
     menuToggle.setAttribute("aria-expanded", "true");
     menuToggle.setAttribute("aria-label", "Close menu");
     body.classList.add("nav-open");
@@ -563,7 +575,7 @@
   const closeMenu = () => {
     if (!menu || !menuToggle) return;
     menu.classList.remove("is-open");
-    menu.setAttribute("aria-hidden", "true");
+    menu.setAttribute("inert", "");
     menuToggle.setAttribute("aria-expanded", "false");
     menuToggle.setAttribute("aria-label", "Open menu");
     body.classList.remove("nav-open");
@@ -778,6 +790,8 @@
       items.forEach((item) => item.classList.add("is-visible"));
       return;
     }
+
+    document.documentElement.classList.add("motion-ready");
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
@@ -878,6 +892,36 @@
     update();
   };
 
+  const setupNavigationState = () => {
+    const links = [...document.querySelectorAll(".desktop-nav a, .mobile-menu nav a")];
+    const sections = links
+      .map((link) => document.querySelector(link.getAttribute("href")))
+      .filter((section, index, list) => section && list.indexOf(section) === index);
+    if (!links.length || !sections.length) return;
+
+    let scheduled = false;
+    const update = () => {
+      const marker = window.scrollY + Math.min(window.innerHeight * .4, 360);
+      const active = sections.find((section) => marker >= section.offsetTop && marker < section.offsetTop + section.offsetHeight);
+      links.forEach((link) => {
+        const isCurrent = active && link.getAttribute("href") === `#${active.id}`;
+        link.classList.toggle("is-current", Boolean(isCurrent));
+        if (isCurrent) link.setAttribute("aria-current", "location");
+        else link.removeAttribute("aria-current");
+      });
+      scheduled = false;
+    };
+
+    window.addEventListener("scroll", () => {
+      if (!scheduled) {
+        scheduled = true;
+        requestAnimationFrame(update);
+      }
+    }, { passive: true });
+    window.addEventListener("resize", update, { passive: true });
+    update();
+  };
+
   const clearFieldError = (field) => {
     field.removeAttribute("aria-invalid");
     const error = document.querySelector(`#${field.id}-error`);
@@ -958,11 +1002,14 @@
   setupHeroMotion();
   setupResidenceRail();
   setupPageAtmosphere();
+  setupNavigationState();
 
   window.addEventListener("scroll", () => header?.classList.toggle("is-scrolled", window.scrollY > 40), { passive: true });
   menuToggle?.addEventListener("click", () => menu?.classList.contains("is-open") ? closeMenu() : openMenu());
   menuClose?.addEventListener("click", closeMenu);
-  menu?.addEventListener("keydown", trapMenuFocus);
+  document.addEventListener("keydown", (event) => {
+    if (menu?.classList.contains("is-open")) trapMenuFocus(event);
+  });
   menu?.querySelectorAll("a").forEach((link) => link.addEventListener("click", closeMenu));
 
   residenceGrid?.addEventListener("click", (event) => {
@@ -972,6 +1019,10 @@
   residenceDialog?.querySelectorAll("[data-dialog-close]").forEach((control) => control.addEventListener("click", closeResidence));
   residenceDialog?.addEventListener("click", (event) => {
     if (event.target === residenceDialog) closeResidence();
+  });
+  residenceDialog?.addEventListener("cancel", (event) => {
+    event.preventDefault();
+    closeResidence();
   });
   residenceDialog?.addEventListener("close", () => body.classList.remove("modal-open"));
 

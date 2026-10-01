@@ -5,10 +5,10 @@
  */
 window.CYRA_CONFIG = Object.freeze({
   site: {
-    canonicalUrl: "https://danieleyny.github.io/cyra-management/"
+    canonicalUrl: "https://cyramgmt.com/"
   },
   contact: {
-    email: "eynymgmt@gmail.com",
+    email: "d@cyramgmt.com",
     phoneDisplay: "917 444 3323",
     phoneHref: "+19174443323",
     whatsappDisplay: "646 418 9226",

@@ -39,7 +39,7 @@ All public contact values live in `assets/js/config.js`:
 - `whatsappDisplay` and `whatsappHref`
 - `formEndpoint`
 
-The current values reflect the public details on the former site. Confirm that the email, phone numbers, WhatsApp account, and Formspree destination are still owned and monitored before launch.
+The public email is `d@cyramgmt.com`. Confirm that the phone numbers, WhatsApp account, and Formspree destination are still owned and monitored before launch.
 
 ## Formspree setup
 
@@ -66,13 +66,13 @@ The workflow at `.github/workflows/pages.yml` publishes the repository root when
 2. Push this project to its `main` branch.
 3. In **Settings → Pages**, choose **GitHub Actions** as the source if it is not selected automatically.
 4. Confirm the `Deploy static site to GitHub Pages` workflow completes successfully.
-5. Visit `https://danieleyny.github.io/cyra-management/` and inspect the live site.
+5. Visit `https://cyramgmt.com/` and inspect the live site.
 
-If the repository owner or name changes, update the canonical URL in `index.html`, `assets/js/config.js`, `robots.txt`, `sitemap.xml`, and the structured-data block in `index.html`.
+The repository includes a `CNAME` file for `cyramgmt.com`. If the public domain changes, update that file together with the canonical URL in `index.html`, `privacy.html`, `terms.html`, `assets/js/config.js`, `robots.txt`, `sitemap.xml`, and the structured-data block in `index.html`.
 
 ## Before final public launch
 
 - Confirm all public contact destinations, particularly the inherited Formspree form.
 - Have the privacy and website terms reviewed by qualified legal counsel.
 - Confirm that every displayed property and photograph remains approved for publication.
-- Update canonical metadata if a custom domain will be used.
+- Verify `https://cyramgmt.com/`, `https://www.cyramgmt.com/`, and HTTPS after each DNS or Pages configuration change.
