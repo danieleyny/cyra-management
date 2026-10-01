@@ -35,18 +35,18 @@
           const forceIntro = new URLSearchParams(location.search).has("intro");
           const isHomeEntry = !location.hash || location.hash === "#top";
           const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
-          const lastIntro = Number(localStorage.getItem("cyra-intro-v6") || 0);
+          const lastIntro = Number(localStorage.getItem("cyra-intro-v7") || 0);
           const introIsFresh = Date.now() - lastIntro < 7 * 24 * 60 * 60 * 1000;
           if (isHomeEntry && !reduceMotion && (forceIntro || !introIsFresh)) {
             document.documentElement.classList.add("intro-pending");
-            setTimeout(() => document.documentElement.classList.remove("intro-pending"), 2800);
+            setTimeout(() => document.documentElement.classList.remove("intro-pending"), 4100);
           }
         } catch (error) {
           document.documentElement.classList.remove("intro-pending");
         }
       })();
     </script>
-    <link rel="stylesheet" href="./assets/css/styles.css?v=20260930-1">
+    <link rel="stylesheet" href="./assets/css/styles.css?v=20261001-1">
   </head>
   <body>
     <div class="site-intro" data-site-intro aria-hidden="true">
@@ -423,6 +423,6 @@
     </script>
     <script src="./assets/js/config.js?v=20260930-2"></script>
     <script src="./assets/js/data.js?v=20260930-1"></script>
-    <script src="./assets/js/main.js?v=20260930-1"></script>
+    <script src="./assets/js/main.js?v=20261001-1"></script>
   </body>
 </html>

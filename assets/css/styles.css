@@ -68,7 +68,7 @@ html.intro-pending { overflow: hidden; }
 
 .intro-pending .site-intro,
 .site-intro.is-exiting { display: grid; }
-.site-intro.is-exiting { animation: intro-blast-open .68s cubic-bezier(.22,.72,.2,1) forwards; will-change: opacity; }
+.site-intro.is-exiting { animation: intro-blast-open .82s cubic-bezier(.22,.72,.2,1) forwards; will-change: opacity; }
 
 .site-intro::before {
   content: "";

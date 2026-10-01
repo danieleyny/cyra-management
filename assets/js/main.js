@@ -115,14 +115,14 @@
       finished = true;
       cancelAnimationFrame(frame);
       window.removeEventListener("resize", resizeCanvas);
-      try { localStorage.setItem("cyra-intro-v6", String(Date.now())); } catch (error) { /* Storage may be unavailable. */ }
+      try { localStorage.setItem("cyra-intro-v7", String(Date.now())); } catch (error) { /* Storage may be unavailable. */ }
       intro.classList.add("is-exiting");
       root.classList.remove("intro-pending");
       root.classList.add("intro-revealing");
       window.setTimeout(() => {
         intro.remove();
         root.classList.remove("intro-revealing");
-      }, 760);
+      }, 940);
     };
 
     const heroArt = document.querySelector(".hero-art__image");
@@ -442,10 +442,10 @@
       lastDrawn = time;
       const elapsed = time - startedAt;
       context.clearRect(0, 0, width, height);
-      const laserProgress = clamp((elapsed - 650) / 650);
-      const sliceProgress = clamp((elapsed - 780) / 500);
-      const blastProgress = clamp((elapsed - 1270) / 560);
-      drawPaint(clamp((elapsed - 40) / 850), sliceProgress, blastProgress);
+      const laserProgress = clamp((elapsed - 1120) / 900);
+      const sliceProgress = clamp((elapsed - 1260) / 680);
+      const blastProgress = clamp((elapsed - 2160) / 720);
+      drawPaint(clamp((elapsed - 60) / 1350), sliceProgress, blastProgress);
       if (laserProgress > 0 && !lasersStarted) {
         lasersStarted = true;
         intro.classList.add("is-laser-live");
@@ -460,7 +460,7 @@
         intro.classList.add("is-blasting");
       }
       drawExplosion(blastProgress);
-      if (elapsed >= 1850 && !sequenceReady) {
+      if (elapsed >= 2920 && !sequenceReady) {
         sequenceReady = true;
         maybeFinish();
       }
@@ -481,7 +481,7 @@
 
     const fontReady = document.fonts?.ready || Promise.resolve();
     Promise.race([fontReady, new Promise((resolve) => window.setTimeout(resolve, 240))]).then(startAnimation);
-    window.setTimeout(finish, 2600);
+    window.setTimeout(finish, 3900);
   };
 
   const setContactLinks = () => {
