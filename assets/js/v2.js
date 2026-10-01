@@ -170,11 +170,30 @@
     sections.forEach((section) => observer.observe(section));
   };
 
+  const setupVisualSections = () => {
+    const sections = [...document.querySelectorAll("[data-visual-section]")];
+    if (!sections.length) return;
+
+    if (reducedMotion || !("IntersectionObserver" in window)) {
+      sections.forEach((section) => section.classList.add("is-v2-live"));
+      return;
+    }
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        entry.target.classList.toggle("is-v2-live", entry.isIntersecting);
+      });
+    }, { threshold: .12, rootMargin: "8% 0px 8%" });
+
+    sections.forEach((section) => observer.observe(section));
+  };
+
   setupV2ContactLinks();
   setupCareFlow();
   setupResidenceAtmosphere();
   setupLightFollow();
   setupContactOptions();
   setupSeamLifecycle();
+  setupVisualSections();
   document.documentElement.classList.add("v2-ready");
 })();
