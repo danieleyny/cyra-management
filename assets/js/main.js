@@ -767,7 +767,7 @@
 
   const setupReveals = () => {
     const items = document.querySelectorAll(".reveal");
-    const motionSections = document.querySelectorAll(".brand-intro, .approach, .promise, .contact");
+    const motionSections = document.querySelectorAll(".brand-intro, .approach, .signal-break, .promise, .contact");
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches || !("IntersectionObserver" in window)) {
       items.forEach((item) => item.classList.add("is-visible"));
       return;
@@ -847,12 +847,91 @@
 
     previous?.addEventListener("click", () => move(-1));
     next?.addEventListener("click", () => move(1));
-    rail.addEventListener("wheel", (event) => {
-      if (event.ctrlKey || Math.abs(event.deltaY) <= Math.abs(event.deltaX)) return;
-      const unit = event.deltaMode === 1 ? 16 : event.deltaMode === 2 ? window.innerHeight : 1;
+
+    let drag = null;
+    let suppressClick = false;
+
+    const snapToClosestCard = () => {
+      const cards = [...rail.querySelectorAll(".residence-card")];
+      if (!cards.length) return;
+      const railRect = rail.getBoundingClientRect();
+      const styles = getComputedStyle(rail);
+      const inset = parseFloat(styles.scrollPaddingInlineStart) || parseFloat(styles.paddingInlineStart) || 0;
+      let target = rail.scrollLeft;
+      let closest = Infinity;
+
+      cards.forEach((card) => {
+        const left = rail.scrollLeft + card.getBoundingClientRect().left - railRect.left - inset;
+        const distance = Math.abs(left - rail.scrollLeft);
+        if (distance < closest) {
+          closest = distance;
+          target = left;
+        }
+      });
+
+      rail.scrollTo({ left: target, behavior: reducedMotion ? "auto" : "smooth" });
+    };
+
+    const finishDrag = (event) => {
+      if (!drag || (event.pointerId != null && event.pointerId !== drag.pointerId)) return;
+      const wasHorizontal = drag.axis === "x";
+      const moved = drag.moved;
+      const pointerId = drag.pointerId;
+      drag = null;
+      rail.classList.remove("is-dragging");
+      if (rail.hasPointerCapture?.(pointerId)) rail.releasePointerCapture(pointerId);
+
+      if (moved) {
+        suppressClick = true;
+        window.setTimeout(() => { suppressClick = false; }, 400);
+      }
+      if (wasHorizontal) {
+        requestAnimationFrame(snapToClosestCard);
+      }
+    };
+
+    rail.addEventListener("pointerdown", (event) => {
+      if (!event.isPrimary || (event.pointerType === "mouse" && event.button !== 0)) return;
+      drag = {
+        pointerId: event.pointerId,
+        startX: event.clientX,
+        startY: event.clientY,
+        startScroll: rail.scrollLeft,
+        axis: null,
+        moved: false
+      };
+    });
+
+    rail.addEventListener("pointermove", (event) => {
+      if (!drag || event.pointerId !== drag.pointerId) return;
+      const deltaX = event.clientX - drag.startX;
+      const deltaY = event.clientY - drag.startY;
+
+      if (!drag.axis) {
+        if (Math.hypot(deltaX, deltaY) < 7) return;
+        drag.axis = Math.abs(deltaX) > Math.abs(deltaY) * 1.12 ? "x" : "y";
+        if (drag.axis === "x") {
+          rail.setPointerCapture?.(event.pointerId);
+          rail.classList.add("is-dragging");
+        }
+      }
+
+      drag.moved ||= Math.hypot(deltaX, deltaY) > 9;
+      if (drag.axis !== "x") return;
       event.preventDefault();
-      window.scrollBy({ top: event.deltaY * unit, left: 0, behavior: "auto" });
+      rail.scrollLeft = drag.startScroll - deltaX;
     }, { passive: false });
+
+    rail.addEventListener("pointerup", finishDrag);
+    rail.addEventListener("pointercancel", finishDrag);
+    rail.addEventListener("dragstart", (event) => event.preventDefault());
+    rail.addEventListener("click", (event) => {
+      if (!suppressClick) return;
+      event.preventDefault();
+      event.stopPropagation();
+      suppressClick = false;
+    }, true);
+
     rail.addEventListener("scroll", () => requestAnimationFrame(update), { passive: true });
     window.addEventListener("resize", () => requestAnimationFrame(update), { passive: true });
     update();
