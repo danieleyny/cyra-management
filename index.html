@@ -46,7 +46,7 @@
         }
       })();
     </script>
-    <link rel="stylesheet" href="./assets/css/styles.css?v=20261001-8">
+    <link rel="stylesheet" href="./assets/css/styles.css?v=20261001-9">
   </head>
   <body>
     <div class="site-intro" data-site-intro aria-hidden="true">
@@ -164,20 +164,10 @@
             <div class="work-system__halo"><i></i><i></i></div>
             <svg class="work-system__illustration" viewBox="0 0 720 500">
               <defs>
-                <linearGradient id="work-building-fill" x1="0" y1="0" x2="1" y2="1">
-                  <stop offset="0" stop-color="#263a4d"/>
-                  <stop offset=".58" stop-color="#132433"/>
-                  <stop offset="1" stop-color="#0b1722"/>
-                </linearGradient>
                 <linearGradient id="work-flow-gradient" x1="0" y1="0" x2="1" y2="0">
                   <stop offset="0" stop-color="#ff9e74"/>
                   <stop offset=".5" stop-color="#a48bff"/>
                   <stop offset="1" stop-color="#66e6db"/>
-                </linearGradient>
-                <linearGradient id="work-scan-gradient" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0" stop-color="#66e6db" stop-opacity="0"/>
-                  <stop offset=".55" stop-color="#66e6db" stop-opacity=".5"/>
-                  <stop offset="1" stop-color="#66e6db" stop-opacity="0"/>
                 </linearGradient>
               </defs>
               <g class="work-system__grid">
@@ -194,25 +184,53 @@
                 </g>
               </g>
               <g class="work-system__continuum">
-                <path class="work-system__continuum-shadow" data-work-continuum d="M176 380C150 220 230 125 360 122C490 125 570 220 544 380C446 430 274 430 176 380"/>
-                <path class="work-system__continuum-flow" data-work-continuum d="M176 380C150 220 230 125 360 122C490 125 570 220 544 380C446 430 274 430 176 380"/>
+                <path class="work-system__continuum-shadow" data-work-continuum d="M185 340C150 210 230 125 360 122C490 125 570 210 535 340C450 405 270 405 185 340"/>
+                <path class="work-system__continuum-flow" data-work-continuum d="M185 340C150 210 230 125 360 122C490 125 570 210 535 340C450 405 270 405 185 340"/>
               </g>
-              <g class="work-system__building">
-                <path class="work-system__ground" d="M190 416C278 380 442 380 530 416"/>
-                <rect x="252" y="139" width="216" height="272" rx="30" fill="url(#work-building-fill)"/>
-                <path d="M309 139V111C309 84 331 62 358 62H362C389 62 411 84 411 111V139"/>
-                <path d="M252 229H468M252 319H468M324 139V411M396 139V411"/>
-                <g class="work-system__windows">
-                  <rect x="274" y="164" width="27" height="37" rx="7"/><rect x="346" y="164" width="27" height="37" rx="7"/><rect x="418" y="164" width="27" height="37" rx="7"/>
-                  <rect x="274" y="254" width="27" height="37" rx="7"/><rect x="346" y="254" width="27" height="37" rx="7"/><rect x="418" y="254" width="27" height="37" rx="7"/>
-                  <rect x="274" y="344" width="27" height="37" rx="7"/><rect x="346" y="344" width="27" height="37" rx="7"/><rect x="418" y="344" width="27" height="37" rx="7"/>
-                </g>
-                <circle class="work-system__hub" cx="360" cy="276" r="19"/>
-                <circle class="work-system__hub-core" cx="360" cy="276" r="5"/>
+              <g class="work-system__property">
+                <circle class="work-system__property-aura" cx="360" cy="260" r="106"/>
+                <circle class="work-system__property-ring" cx="360" cy="260" r="84"/>
+                <circle class="work-system__property-sweep" cx="360" cy="260" r="84"/>
+                <circle class="work-system__property-disc" cx="360" cy="260" r="65"/>
+                <path class="work-system__property-home" d="M326 256L360 228L394 256V296H370V269H350V296H326Z"/>
+                <rect class="work-system__property-core" x="356" y="250" width="8" height="8" rx="2"/>
+                <text class="work-system__scene-label work-system__property-label" x="360" y="319" text-anchor="middle">PROPERTY</text>
               </g>
               <g class="work-system__mode work-system__mode--oversight">
-                <rect class="work-system__scanner" x="246" y="139" width="228" height="88" rx="24" fill="url(#work-scan-gradient)"/>
-                <path class="work-system__bracket" d="M211 183V142H252M509 183V142H468M211 365V406H252M509 365V406H468"/>
+                <g class="work-system__status work-system__status--access" transform="translate(225 158)">
+                  <circle class="work-system__status-pulse" r="32"/>
+                  <circle class="work-system__status-disc" r="25"/>
+                  <circle class="work-system__status-check" cx="18" cy="-18" r="7"/>
+                  <path class="work-system__status-checkmark" d="M15 -18L18 -15L22 -21"/>
+                  <circle class="work-system__status-icon" cx="-6" cy="0" r="5"/>
+                  <path class="work-system__status-icon" d="M-1 0H11M6 0V5M11 0V4"/>
+                  <text class="work-system__scene-label" x="0" y="48" text-anchor="middle">ACCESS</text>
+                </g>
+                <g class="work-system__status work-system__status--systems" transform="translate(495 158)">
+                  <circle class="work-system__status-pulse" r="32"/>
+                  <circle class="work-system__status-disc" r="25"/>
+                  <circle class="work-system__status-check" cx="18" cy="-18" r="7"/>
+                  <path class="work-system__status-checkmark" d="M15 -18L18 -15L22 -21"/>
+                  <path class="work-system__status-icon work-system__status-icon--bolt" d="M3 -13L-9 3H0L-4 14L11 -5H2Z"/>
+                  <text class="work-system__scene-label" x="0" y="48" text-anchor="middle">SYSTEMS</text>
+                </g>
+                <g class="work-system__status work-system__status--condition" transform="translate(185 340)">
+                  <circle class="work-system__status-pulse" r="32"/>
+                  <circle class="work-system__status-disc" r="25"/>
+                  <circle class="work-system__status-check" cx="18" cy="-18" r="7"/>
+                  <path class="work-system__status-checkmark" d="M15 -18L18 -15L22 -21"/>
+                  <rect class="work-system__status-icon" x="-9" y="-11" width="18" height="22" rx="3"/>
+                  <path class="work-system__status-icon" d="M-4 -11V-15H4V-11M-5 2L-1 6L6 -3"/>
+                  <text class="work-system__scene-label" x="0" y="48" text-anchor="middle">CONDITION</text>
+                </g>
+                <g class="work-system__status work-system__status--upkeep" transform="translate(535 340)">
+                  <circle class="work-system__status-pulse" r="32"/>
+                  <circle class="work-system__status-disc" r="25"/>
+                  <circle class="work-system__status-check" cx="18" cy="-18" r="7"/>
+                  <path class="work-system__status-checkmark" d="M15 -18L18 -15L22 -21"/>
+                  <path class="work-system__status-icon" d="M0 -14V14M-14 0H14M-9 -9L9 9M9 -9L-9 9"/>
+                  <text class="work-system__scene-label" x="0" y="48" text-anchor="middle">UPKEEP</text>
+                </g>
               </g>
               <g class="work-system__mode work-system__mode--communication">
                 <g class="work-system__contact work-system__contact--resident">
@@ -552,6 +570,6 @@
     </script>
     <script src="./assets/js/config.js?v=20260930-2"></script>
     <script src="./assets/js/data.js?v=20260930-1"></script>
-    <script src="./assets/js/main.js?v=20261001-8"></script>
+    <script src="./assets/js/main.js?v=20261001-9"></script>
   </body>
 </html>
