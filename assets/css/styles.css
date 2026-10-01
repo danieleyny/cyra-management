@@ -68,7 +68,7 @@ html.intro-pending { overflow: hidden; }
 
 .intro-pending .site-intro,
 .site-intro.is-exiting { display: grid; }
-.site-intro.is-exiting { animation: intro-blast-open .82s cubic-bezier(.22,.72,.2,1) forwards; will-change: opacity; }
+.site-intro.is-exiting { animation: intro-blast-open 1.05s cubic-bezier(.22,.72,.2,1) forwards; will-change: opacity; }
 
 .site-intro::before {
   content: "";
@@ -105,11 +105,12 @@ html.intro-pending { overflow: hidden; }
 .site-intro.is-laser-live .site-intro__laser-flash { animation: intro-laser-flash .68s .18s var(--ease) both; }
 .site-intro.is-blasting .site-intro__laser-flash { animation: none; opacity: 0; }
 .site-intro.is-blasting .site-intro__fallback { display: none; }
-.site-intro__blast { position: absolute; z-index: 4; top: 50%; left: 50%; display: block; width: min(10rem,26vw); aspect-ratio: 1; border-radius: 50%; background: radial-gradient(circle,rgba(255,255,255,.96) 0 4%,rgba(211,181,255,.65) 10%,rgba(102,230,219,.25) 28%,transparent 70%); box-shadow: 0 0 2.5rem rgba(255,255,255,.42),0 0 5rem rgba(164,139,255,.3); opacity: 0; transform: translate(-50%,-50%) scale(.06); }
+.site-intro__blast { position: absolute; z-index: 4; top: 50%; left: 50%; display: block; width: min(9rem,23vw); aspect-ratio: 1; contain: strict; border-radius: 50%; background: radial-gradient(circle,rgba(255,255,255,.96) 0 4%,rgba(211,181,255,.65) 10%,rgba(102,230,219,.25) 28%,transparent 70%); opacity: 0; transform: translate(-50%,-50%) scale(.06); will-change: transform,opacity; }
 .site-intro.is-blasting .site-intro__blast { animation: intro-blast-wave .78s cubic-bezier(.16,.84,.31,1) both; }
 
 .intro-pending .site-header * { animation-play-state: paused !important; }
 .intro-pending .site-header { opacity: 0; transform: translate(-50%,-1rem); }
+.intro-pending .hero__beam, .intro-pending .hero__orbit, .intro-pending .hero-art, .intro-pending .hero-art::after, .intro-pending .hero-art__scene, .intro-pending .hero-art__glow-image, .intro-pending .hero-art__halo, .intro-pending .hero-art__route, .intro-pending .hero-art__beacon, .intro-pending .hero-art__reflection, .intro-pending .hero__flow > i, .intro-pending .hero__stardust-glints i { animation-play-state: paused !important; }
 .intro-revealing .site-header { animation: intro-header-in 1.05s .14s both var(--ease); }
 .intro-revealing .hero__stardust, .intro-revealing .hero__stardust-glints { transition: none; }
 

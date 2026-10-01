@@ -103,42 +103,25 @@
     let particleGroups = [[], [], [], []];
     let oversprayGroups = [[], [], [], []];
     let textStyle = {};
-    let sequenceReady = false;
-    let artIsReady = false;
     let lasersStarted = false;
     let slicingStarted = false;
     let blastingStarted = false;
-    let lastDrawn = 0;
 
     const finish = () => {
       if (finished) return;
       finished = true;
       cancelAnimationFrame(frame);
       window.removeEventListener("resize", resizeCanvas);
-      try { localStorage.setItem("cyra-intro-v7", String(Date.now())); } catch (error) { /* Storage may be unavailable. */ }
+      try { localStorage.setItem("cyra-intro-v8", String(Date.now())); } catch (error) { /* Storage may be unavailable. */ }
       intro.classList.add("is-exiting");
       root.classList.remove("intro-pending");
       root.classList.add("intro-revealing");
+      window.dispatchEvent(new CustomEvent("cyra:intro-complete"));
       window.setTimeout(() => {
         intro.remove();
         root.classList.remove("intro-revealing");
-      }, 940);
+      }, 1120);
     };
-
-    const heroArt = document.querySelector(".hero-art__image");
-    const artReady = !heroArt || heroArt.complete
-      ? Promise.resolve()
-      : new Promise((resolve) => {
-          heroArt.addEventListener("load", resolve, { once: true });
-          heroArt.addEventListener("error", resolve, { once: true });
-        });
-    const maybeFinish = () => {
-      if (sequenceReady && artIsReady) finish();
-    };
-    artReady.then(() => {
-      artIsReady = true;
-      maybeFinish();
-    });
 
     const buildPaintMap = () => {
       if (!context) return;
@@ -220,9 +203,9 @@
         return;
       }
 
-      const particleLimit = width < 600 ? 2600 : 4200;
+      const particleLimit = width < 600 ? 950 : 1750;
       particles = paint.sort((a, b) => a.phase - b.phase).slice(0, particleLimit);
-      overspray = mist.sort((a, b) => a.phase - b.phase).slice(0, width < 600 ? 220 : 360);
+      overspray = mist.sort((a, b) => a.phase - b.phase).slice(0, width < 600 ? 70 : 130);
       particleGroups = [[], [], [], []];
       oversprayGroups = [[], [], [], []];
       particles.forEach((point) => particleGroups[point.color].push(point));
@@ -235,7 +218,7 @@
       if (!canvas || !context) return;
       width = window.innerWidth;
       height = window.innerHeight;
-      pixelRatio = Math.min(window.devicePixelRatio || 1, 1.5);
+      pixelRatio = Math.min(window.devicePixelRatio || 1, width < 600 ? 1 : 1.25);
       canvas.width = Math.round(width * pixelRatio);
       canvas.height = Math.round(height * pixelRatio);
       context.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
@@ -251,19 +234,14 @@
     const drawPaint = (progress, sliceProgress, blastProgress) => {
       if (!context || !particles.length) return;
       const palette = ["#ff9e74", "#b98cff", "#66e6db", "#fff6ed"];
-      const paintProgress = easeOut(progress);
+      const paintProgress = clamp(progress);
       const sliceAmount = easeOut(sliceProgress) * (1 - blastProgress);
       const blastAmount = Math.pow(easeOut(blastProgress), 1.12);
       const blastAlpha = Math.pow(1 - blastProgress, 1.55);
       const positionPoint = (point) => {
-        const rotation = point.sliceSpin * sliceAmount;
-        const cosine = Math.cos(rotation);
-        const sine = Math.sin(rotation);
-        const relativeX = point.x - textStyle.centerX;
-        const relativeY = point.y - textStyle.centerY;
         return {
-          x: textStyle.centerX + relativeX * cosine - relativeY * sine + point.sliceX * sliceAmount + point.blastX * blastAmount,
-          y: textStyle.centerY + relativeX * sine + relativeY * cosine + point.sliceY * sliceAmount + point.blastY * blastAmount
+          x: point.x + point.sliceX * sliceAmount + point.blastX * blastAmount,
+          y: point.y + point.sliceY * sliceAmount + point.blastY * blastAmount
         };
       };
       context.save();
@@ -435,17 +413,12 @@
 
     const drawFrame = (time) => {
       if (!context || finished) return;
-      if (lastDrawn && time - lastDrawn < 28) {
-        frame = requestAnimationFrame(drawFrame);
-        return;
-      }
-      lastDrawn = time;
       const elapsed = time - startedAt;
       context.clearRect(0, 0, width, height);
-      const laserProgress = clamp((elapsed - 1120) / 900);
-      const sliceProgress = clamp((elapsed - 1260) / 680);
-      const blastProgress = clamp((elapsed - 2160) / 720);
-      drawPaint(clamp((elapsed - 60) / 1350), sliceProgress, blastProgress);
+      const laserProgress = clamp((elapsed - 2300) / 900);
+      const sliceProgress = clamp((elapsed - 2440) / 820);
+      const blastProgress = clamp((elapsed - 3380) / 720);
+      drawPaint(clamp((elapsed - 80) / 1880), sliceProgress, blastProgress);
       if (laserProgress > 0 && !lasersStarted) {
         lasersStarted = true;
         intro.classList.add("is-laser-live");
@@ -460,17 +433,14 @@
         intro.classList.add("is-blasting");
       }
       drawExplosion(blastProgress);
-      if (elapsed >= 2920 && !sequenceReady) {
-        sequenceReady = true;
-        maybeFinish();
-      }
+      if (elapsed >= 4140) finish();
+      if (finished) return;
       frame = requestAnimationFrame(drawFrame);
     };
 
     const startAnimation = () => {
       if (!canvas || !context || finished) {
-        sequenceReady = true;
-        maybeFinish();
+        finish();
         return;
       }
       resizeCanvas();
@@ -481,7 +451,7 @@
 
     const fontReady = document.fonts?.ready || Promise.resolve();
     Promise.race([fontReady, new Promise((resolve) => window.setTimeout(resolve, 240))]).then(startAnimation);
-    window.setTimeout(finish, 3900);
+    window.setTimeout(finish, 4800);
   };
 
   const setContactLinks = () => {
@@ -652,7 +622,9 @@
     let width = 0;
     let height = 0;
     let frame = 0;
-    let visible = true;
+    let inViewport = true;
+    let introRunning = document.documentElement.classList.contains("intro-pending");
+    let visible = !introRunning;
     let lastDrawn = 0;
     const colors = ["#ff9e74", "#a48bff", "#66e6db"];
     const waveY = (x, layer, time) => {
@@ -732,17 +704,27 @@
     window.addEventListener("resize", resize, { passive: true });
     if (reducedMotion) return;
 
-    const observer = new IntersectionObserver(([entry]) => {
-      visible = entry.isIntersecting;
+    const syncVisibility = () => {
+      visible = inViewport && !introRunning;
       hero.classList.toggle("is-offscreen", !visible);
       if (visible && !frame) frame = requestAnimationFrame(render);
       if (!visible && frame) {
         cancelAnimationFrame(frame);
         frame = 0;
       }
+    };
+    const observer = new IntersectionObserver(([entry]) => {
+      inViewport = entry.isIntersecting;
+      syncVisibility();
     }, { threshold: 0 });
     observer.observe(hero);
-    frame = requestAnimationFrame(render);
+    if (introRunning) {
+      window.addEventListener("cyra:intro-complete", () => {
+        introRunning = false;
+        syncVisibility();
+      }, { once: true });
+    }
+    if (visible) frame = requestAnimationFrame(render);
   };
 
   const setupCareConstellation = () => {
