@@ -727,42 +727,101 @@
     if (visible) frame = requestAnimationFrame(render);
   };
 
-  const setupCareConstellation = () => {
-    const constellation = document.querySelector("[data-care-constellation]");
-    const points = [...(constellation?.querySelectorAll("li") || [])];
-    if (!constellation || !points.length || reducedMotion) return;
+  const setupWorkSystem = () => {
+    const system = document.querySelector("[data-work-system]");
+    const buttons = [...(system?.querySelectorAll("[data-work-button]") || [])];
+    const indexLabel = system?.querySelector("[data-work-index]");
+    const titleLabel = system?.querySelector("[data-work-title]");
+    if (!system || !buttons.length) return;
 
-    let activeIndex = 0;
+    let activeIndex = Math.max(0, buttons.findIndex((button) => button.classList.contains("is-active")));
     let timer = 0;
+    let restartTimer = 0;
+    let changeTimer = 0;
     let inView = false;
-    const activate = (index) => {
-      activeIndex = index;
-      points.forEach((point, pointIndex) => point.classList.toggle("is-active", pointIndex === activeIndex));
-    };
+    let held = false;
+
     const stop = () => {
       window.clearInterval(timer);
       timer = 0;
     };
-    const start = () => {
-      if (timer || !inView) return;
-      timer = window.setInterval(() => activate((activeIndex + 1) % points.length), 2200);
+
+    const activate = (nextIndex, animate = true) => {
+      activeIndex = (nextIndex + buttons.length) % buttons.length;
+      const active = buttons[activeIndex];
+      system.dataset.workMode = active.dataset.workButton;
+      buttons.forEach((button, index) => {
+        const selected = index === activeIndex;
+        button.classList.toggle("is-active", selected);
+        button.setAttribute("aria-pressed", String(selected));
+      });
+      if (indexLabel) indexLabel.textContent = active.dataset.workIndex;
+      if (titleLabel) titleLabel.textContent = active.dataset.workTitle;
+
+      if (!animate || reducedMotion) return;
+      window.clearTimeout(changeTimer);
+      system.classList.remove("is-changing");
+      requestAnimationFrame(() => system.classList.add("is-changing"));
+      changeTimer = window.setTimeout(() => system.classList.remove("is-changing"), 780);
     };
 
-    points.forEach((point, index) => {
-      point.addEventListener("pointerenter", () => {
+    const start = () => {
+      if (reducedMotion || timer || !inView || held) return;
+      timer = window.setInterval(() => activate(activeIndex + 1), 4300);
+    };
+
+    const restartLater = () => {
+      window.clearTimeout(restartTimer);
+      restartTimer = window.setTimeout(start, 7000);
+    };
+
+    system.addEventListener("pointerenter", () => {
+      held = true;
+      stop();
+    });
+    system.addEventListener("pointerleave", () => {
+      held = false;
+      start();
+    });
+
+    buttons.forEach((button, index) => {
+      button.addEventListener("pointerenter", () => activate(index));
+      button.addEventListener("click", () => {
+        stop();
+        activate(index);
+        restartLater();
+      });
+      button.addEventListener("focus", () => {
+        held = true;
         stop();
         activate(index);
       });
-      point.addEventListener("pointerleave", start);
-      point.addEventListener("pointerdown", () => activate(index), { passive: true });
+      button.addEventListener("blur", () => {
+        held = false;
+        start();
+      });
+      button.addEventListener("keydown", (event) => {
+        if (![/ArrowLeft/, /ArrowUp/, /ArrowRight/, /ArrowDown/].some((pattern) => pattern.test(event.key))) return;
+        event.preventDefault();
+        const direction = event.key === "ArrowLeft" || event.key === "ArrowUp" ? -1 : 1;
+        const targetIndex = (index + direction + buttons.length) % buttons.length;
+        buttons[targetIndex].focus();
+      });
     });
 
-    const observer = new IntersectionObserver(([entry]) => {
-      inView = entry.isIntersecting;
-      if (inView) start();
-      else stop();
-    }, { threshold: .2 });
-    observer.observe(constellation);
+    if ("IntersectionObserver" in window) {
+      const observer = new IntersectionObserver(([entry]) => {
+        inView = entry.isIntersecting;
+        if (inView) start();
+        else stop();
+      }, { threshold: .2 });
+      observer.observe(system);
+    } else {
+      inView = true;
+      start();
+    }
+
+    activate(activeIndex, false);
   };
 
   const setupReveals = () => {
@@ -1058,7 +1117,7 @@
   setContactLinks();
   setupHeroStardust();
   setupHeroFlow();
-  setupCareConstellation();
+  setupWorkSystem();
   setupReveals();
   setupHeroMotion();
   setupResidenceRail();
