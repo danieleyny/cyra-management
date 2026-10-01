@@ -16,6 +16,20 @@ Then open `http://127.0.0.1:4173/`.
 
 No compilation is required. The repository root is the production site. Before release, validate that `index.html`, `privacy.html`, `terms.html`, and `404.html` load through a local HTTP server; direct `file://` previews are not recommended.
 
+## V2 preview workflow
+
+`v2.html` is the isolated visual-testing page. Once the repository is published through GitHub Pages, it is available at `https://cyramgmt.com/v2.html`. The page is marked `noindex, nofollow` so it can be reviewed without becoming a search result.
+
+- Keep experimental markup in `v2.html`.
+- `assets/css/v2-base.css` and `assets/js/v2-base.js` are the V2 baseline copies; the preview does not load the production stylesheet or production interaction file.
+- Keep experimental presentation and motion in `assets/css/v2.css` and `assets/js/v2.js`. Update the V2 baseline copies only when the preview intentionally needs a newer production starting point.
+- Shared property and contact data continue to come from `assets/js/data.js` and `assets/js/config.js`.
+- Review locally at `http://127.0.0.1:4173/v2.html?intro=1` and on the published V2 URL.
+- After approval, deliberately port the accepted V2 markup, styles, and behavior into `index.html`, `assets/css/styles.css`, and `assets/js/main.js` instead of replacing the live page wholesale.
+- Re-test the production page before removing or resetting the V2 experiment.
+
+This separation keeps unapproved design work out of `index.html`. Avoid placing preview-only rules in the shared stylesheet or preview-only behavior in the shared JavaScript file.
+
 ## Editing content
 
 - Main page structure and editorial copy: `index.html`

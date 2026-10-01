@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Cyra Management — V2 Preview</title>
+    <meta name="description" content="Responsive residential property management across New York City, the Hudson Valley, and South Florida.">
+    <meta name="theme-color" content="#101820">
+    <meta name="color-scheme" content="dark light">
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="canonical" href="https://cyramgmt.com/">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Cyra Management">
+    <meta property="og:title" content="Cyra Real Estate Property Management">
+    <meta property="og:description" content="Responsive residential property management across New York City, the Hudson Valley, and South Florida.">
+    <meta property="og:url" content="https://cyramgmt.com/">
+    <meta property="og:image" content="https://cyramgmt.com/og.png">
+    <meta property="og:image:secure_url" content="https://cyramgmt.com/og.png">
+    <meta property="og:image:type" content="image/png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="CYRA in colorful particles with the words Real Estate Property Management">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Cyra Real Estate Property Management">
+    <meta name="twitter:description" content="Responsive residential property management across New York City, the Hudson Valley, and South Florida.">
+    <meta name="twitter:image" content="https://cyramgmt.com/og.png">
+    <meta name="twitter:image:alt" content="CYRA in colorful particles with the words Real Estate Property Management">
+    <link rel="icon" href="./favicon.svg" type="image/svg+xml">
+    <link rel="preload" href="./assets/fonts/cormorant-garamond-latin.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="./assets/fonts/manrope-latin.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="./assets/images/cyra-property-world-v2-640.webp" as="image" type="image/webp" imagesrcset="./assets/images/cyra-property-world-v2-640.webp 640w, ./assets/images/cyra-property-world-v2-900.webp 900w, ./assets/images/cyra-property-world-v2.webp 1122w" imagesizes="(max-width: 740px) 82vw, 53vw" fetchpriority="high">
+    <script>
+      (() => {
+        try {
+          const forceIntro = new URLSearchParams(location.search).has("intro");
+          const isHomeEntry = !location.hash || location.hash === "#top";
+          const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
+          const lastIntro = Number(localStorage.getItem("cyra-intro-v7") || 0);
+          const introIsFresh = Date.now() - lastIntro < 7 * 24 * 60 * 60 * 1000;
+          if (isHomeEntry && !reduceMotion && (forceIntro || !introIsFresh)) {
+            document.documentElement.classList.add("intro-pending");
+            setTimeout(() => document.documentElement.classList.remove("intro-pending"), 4100);
+          }
+        } catch (error) {
+          document.documentElement.classList.remove("intro-pending");
+        }
+      })();
+    </script>
+    <link rel="stylesheet" href="./assets/css/v2-base.css?v=20261001-1">
+    <link rel="stylesheet" href="./assets/css/v2.css?v=20261001-1">
+  </head>
+  <body class="v2-preview">
+    <div class="site-intro" data-site-intro aria-hidden="true">
+      <canvas class="site-intro__canvas" data-intro-canvas></canvas>
+      <canvas class="site-intro__stardust" data-intro-stardust></canvas>
+      <strong class="site-intro__fallback">CYRA</strong>
+      <i class="site-intro__laser-flash"></i>
+      <i class="site-intro__blast"></i>
+    </div>
+
+    <a class="skip-link" href="#main-content">Skip to content</a>
+    <div class="page-progress" aria-hidden="true"><i data-page-progress></i></div>
+    <a class="v2-preview-badge" href="./index.html" aria-label="V2 preview. Return to the current website">
+      <span>V2 preview</span><small>Return to current site</small>
+    </a>
+
+    <header class="site-header" data-header>
+      <a class="wordmark" href="#top" aria-label="Cyra Management home">
+        <span class="wordmark__name">CYRA</span>
+        <span class="wordmark__descriptor">Management</span>
+      </a>
+
+      <nav class="desktop-nav" aria-label="Primary navigation">
+        <a href="#residences">Properties</a>
+        <a href="#approach">Approach</a>
+        <a href="#services">Services</a>
+        <a href="#care-flow">Process</a>
+        <a href="#about">About</a>
+        <a href="#contact">Contact</a>
+      </nav>
+
+      <a class="header-cta" href="#contact" data-resident-support>Resident support</a>
+      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="mobile-menu" aria-label="Open menu">
+        <span></span><span></span>
+      </button>
+    </header>
+
+    <aside class="mobile-menu" id="mobile-menu" aria-label="Mobile navigation" inert>
+      <div class="mobile-menu__top">
+        <span class="wordmark__name">CYRA</span>
+        <button class="mobile-menu__close" type="button" aria-label="Close menu"><span></span><span></span></button>
+      </div>
+      <nav aria-label="Mobile navigation">
+        <a href="#residences"><span>01</span> Properties</a>
+        <a href="#approach"><span>02</span> Approach</a>
+        <a href="#services"><span>03</span> Services</a>
+        <a href="#care-flow"><span>04</span> Process</a>
+        <a href="#about"><span>05</span> About</a>
+        <a href="#contact"><span>06</span> Contact</a>
+      </nav>
+      <div class="mobile-menu__footer">
+        <a href="#contact" data-resident-support>Resident support <svg class="icon icon--arrow-right" aria-hidden="true" viewBox="0 0 16 16"><path d="M2.5 8h10M8.5 4l4 4-4 4"/></svg></a>
+        <p>New York · Hudson Valley · South Florida</p>
+      </div>
+    </aside>
+
+    <noscript>
+      <nav class="noscript-nav" aria-label="Navigation without JavaScript">
+        <a href="#residences">Properties</a><a href="#approach">Approach</a><a href="#services">Services</a><a href="#contact">Contact</a>
+      </nav>
+    </noscript>
+
+    <main id="main-content">
+      <section class="hero" id="top" aria-labelledby="hero-title" data-hero>
+        <canvas class="hero__stardust" data-hero-stardust aria-hidden="true"></canvas>
+        <div class="hero__stardust-glints" data-hero-glints aria-hidden="true"></div>
+        <div class="hero__light-field" aria-hidden="true">
+          <i class="hero__beam hero__beam--one"></i>
+          <i class="hero__beam hero__beam--two"></i>
+          <i class="hero__glow"></i>
+          <i class="hero__grid"></i>
+        </div>
+
+        <div class="hero__copy">
+          <h1 id="hero-title"><span>Property care,</span><span class="hero__accent"><em>done right.</em></span></h1>
+          <p class="hero__intro">Proactive property management with clear communication, reliable support, and direct oversight.</p>
+          <div class="hero__actions">
+            <a class="button button--sun" href="#residences">View properties <svg class="icon icon--arrow-down-right" aria-hidden="true" viewBox="0 0 16 16"><path d="M3 3l10 10M7 13h6V7"/></svg></a>
+            <a class="text-link" href="#contact">Contact us <svg class="icon icon--arrow-right" aria-hidden="true" viewBox="0 0 16 16"><path d="M2.5 8h10M8.5 4l4 4-4 4"/></svg></a>
+          </div>
+        </div>
+
+        <div class="hero__stage" data-hero-stage>
+          <div class="hero__orbit" aria-hidden="true"><span></span><span></span></div>
+          <div class="hero-art" aria-hidden="true">
+            <i class="hero-art__halo"></i>
+            <i class="hero-art__route"></i>
+            <div class="hero-art__scene">
+              <img class="hero-art__image" src="./assets/images/cyra-property-world-v2-640.webp" srcset="./assets/images/cyra-property-world-v2-640.webp 640w, ./assets/images/cyra-property-world-v2-900.webp 900w, ./assets/images/cyra-property-world-v2.webp 1122w" sizes="(max-width: 740px) 82vw, 53vw" width="1122" height="1402" alt="" fetchpriority="high" decoding="async">
+              <img class="hero-art__glow-image" src="./assets/images/cyra-property-world-v2-640.webp" srcset="./assets/images/cyra-property-world-v2-640.webp 640w, ./assets/images/cyra-property-world-v2-900.webp 900w, ./assets/images/cyra-property-world-v2.webp 1122w" sizes="(max-width: 740px) 82vw, 53vw" width="1122" height="1402" alt="" fetchpriority="low" decoding="async">
+              <i class="hero-art__beacon hero-art__beacon--city"></i>
+              <i class="hero-art__beacon hero-art__beacon--valley"></i>
+              <i class="hero-art__beacon hero-art__beacon--south"></i>
+            </div>
+            <i class="hero-art__reflection"></i>
+          </div>
+        </div>
+
+        <div class="hero__flow" aria-hidden="true">
+          <canvas data-hero-flow></canvas>
+          <i></i>
+        </div>
+
+        <a class="scroll-cue" href="#introduction" aria-label="Scroll to how we work">
+          <span>See how we work</span><i aria-hidden="true"></i>
+        </a>
+      </section>
+
+      <section class="brand-intro section" id="introduction" aria-labelledby="standard-title">
+        <div class="section-label reveal"><span>01</span><p>How we work</p></div>
+        <div class="brand-intro__body">
+          <div class="sunline reveal" aria-hidden="true"><span></span></div>
+          <h2 class="display-heading reveal" id="standard-title">Clear updates.<br><em>Reliable follow-through.</em></h2>
+          <p class="brand-intro__copy reveal">We stay involved, communicate directly, and handle the day-to-day details that keep each property running smoothly.</p>
+        </div>
+        <div class="care-constellation reveal" data-care-constellation role="group" aria-label="How Cyra manages properties">
+          <div class="care-constellation__aurora" aria-hidden="true">
+            <i></i><span></span><span></span><span></span>
+          </div>
+          <ol>
+            <li class="is-active">
+              <span class="care-constellation__orb" aria-hidden="true"><i></i></span>
+              <p><small>01</small><strong>Active oversight</strong></p>
+            </li>
+            <li>
+              <span class="care-constellation__orb" aria-hidden="true"><i></i></span>
+              <p><small>02</small><strong>Prompt communication</strong></p>
+            </li>
+            <li>
+              <span class="care-constellation__orb" aria-hidden="true"><i></i></span>
+              <p><small>03</small><strong>Long-term planning</strong></p>
+            </li>
+          </ol>
+        </div>
+      </section>
+
+      <section class="residences section" id="residences" aria-labelledby="residences-title">
+        <div class="residences-v2-atmosphere" aria-hidden="true">
+          <i data-v2-region="new-york"></i>
+          <i data-v2-region="hudson"></i>
+          <i data-v2-region="south-florida"></i>
+        </div>
+        <div class="section-label section-label--dark reveal"><span>02</span><p>Our properties</p></div>
+        <div class="section-heading-row reveal">
+          <h2 class="display-heading" id="residences-title">A selection of<br><em>properties we manage.</em></h2>
+          <p>We manage residences in Manhattan, Brooklyn, the Hudson Valley, and South Florida with the same direct approach.</p>
+        </div>
+        <div class="residence-controls reveal" role="group" aria-label="Property carousel controls">
+          <p><span data-residence-current>01</span> / 06 <small>Swipe or use arrows</small></p>
+          <div class="residence-progress" aria-hidden="true"><i data-residence-progress></i></div>
+          <div>
+            <button type="button" data-residence-prev aria-label="Previous properties"><svg class="icon icon--arrow-left" aria-hidden="true" viewBox="0 0 16 16"><path d="M13.5 8h-10M7.5 4l-4 4 4 4"/></svg></button>
+            <button type="button" data-residence-next aria-label="Next properties"><svg class="icon icon--arrow-right" aria-hidden="true" viewBox="0 0 16 16"><path d="M2.5 8h10M8.5 4l4 4-4 4"/></svg></button>
+          </div>
+        </div>
+        <div class="residence-grid" id="residence-grid"></div>
+        <noscript>
+          <div class="residence-fallback">
+            <p>Properties include 214 West 102nd Street, 170 West 74th Street, 923 Bedford Avenue, 400 Whitfield Road, 1830 South Ocean Drive, and 1881 Washington Avenue.</p>
+          </div>
+        </noscript>
+        <p class="inventory-note reveal">These temporary AI-generated images may not depict the exact properties. They do not indicate current availability.</p>
+      </section>
+
+      <section class="approach section" id="approach" aria-labelledby="approach-title">
+        <div class="section-label reveal"><span>03</span><p>Our approach</p></div>
+        <div class="approach__intro reveal">
+          <h2 class="display-heading" id="approach-title">Reliable management.<br><em>Clear accountability.</em></h2>
+          <p>We stay close to the work so questions get answered, decisions get made, and residents know who to contact.</p>
+        </div>
+        <ol class="principles">
+          <li class="reveal">
+            <span>01</span>
+            <h3>Direct and available</h3>
+            <p>We stay involved and keep communication straightforward with residents, owners, boards, and vendors.</p>
+          </li>
+          <li class="reveal">
+            <span>02</span>
+            <h3>Quick to respond</h3>
+            <p>Maintenance requests are reviewed promptly, coordinated carefully, and followed through to completion.</p>
+          </li>
+          <li class="reveal">
+            <span>03</span>
+            <h3>Well maintained</h3>
+            <p>We pay attention to building systems, security, common areas, and the everyday details that keep a property running well.</p>
+          </li>
+          <li class="reveal">
+            <span>04</span>
+            <h3>Built for the long term</h3>
+            <p>Daily decisions are made with resident experience, property condition, and long-term value in mind.</p>
+          </li>
+        </ol>
+      </section>
+
+      <section class="services section" id="services" aria-labelledby="services-title">
+        <div class="section-label reveal"><span>04</span><p>Services</p></div>
+        <div class="services__header reveal">
+          <h2 class="display-heading" id="services-title">Support for residents.<br><em>Confidence for owners.</em></h2>
+          <p>Good property management should make life easier for residents and owners alike.</p>
+        </div>
+        <div class="service-columns">
+          <article class="service-column reveal">
+            <p class="eyebrow">For residents</p>
+            <h3>Clear answers and reliable support.</h3>
+            <ul>
+              <li>Maintenance requests and coordination</li>
+              <li>Direct communication</li>
+              <li>Clean, secure common areas</li>
+              <li>Laundry access where available</li>
+              <li>Leasing support</li>
+            </ul>
+            <p class="service-note">Some properties also offer community programs and policies intended to reduce routine viewing, application, move-in, trash-collection, and lease-renewal fees. Terms vary by property.</p>
+          </article>
+          <article class="service-column service-column--owners reveal">
+            <p class="eyebrow">For owners &amp; boards</p>
+            <h3>Direct management with a long-term view.</h3>
+            <ul>
+              <li>Direct property oversight</li>
+              <li>Vendor and maintenance coordination</li>
+              <li>Day-to-day building operations</li>
+              <li>Resident communication</li>
+              <li>Property condition and long-term value</li>
+            </ul>
+            <a class="text-link text-link--ink" href="#contact">Talk about your property <svg class="icon icon--arrow-right" aria-hidden="true" viewBox="0 0 16 16"><path d="M2.5 8h10M8.5 4l4 4-4 4"/></svg></a>
+          </article>
+        </div>
+      </section>
+
+      <section class="care-flow-v2 section" id="care-flow" aria-labelledby="care-flow-title">
+        <div class="care-flow-v2__ambient" aria-hidden="true"><i></i><i></i></div>
+        <div class="section-label reveal"><span>05</span><p>From request to resolution</p></div>
+        <div class="care-flow-v2__intro reveal">
+          <h2 class="display-heading" id="care-flow-title">One clear path.<br><em>Nothing gets lost.</em></h2>
+          <p>Every request follows the same direct process, with clear ownership and updates from beginning to end.</p>
+        </div>
+        <div class="care-flow-v2__stage reveal" data-care-flow aria-label="Cyra service process">
+          <svg class="care-flow-v2__route care-flow-v2__route--desktop" viewBox="0 0 1200 260" role="img" aria-label="A flowing line connecting four stages of service">
+            <defs>
+              <linearGradient id="care-flow-gradient" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0" stop-color="#ff9e74"/>
+                <stop offset=".48" stop-color="#a48bff"/>
+                <stop offset="1" stop-color="#66e6db"/>
+              </linearGradient>
+              <filter id="care-flow-glow" x="-30%" y="-60%" width="160%" height="220%">
+                <feGaussianBlur stdDeviation="6" result="blur"/>
+                <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+              </filter>
+            </defs>
+            <path class="care-flow-v2__route-base" d="M70 142 C190 30 285 222 405 126 S630 28 742 139 S978 235 1130 112"/>
+            <path class="care-flow-v2__route-draw" d="M70 142 C190 30 285 222 405 126 S630 28 742 139 S978 235 1130 112" pathLength="1"/>
+            <path class="care-flow-v2__route-current" d="M70 142 C190 30 285 222 405 126 S630 28 742 139 S978 235 1130 112" pathLength="1000"/>
+          </svg>
+          <svg class="care-flow-v2__route care-flow-v2__route--mobile" viewBox="0 0 320 760" aria-hidden="true">
+            <path class="care-flow-v2__route-base" d="M94 42 C240 116 50 212 160 292 S250 438 135 506 S56 650 212 718"/>
+            <path class="care-flow-v2__route-draw" d="M94 42 C240 116 50 212 160 292 S250 438 135 506 S56 650 212 718" pathLength="1"/>
+            <path class="care-flow-v2__route-current" d="M94 42 C240 116 50 212 160 292 S250 438 135 506 S56 650 212 718" pathLength="1000"/>
+          </svg>
+          <ol class="care-flow-v2__nodes">
+            <li><span>01</span><strong>Reach us</strong><p>A question or request comes directly to the team.</p></li>
+            <li><span>02</span><strong>We coordinate</strong><p>The right person or vendor is assigned without unnecessary handoffs.</p></li>
+            <li><span>03</span><strong>You stay updated</strong><p>Clear communication continues while the work is underway.</p></li>
+            <li><span>04</span><strong>We close the loop</strong><p>Completion is confirmed and the property remains in view.</p></li>
+          </ol>
+        </div>
+      </section>
+
+      <section class="promise" aria-label="Our service promise">
+        <img src="./assets/images/residence-1830-south-ocean-ai-640.webp" srcset="./assets/images/residence-1830-south-ocean-ai-640.webp 640w, ./assets/images/residence-1830-south-ocean-ai-900.webp 900w, ./assets/images/residence-1830-south-ocean-ai.webp 1448w" sizes="100vw" width="1448" height="1086" alt="AI-generated visualization of a sunlit South Florida residence with panoramic ocean views" loading="lazy" decoding="async">
+        <div class="promise__overlay"></div>
+        <div class="promise__halo" aria-hidden="true"><i></i><i></i></div>
+        <div class="promise__content reveal">
+          <p class="eyebrow">The Cyra promise</p>
+          <blockquote>“Good management is simple: be available, follow through, and handle the details.”</blockquote>
+        </div>
+      </section>
+
+      <section class="about section" id="about" aria-labelledby="about-title">
+        <div class="about__monogram" aria-hidden="true">CYRA</div>
+        <div class="section-label reveal"><span>06</span><p>About Cyra</p></div>
+        <div class="about__grid">
+          <div class="about__copy reveal">
+            <h2 class="display-heading" id="about-title">Responsive management.<br><em>People you can reach.</em></h2>
+            <p class="about__lead">Cyra manages residential properties across New York City, the Hudson Valley, and South Florida.</p>
+            <p>We work directly with residents, owners, boards, and vendors to keep communication clear, resolve issues quickly, and care for each property over the long term.</p>
+          </div>
+          <figure class="about__image reveal">
+            <img src="./assets/images/about-responsive-management-ai-640.webp" srcset="./assets/images/about-responsive-management-ai-640.webp 640w, ./assets/images/about-responsive-management-ai-960.webp 960w, ./assets/images/about-responsive-management-ai.webp 1448w" sizes="(max-width: 760px) calc(100vw - 2rem), 52vw" width="1448" height="1086" alt="AI-generated editorial scene of a property manager speaking with a resident in a welcoming residential lobby" loading="lazy" decoding="async">
+            <figcaption><span>Responsive management</span><span>Direct, attentive care</span></figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <section class="contact section" id="contact" aria-labelledby="contact-title">
+        <div class="section-label reveal"><span>07</span><p>Contact</p></div>
+        <div class="contact__grid">
+          <div class="contact__intro reveal">
+            <h2 class="display-heading" id="contact-title">How can we<br><em>help?</em></h2>
+            <p>Looking for a home, need help at your current residence, or want to discuss property management? Send us a message.</p>
+            <div class="contact-methods contact-actions-v2">
+              <a class="contact-action-v2" data-v2-contact="phone" href="tel:+19174443323"><span>Call</span><strong>917&nbsp;444&nbsp;3323</strong><i aria-hidden="true"></i></a>
+              <a class="contact-action-v2" data-v2-contact="email" href="mailto:General@cyramgmt.com"><span>Email</span><strong>General@cyramgmt.com</strong><i aria-hidden="true"></i></a>
+              <a class="contact-action-v2" data-v2-contact="whatsapp" href="https://wa.me/16464189226"><span>WhatsApp</span><strong>646 418 9226</strong><i aria-hidden="true"></i></a>
+            </div>
+            <div class="contact-pulse"><span aria-hidden="true"></span><p>You’ll hear directly from our team.</p></div>
+          </div>
+
+          <div class="contact__form-wrap reveal">
+            <noscript><p class="noscript-form-message">JavaScript is required for the inquiry form. Please email <a href="mailto:General@cyramgmt.com">General@cyramgmt.com</a>.</p></noscript>
+            <form class="contact-form" id="contact-form" method="post" action="https://formspree.io/f/mjvjordw">
+              <input type="hidden" name="_subject" value="New Cyra Management website inquiry">
+              <div class="honeypot" aria-hidden="true">
+                <label for="company-website">Leave this field empty</label>
+                <input id="company-website" name="_gotcha" type="text" tabindex="-1" autocomplete="off">
+              </div>
+              <div class="form-row form-row--split">
+                <div class="field">
+                  <label for="name">Name</label>
+                  <input id="name" name="name" type="text" autocomplete="name" required aria-describedby="name-error">
+                  <span class="field-error" id="name-error" aria-live="polite"></span>
+                </div>
+                <div class="field">
+                  <label for="email">Email</label>
+                  <input id="email" name="email" type="email" autocomplete="email" required aria-describedby="email-error">
+                  <span class="field-error" id="email-error" aria-live="polite"></span>
+                </div>
+              </div>
+              <div class="field">
+                <label for="inquiry-type">I’m contacting Cyra as</label>
+                <select id="inquiry-type" name="inquiry_type" required aria-describedby="inquiry-type-error">
+                  <option value="">Select one</option>
+                  <option value="prospective-resident">A prospective resident</option>
+                  <option value="current-resident">A current resident</option>
+                  <option value="owner-board">A property owner or board member</option>
+                  <option value="general">General inquiry</option>
+                </select>
+                <span class="field-error" id="inquiry-type-error" aria-live="polite"></span>
+              </div>
+              <details class="contact-options-v2">
+                <summary><span>Add phone or property details</span><small>Optional</small><i aria-hidden="true"></i></summary>
+                <div class="form-row form-row--split">
+                  <div class="field">
+                    <label for="phone">Phone</label>
+                    <input id="phone" name="phone" type="tel" autocomplete="tel" aria-describedby="phone-error">
+                    <span class="field-error" id="phone-error" aria-live="polite"></span>
+                  </div>
+                  <div class="field">
+                    <label for="property">Property or address</label>
+                    <input id="property" name="property" type="text" autocomplete="address-line1" aria-describedby="property-error">
+                    <span class="field-error" id="property-error" aria-live="polite"></span>
+                  </div>
+                </div>
+              </details>
+              <div class="field">
+                <label for="message">How can we help?</label>
+                <textarea id="message" name="message" rows="4" required aria-describedby="message-error"></textarea>
+                <span class="field-error" id="message-error" aria-live="polite"></span>
+              </div>
+              <div class="consent">
+                <input id="consent" name="consent" type="checkbox" value="acknowledged" required aria-describedby="consent-error">
+                <label for="consent">I understand that Cyra will use these details to respond to my inquiry.</label>
+                <span class="field-error" id="consent-error" aria-live="polite"></span>
+              </div>
+              <div class="form-submit-row">
+                <button class="button button--sun" type="submit">Send inquiry <svg class="icon icon--arrow-up-right" aria-hidden="true" viewBox="0 0 16 16"><path d="M3 13L13 3M7 3h6v6"/></svg></button>
+                <p class="form-status" data-form-status role="status" aria-live="polite"></p>
+              </div>
+            </form>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="site-footer__brand">
+        <a class="wordmark wordmark--footer" href="#top" aria-label="Cyra Management home">
+          <span class="wordmark__name">CYRA</span><span class="wordmark__descriptor">Management</span>
+        </a>
+        <p>Well-managed homes.<br>Clear, reliable service.</p>
+      </div>
+      <div class="site-footer__links">
+        <div><p>Explore</p><a href="#residences">Properties</a><a href="#approach">Approach</a><a href="#services">Services</a><a href="#care-flow">Process</a><a href="#about">About</a></div>
+        <div><p>Contact</p><a data-contact-phone href="tel:+19174443323">917&nbsp;444&nbsp;3323</a><a data-contact-email href="mailto:General@cyramgmt.com">General@cyramgmt.com</a><a href="#contact" data-resident-support>Resident support</a></div>
+        <div><p>Regions</p><span>New York City</span><span>Hudson Valley</span><span>South Florida</span></div>
+      </div>
+      <div class="site-footer__bottom">
+        <p>© <span data-year>2026</span> Cyra Management. All rights reserved.</p>
+        <div><a href="./privacy.html">Privacy</a><a href="./terms.html">Terms</a></div>
+      </div>
+    </footer>
+
+    <dialog class="residence-dialog" id="residence-dialog" aria-labelledby="dialog-title">
+      <button class="residence-dialog__close" type="button" data-dialog-close aria-label="Close residence details"><span></span><span></span></button>
+      <div class="residence-dialog__image-wrap">
+        <img data-dialog-image src="./assets/images/residence-400-whitfield-ai-640.webp" width="1448" height="1086" alt="" loading="lazy" decoding="async">
+      </div>
+      <div class="residence-dialog__content">
+        <p class="eyebrow" data-dialog-region></p>
+        <h2 id="dialog-title" data-dialog-title>Property details</h2>
+        <p class="dialog-location" data-dialog-location></p>
+        <div class="dialog-types">
+          <p>Residence details</p>
+          <ul data-dialog-types></ul>
+        </div>
+        <p class="dialog-note">Images are temporary AI-generated placeholders. Sizes are provided for reference only and do not reflect current availability.</p>
+        <a class="button button--sun" href="#contact" data-dialog-close>Ask about this property <svg class="icon icon--arrow-up-right" aria-hidden="true" viewBox="0 0 16 16"><path d="M3 13L13 3M7 3h6v6"/></svg></a>
+      </div>
+    </dialog>
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "Cyra Management",
+        "url": "https://cyramgmt.com/",
+        "email": "General@cyramgmt.com",
+        "telephone": "+1-917-444-3323",
+        "areaServed": ["New York City", "Hudson Valley", "South Florida"],
+        "contactPoint": {
+          "@type": "ContactPoint",
+          "contactType": "customer service",
+          "telephone": "+1-917-444-3323",
+          "email": "General@cyramgmt.com"
+        }
+      }
+    </script>
+    <script src="./assets/js/config.js?v=20260930-2"></script>
+    <script src="./assets/js/data.js?v=20260930-1"></script>
+    <script src="./assets/js/v2-base.js?v=20261001-1"></script>
+    <script src="./assets/js/v2.js?v=20261001-1"></script>
+  </body>
+</html>
