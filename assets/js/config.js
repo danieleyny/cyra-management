@@ -8,7 +8,7 @@ window.CYRA_CONFIG = Object.freeze({
     canonicalUrl: "https://cyramgmt.com/"
   },
   contact: {
-    email: "d@cyramgmt.com",
+    email: "General@cyramgmt.com",
     phoneDisplay: "917 444 3323",
     phoneHref: "+19174443323",
     whatsappDisplay: "646 418 9226",

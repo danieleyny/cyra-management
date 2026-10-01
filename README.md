@@ -39,7 +39,7 @@ All public contact values live in `assets/js/config.js`:
 - `whatsappDisplay` and `whatsappHref`
 - `formEndpoint`
 
-The public email is `d@cyramgmt.com`. Confirm that the phone numbers, WhatsApp account, and Formspree destination are still owned and monitored before launch.
+The public email is `General@cyramgmt.com`. Confirm that the phone numbers, WhatsApp account, and Formspree destination are still owned and monitored before launch.
 
 ## Formspree setup
 
