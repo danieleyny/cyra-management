@@ -46,7 +46,7 @@
         }
       })();
     </script>
-    <link rel="stylesheet" href="./assets/css/styles.css?v=20261001-4">
+    <link rel="stylesheet" href="./assets/css/styles.css?v=20261001-5">
   </head>
   <body>
     <div class="site-intro" data-site-intro aria-hidden="true">
@@ -184,6 +184,10 @@
                 <path d="M70 412H650M108 352H612M151 292H569"/>
                 <path d="M188 92V430M274 70V430M360 52V430M446 70V430M532 92V430"/>
               </g>
+              <g class="work-system__continuum">
+                <path class="work-system__continuum-shadow" data-work-continuum d="M176 380C150 220 230 125 360 122C490 125 570 220 544 380C446 430 274 430 176 380"/>
+                <path class="work-system__continuum-flow" data-work-continuum d="M176 380C150 220 230 125 360 122C490 125 570 220 544 380C446 430 274 430 176 380"/>
+              </g>
               <g class="work-system__building">
                 <path class="work-system__ground" d="M190 416C278 380 442 380 530 416"/>
                 <rect x="252" y="139" width="216" height="272" rx="30" fill="url(#work-building-fill)"/>
@@ -203,19 +207,40 @@
                 <circle cx="288" cy="184" r="6"/><circle cx="432" cy="275" r="6"/><circle cx="288" cy="365" r="6"/>
               </g>
               <g class="work-system__mode work-system__mode--communication">
-                <path class="work-system__signal-path" d="M360 276C271 205 201 207 123 171"/>
-                <path class="work-system__signal-path" d="M360 276C449 205 519 207 597 171"/>
-                <path class="work-system__signal-path" d="M360 276C283 335 222 345 153 383"/>
-                <path class="work-system__signal-path" d="M360 276C437 335 498 345 567 383"/>
-                <circle cx="123" cy="171" r="10"/><circle cx="597" cy="171" r="10"/><circle cx="153" cy="383" r="10"/><circle cx="567" cy="383" r="10"/>
-                <circle class="work-system__signal-ring" cx="360" cy="276" r="58"/>
-                <circle class="work-system__signal-ring" cx="360" cy="276" r="92"/>
+                <circle class="work-system__conversation-ring" cx="360" cy="276" r="82"/>
+                <circle class="work-system__conversation-head" cx="360" cy="239" r="24"/>
+                <path class="work-system__conversation-person" d="M306 344C314 296 333 276 360 276S406 296 414 344"/>
+                <g class="work-system__message work-system__message--one">
+                  <path d="M139 143H281V217H204L174 241V217H139Z"/>
+                  <path d="M167 172H252M167 191H224"/>
+                </g>
+                <g class="work-system__message work-system__message--two">
+                  <path d="M452 302H596V376H560V400L530 376H452Z"/>
+                  <path d="M480 331H566M480 350H538"/>
+                </g>
               </g>
               <g class="work-system__mode work-system__mode--planning">
-                <ellipse class="work-system__orbit" cx="360" cy="276" rx="204" ry="142"/>
-                <ellipse class="work-system__orbit work-system__orbit--inner" cx="360" cy="276" rx="155" ry="104"/>
-                <path class="work-system__future-path" d="M132 389C223 349 265 390 344 326S471 189 588 123" pathLength="1"/>
-                <circle class="work-system__future-node" cx="132" cy="389" r="7"/><circle class="work-system__future-node" cx="344" cy="326" r="7"/><circle class="work-system__future-node" cx="588" cy="123" r="11"/>
+                <path class="work-system__planning-ground" d="M172 417H626"/>
+                <g class="work-system__future-building work-system__future-building--one">
+                  <rect x="374" y="286" width="66" height="131" rx="12"/>
+                  <path d="M390 313H424M390 338H424M390 363H424"/>
+                </g>
+                <g class="work-system__future-building work-system__future-building--two">
+                  <rect x="453" y="224" width="73" height="193" rx="13"/>
+                  <path d="M471 254H508M471 283H508M471 312H508M471 341H508M471 370H508"/>
+                </g>
+                <g class="work-system__future-building work-system__future-building--three">
+                  <rect x="540" y="157" width="78" height="260" rx="14"/>
+                  <path d="M558 190H600M558 222H600M558 254H600M558 286H600M558 318H600M558 350H600"/>
+                </g>
+                <path class="work-system__planning-arrow" d="M431 271C476 234 520 193 583 118M559 119H583V143"/>
+              </g>
+              <g class="work-system__nodes">
+                <g class="work-system__node work-system__node--one"><circle r="12"/><circle r="3.5"/></g>
+                <g class="work-system__node work-system__node--two"><circle r="12"/><circle r="3.5"/></g>
+                <g class="work-system__node work-system__node--three"><circle r="12"/><circle r="3.5"/></g>
+                <g class="work-system__node work-system__node--four"><circle r="12"/><circle r="3.5"/></g>
+                <g class="work-system__node work-system__node--five"><circle r="12"/><circle r="3.5"/></g>
               </g>
             </svg>
             <div class="work-system__readout">
@@ -504,6 +529,6 @@
     </script>
     <script src="./assets/js/config.js?v=20260930-2"></script>
     <script src="./assets/js/data.js?v=20260930-1"></script>
-    <script src="./assets/js/main.js?v=20261001-4"></script>
+    <script src="./assets/js/main.js?v=20261001-5"></script>
   </body>
 </html>

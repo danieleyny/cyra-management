@@ -730,11 +730,21 @@
   const setupWorkSystem = () => {
     const system = document.querySelector("[data-work-system]");
     const buttons = [...(system?.querySelectorAll("[data-work-button]") || [])];
+    const continuumPaths = [...(system?.querySelectorAll("[data-work-continuum]") || [])];
     const indexLabel = system?.querySelector("[data-work-index]");
     const titleLabel = system?.querySelector("[data-work-title]");
     if (!system || !buttons.length) return;
 
+    const pathShapes = {
+      oversight: [176,380,150,220,230,125,360,122,490,125,570,220,544,380,446,430,274,430,176,380],
+      communication: [116,178,220,94,290,420,360,276,430,132,500,448,604,348,512,236,208,242,116,178],
+      planning: [118,398,218,362,275,410,354,327,433,244,500,188,608,110,532,238,265,362,118,398]
+    };
+    const formatPath = (shape) => `M${shape[0]} ${shape[1]}C${shape[2]} ${shape[3]} ${shape[4]} ${shape[5]} ${shape[6]} ${shape[7]}C${shape[8]} ${shape[9]} ${shape[10]} ${shape[11]} ${shape[12]} ${shape[13]}C${shape[14]} ${shape[15]} ${shape[16]} ${shape[17]} ${shape[18]} ${shape[19]}`;
+
     let activeIndex = Math.max(0, buttons.findIndex((button) => button.classList.contains("is-active")));
+    let currentPathShape = [...pathShapes[buttons[activeIndex].dataset.workButton]];
+    let pathFrame = 0;
     let timer = 0;
     let restartTimer = 0;
     let changeTimer = 0;
@@ -746,10 +756,34 @@
       timer = 0;
     };
 
+    const morphPath = (mode, animate) => {
+      const target = pathShapes[mode];
+      if (!target || !continuumPaths.length) return;
+      cancelAnimationFrame(pathFrame);
+      if (!animate || reducedMotion) {
+        currentPathShape = [...target];
+        continuumPaths.forEach((path) => path.setAttribute("d", formatPath(target)));
+        return;
+      }
+
+      const startShape = [...currentPathShape];
+      const startedAt = performance.now();
+      const renderPath = (time) => {
+        const progress = Math.min(1, (time - startedAt) / 1050);
+        const eased = progress * progress * (3 - 2 * progress);
+        currentPathShape = startShape.map((value, index) => value + (target[index] - value) * eased);
+        const nextPath = formatPath(currentPathShape);
+        continuumPaths.forEach((path) => path.setAttribute("d", nextPath));
+        if (progress < 1) pathFrame = requestAnimationFrame(renderPath);
+      };
+      pathFrame = requestAnimationFrame(renderPath);
+    };
+
     const activate = (nextIndex, animate = true) => {
       activeIndex = (nextIndex + buttons.length) % buttons.length;
       const active = buttons[activeIndex];
       system.dataset.workMode = active.dataset.workButton;
+      morphPath(active.dataset.workButton, animate);
       buttons.forEach((button, index) => {
         const selected = index === activeIndex;
         button.classList.toggle("is-active", selected);
