@@ -46,7 +46,7 @@
         }
       })();
     </script>
-    <link rel="stylesheet" href="./assets/css/styles.css?v=20261001-5">
+    <link rel="stylesheet" href="./assets/css/styles.css?v=20261001-6">
   </head>
   <body>
     <div class="site-intro" data-site-intro aria-hidden="true">
@@ -207,33 +207,47 @@
                 <circle cx="288" cy="184" r="6"/><circle cx="432" cy="275" r="6"/><circle cx="288" cy="365" r="6"/>
               </g>
               <g class="work-system__mode work-system__mode--communication">
-                <circle class="work-system__conversation-ring" cx="360" cy="276" r="82"/>
-                <circle class="work-system__conversation-head" cx="360" cy="239" r="24"/>
-                <path class="work-system__conversation-person" d="M306 344C314 296 333 276 360 276S406 296 414 344"/>
-                <g class="work-system__message work-system__message--one">
-                  <path d="M139 143H281V217H204L174 241V217H139Z"/>
-                  <path d="M167 172H252M167 191H224"/>
+                <g class="work-system__contact work-system__contact--resident">
+                  <circle class="work-system__contact-aura" cx="204" cy="260" r="70"/>
+                  <circle class="work-system__contact-disc" cx="204" cy="260" r="48"/>
+                  <circle class="work-system__contact-head" cx="204" cy="244" r="11"/>
+                  <path class="work-system__contact-body" d="M178 289C183 268 192 259 204 259S225 268 230 289"/>
+                  <text class="work-system__scene-label" x="204" y="345" text-anchor="middle">RESIDENT</text>
                 </g>
-                <g class="work-system__message work-system__message--two">
-                  <path d="M452 302H596V376H560V400L530 376H452Z"/>
-                  <path d="M480 331H566M480 350H538"/>
+                <g class="work-system__contact work-system__contact--cyra">
+                  <circle class="work-system__contact-aura" cx="516" cy="260" r="70"/>
+                  <circle class="work-system__contact-disc" cx="516" cy="260" r="48"/>
+                  <circle class="work-system__contact-head" cx="516" cy="244" r="11"/>
+                  <path class="work-system__contact-body" d="M490 289C495 268 504 259 516 259S537 268 542 289"/>
+                  <circle class="work-system__contact-badge" cx="551" cy="224" r="14"/>
+                  <path class="work-system__contact-check" d="M544 224L549 229L558 218"/>
+                  <text class="work-system__scene-label" x="516" y="345" text-anchor="middle">CYRA</text>
                 </g>
+                <g class="work-system__response-card">
+                  <rect x="302" y="218" width="116" height="76" rx="24"/>
+                  <circle cx="334" cy="256" r="5"/><circle cx="360" cy="256" r="5"/><circle cx="386" cy="256" r="5"/>
+                </g>
+                <path class="work-system__response-arrow" d="M278 260H294M426 260H442M286 252L294 260L286 268M434 252L442 260L434 268"/>
               </g>
               <g class="work-system__mode work-system__mode--planning">
-                <path class="work-system__planning-ground" d="M172 417H626"/>
-                <g class="work-system__future-building work-system__future-building--one">
-                  <rect x="374" y="286" width="66" height="131" rx="12"/>
-                  <path d="M390 313H424M390 338H424M390 363H424"/>
+                <g class="work-system__plan-stage work-system__plan-stage--home">
+                  <circle class="work-system__plan-disc" cx="160" cy="344" r="52"/>
+                  <path class="work-system__plan-home" d="M130 347L160 322L190 347V377H169V356H151V377H130Z"/>
+                  <text class="work-system__scene-label" x="160" y="420" text-anchor="middle">NOW</text>
                 </g>
-                <g class="work-system__future-building work-system__future-building--two">
-                  <rect x="453" y="224" width="73" height="193" rx="13"/>
-                  <path d="M471 254H508M471 283H508M471 312H508M471 341H508M471 370H508"/>
+                <g class="work-system__plan-stage work-system__plan-stage--calendar">
+                  <rect class="work-system__calendar" x="306" y="222" width="108" height="104" rx="24"/>
+                  <path class="work-system__calendar-lines" d="M306 253H414M334 210V236M386 210V236M330 278H348M358 278H376M386 278H397M330 300H348M358 300H376"/>
+                  <path class="work-system__calendar-check" d="M382 298L391 307L409 286"/>
+                  <text class="work-system__scene-label" x="360" y="357" text-anchor="middle">NEXT</text>
                 </g>
-                <g class="work-system__future-building work-system__future-building--three">
-                  <rect x="540" y="157" width="78" height="260" rx="14"/>
-                  <path d="M558 190H600M558 222H600M558 254H600M558 286H600M558 318H600M558 350H600"/>
+                <g class="work-system__plan-stage work-system__plan-stage--target">
+                  <circle class="work-system__target-ring work-system__target-ring--outer" cx="574" cy="142" r="63"/>
+                  <circle class="work-system__target-ring work-system__target-ring--inner" cx="574" cy="142" r="40"/>
+                  <circle class="work-system__target-core" cx="574" cy="142" r="10"/>
+                  <path class="work-system__target-flag" d="M574 142V91M574 95C595 83 606 105 627 93V126C606 138 595 116 574 128"/>
+                  <text class="work-system__scene-label" x="574" y="229" text-anchor="middle">LONG TERM</text>
                 </g>
-                <path class="work-system__planning-arrow" d="M431 271C476 234 520 193 583 118M559 119H583V143"/>
               </g>
               <g class="work-system__nodes">
                 <g class="work-system__node work-system__node--one"><circle r="12"/><circle r="3.5"/></g>
@@ -529,6 +543,6 @@
     </script>
     <script src="./assets/js/config.js?v=20260930-2"></script>
     <script src="./assets/js/data.js?v=20260930-1"></script>
-    <script src="./assets/js/main.js?v=20261001-5"></script>
+    <script src="./assets/js/main.js?v=20261001-6"></script>
   </body>
 </html>
