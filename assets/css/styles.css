@@ -1512,6 +1512,8 @@ main { position: relative; overflow: clip; }
 .brand-intro.is-motion-live .work-system__ambient-dots { animation: work-field-twinkle 4.6s ease-in-out infinite; }
 .work-system__continuum { fill: none; }
 .work-system__continuum path { transition: stroke .6s ease; }
+.work-system__oversight-return { opacity: 0; transition: opacity .5s var(--ease),stroke .6s ease !important; }
+.work-system[data-work-mode="oversight"] .work-system__oversight-return { opacity: 1; }
 .work-system__continuum-shadow { stroke: rgba(var(--work-accent-rgb),.13); stroke-width: 10; stroke-linecap: round; }
 .work-system__continuum-flow { stroke: url(#work-flow-gradient); stroke-width: 2.5; stroke-linecap: round; stroke-dasharray: 12 21; }
 .brand-intro.is-motion-live .work-system__continuum-flow { animation: work-continuum-flow 2.1s linear infinite; }
