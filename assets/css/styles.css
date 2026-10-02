@@ -1231,7 +1231,10 @@ main { position: relative; overflow: clip; }
 
 .approach-network { position: relative; width: min(100%,34rem); min-height: 25rem; margin: 1.25rem auto; }
 .approach-network svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
-.approach-network svg path { fill: none; stroke: rgba(106,83,190,.25); stroke-width: 1.2; stroke-linecap: round; stroke-dasharray: 2 8; vector-effect: non-scaling-stroke; }
+.approach-network svg path { fill: none; stroke: rgba(91,62,190,.68); stroke-width: 1.65; stroke-linecap: round; stroke-dasharray: 3 8; filter: drop-shadow(0 0 3px rgba(118,85,223,.34)); vector-effect: non-scaling-stroke; }
+.approach-network svg path:nth-child(2) { stroke: rgba(35,143,155,.7); filter: drop-shadow(0 0 3px rgba(63,193,193,.34)); }
+.approach-network svg path:nth-child(3) { stroke: rgba(205,104,76,.66); filter: drop-shadow(0 0 3px rgba(255,158,116,.3)); }
+.approach-network svg path:nth-child(4) { stroke: rgba(63,112,183,.68); filter: drop-shadow(0 0 3px rgba(98,161,224,.3)); }
 .approach-network__hub,.approach-network__node { position: absolute; display: grid; place-items: center; border-radius: 50%; transform: translate(-50%,-50%); }
 .approach-network__hub { z-index: 2; top: 50%; left: 50%; width: 8.2rem; aspect-ratio: 1; color: var(--ivory); background: radial-gradient(circle at 35% 30%,#243044,#071018 72%); border: 1px solid rgba(255,255,255,.15); box-shadow: 0 0 0 1rem rgba(164,139,255,.09),0 1.8rem 4rem rgba(7,16,24,.19); }
 .approach-network__hub::before,.approach-network__hub::after { content: ""; position: absolute; border: 1px solid rgba(164,139,255,.26); border-radius: inherit; }
