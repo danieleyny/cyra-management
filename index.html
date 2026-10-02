@@ -46,7 +46,7 @@
         }
       })();
     </script>
-    <link rel="stylesheet" href="./assets/css/styles.css?v=20261002-21">
+    <link rel="stylesheet" href="./assets/css/styles.css?v=20261002-22">
   </head>
   <body>
     <div class="site-intro" data-site-intro aria-hidden="true">
@@ -74,10 +74,12 @@
         <a href="#contact">Contact</a>
       </nav>
 
-      <a class="header-cta" href="#contact" data-resident-support>Resident support</a>
-      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="mobile-menu" aria-label="Open menu">
-        <span></span><span></span>
-      </button>
+      <div class="header-actions">
+        <a class="header-cta" href="https://propertyos-ashy.vercel.app/login" aria-label="Log in to the Cyra management portal">Login <svg class="icon icon--arrow-up-right" aria-hidden="true" viewBox="0 0 16 16"><path d="M3 13L13 3M7 3h6v6"/></svg></a>
+        <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="mobile-menu" aria-label="Open menu">
+          <span></span><span></span>
+        </button>
+      </div>
     </header>
 
     <aside class="mobile-menu" id="mobile-menu" aria-label="Mobile navigation" inert>
@@ -93,14 +95,14 @@
         <a href="#contact"><span>05</span> Contact</a>
       </nav>
       <div class="mobile-menu__footer">
-        <a href="#contact" data-resident-support>Resident support <svg class="icon icon--arrow-right" aria-hidden="true" viewBox="0 0 16 16"><path d="M2.5 8h10M8.5 4l4 4-4 4"/></svg></a>
+        <div><a href="#contact" data-resident-support>Resident support <svg class="icon icon--arrow-right" aria-hidden="true" viewBox="0 0 16 16"><path d="M2.5 8h10M8.5 4l4 4-4 4"/></svg></a><a href="https://propertyos-ashy.vercel.app/login">Management login <svg class="icon icon--arrow-up-right" aria-hidden="true" viewBox="0 0 16 16"><path d="M3 13L13 3M7 3h6v6"/></svg></a></div>
         <p>New York · Hudson Valley · South Florida</p>
       </div>
     </aside>
 
     <noscript>
       <nav class="noscript-nav" aria-label="Navigation without JavaScript">
-        <a href="#residences">Properties</a><a href="#approach">Approach</a><a href="#services">Services</a><a href="#contact">Contact</a>
+        <a href="#residences">Properties</a><a href="#approach">Approach</a><a href="#services">Services</a><a href="#contact">Contact</a><a href="https://propertyos-ashy.vercel.app/login">Login</a>
       </nav>
     </noscript>
 
@@ -682,7 +684,7 @@
         <p>Well-managed homes.<br>Clear, reliable service.</p>
       </div>
       <div class="site-footer__links">
-        <div><p>Explore</p><a href="#residences">Properties</a><a href="#approach">Approach</a><a href="#services">Services</a><a href="#about">About</a></div>
+        <div><p>Explore</p><a href="#residences">Properties</a><a href="#approach">Approach</a><a href="#services">Services</a><a href="#about">About</a><a href="https://propertyos-ashy.vercel.app/login">Management portal</a></div>
         <div><p>Contact</p><a data-contact-phone href="tel:+19174443323">917&nbsp;444&nbsp;3323</a><a data-contact-email href="mailto:General@cyramgmt.com">General@cyramgmt.com</a><a href="#contact" data-resident-support>Resident support</a></div>
         <div><p>Regions</p><span>New York City</span><span>Hudson Valley</span><span>South Florida</span></div>
       </div>
