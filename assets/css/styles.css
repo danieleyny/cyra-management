@@ -1603,20 +1603,49 @@ main { position: relative; overflow: clip; }
 .brand-intro.is-motion-live .work-system[data-work-mode="communication"] .work-system__communication-return-flow { animation: work-communication-return 4.2s linear infinite; }
 .work-system__plan-stage { opacity: 0; transform: translateY(1.5rem); transform-box: fill-box; transform-origin: center; transition: opacity .55s ease,transform .85s var(--ease); }
 .work-system[data-work-mode="planning"] .work-system__plan-stage { opacity: 1; transform: translateY(0); }
-.work-system[data-work-mode="planning"] .work-system__plan-stage--calendar { transition-delay: .1s; }
-.work-system[data-work-mode="planning"] .work-system__plan-stage--target { transition-delay: .2s; }
-.work-system__plan-disc { fill: #1a1820; stroke: rgba(255,187,153,.4); stroke-width: 2; }
-.work-system__plan-home { fill: rgba(255,158,116,.08); stroke: rgba(255,199,173,.78); stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
-.work-system__calendar { fill: #151728; stroke: rgba(207,191,255,.55); stroke-width: 2; }
-.work-system__calendar-lines { fill: none; stroke: rgba(242,239,232,.32); stroke-width: 2; stroke-linecap: round; }
-.work-system__calendar-check { fill: none; stroke: var(--aqua); stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 1; stroke-dashoffset: 1; }
-.work-system__target-ring { fill: none; stroke: rgba(102,230,219,.2); stroke-width: 2; transform-box: fill-box; transform-origin: center; }
-.work-system__target-ring--inner { fill: #0d2025; stroke: rgba(168,247,240,.5); }
-.work-system__target-core { fill: var(--aqua); filter: drop-shadow(0 0 10px rgba(102,230,219,.72)); }
-.work-system__target-flag { fill: rgba(102,230,219,.06); stroke: rgba(184,251,245,.75); stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; transform-box: fill-box; transform-origin: left center; }
-.brand-intro.is-motion-live .work-system[data-work-mode="planning"] .work-system__calendar-check { animation: work-check-draw 1s .45s var(--ease) forwards; }
-.brand-intro.is-motion-live .work-system[data-work-mode="planning"] .work-system__target-ring--outer { animation: work-target-breathe 3.4s ease-in-out infinite; }
-.brand-intro.is-motion-live .work-system[data-work-mode="planning"] .work-system__target-flag { animation: work-flag-wave 3.2s ease-in-out infinite; }
+.work-system[data-work-mode="planning"] .work-system__plan-stage--roadmap { transition-delay: .1s; }
+.work-system[data-work-mode="planning"] .work-system__plan-stage--outcome { transition-delay: .2s; }
+.work-system__plan-home-aura { fill: none; stroke: rgba(255,158,116,.2); stroke-width: 1.4; stroke-dasharray: 4 9; }
+.work-system__plan-home-panel { fill: rgba(25,24,31,.94); stroke: rgba(255,190,158,.4); stroke-width: 1.6; }
+.work-system__plan-home { fill: rgba(255,158,116,.07); stroke: rgba(255,210,187,.82); stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+.work-system__plan-home-status { fill: #101820; stroke: rgba(102,230,219,.68); stroke-width: 1.6; }
+.work-system__plan-home-check { fill: none; stroke: var(--aqua); stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 1; stroke-dashoffset: 1; }
+.work-system__plan-condition circle { fill: rgba(255,199,173,.58); }
+.work-system__plan-condition circle:nth-child(2) { fill: rgba(164,139,255,.72); }
+.work-system__plan-condition circle:nth-child(3) { fill: rgba(102,230,219,.72); }
+.work-system__roadmap-card { fill: rgba(14,23,34,.96); stroke: rgba(199,187,255,.38); stroke-width: 1.5; }
+.work-system__roadmap-port { stroke: rgba(7,16,24,.92); stroke-width: 2; }
+.work-system__roadmap-port--in { fill: var(--peach); }
+.work-system__roadmap-port--out { fill: var(--aqua); filter: drop-shadow(0 0 4px rgba(102,230,219,.5)); }
+.work-system__roadmap-header rect { fill: rgba(164,139,255,.08); stroke: rgba(208,196,255,.44); stroke-width: 1.2; }
+.work-system__roadmap-header path { fill: none; stroke: rgba(229,223,255,.72); stroke-width: 1.4; stroke-linecap: round; }
+.work-system__roadmap-header text { fill: rgba(242,239,232,.68); font: 650 8px/1 var(--sans); letter-spacing: .16em; }
+.work-system__roadmap-track,.work-system__roadmap-flow { fill: none; stroke-linecap: round; }
+.work-system__roadmap-track { stroke: rgba(255,255,255,.09); stroke-width: 6; }
+.work-system__roadmap-flow { stroke: url(#work-flow-gradient); stroke-width: 2.2; stroke-dasharray: 34 160; stroke-dashoffset: 45; filter: drop-shadow(0 0 4px rgba(102,230,219,.3)); }
+.work-system__milestone circle:first-child { fill: #0b151f; stroke: rgba(183,169,255,.62); stroke-width: 1.6; transform-box: fill-box; transform-origin: center; }
+.work-system__milestone circle:nth-child(2) { fill: rgba(225,216,255,.92); filter: drop-shadow(0 0 5px rgba(164,139,255,.55)); }
+.work-system__milestone--three circle:first-child { stroke: rgba(132,241,232,.72); }
+.work-system__milestone--three circle:nth-child(2) { fill: var(--aqua); filter: drop-shadow(0 0 5px rgba(102,230,219,.62)); }
+.work-system__milestone text { fill: rgba(242,239,232,.42); font: 600 6px/1 var(--sans); letter-spacing: .12em; }
+.work-system__outcome-aura { fill: none; stroke: rgba(102,230,219,.18); stroke-width: 1.5; stroke-dasharray: 5 10; transform-box: fill-box; transform-origin: center; }
+.work-system__outcome-ring { fill: rgba(10,31,35,.9); stroke: rgba(167,247,239,.4); stroke-width: 1.8; }
+.work-system__outcome-sweep { fill: none; stroke: url(#work-flow-gradient); stroke-width: 2.3; stroke-linecap: round; stroke-dasharray: 42 285; filter: drop-shadow(0 0 5px rgba(102,230,219,.35)); transform-box: fill-box; transform-origin: center; }
+.work-system__outcome-shield { fill: rgba(102,230,219,.045); stroke: rgba(197,252,247,.7); stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+.work-system__outcome-growth { fill: none; stroke: var(--aqua); stroke-width: 2.1; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 1; stroke-dashoffset: 1; }
+.work-system__outcome-core { fill: #fff; filter: drop-shadow(0 0 7px rgba(102,230,219,.85)); transform-box: fill-box; transform-origin: center; }
+.work-system__outcome-chip rect { fill: rgba(7,16,24,.88); stroke: rgba(102,230,219,.2); stroke-width: 1; }
+.work-system__outcome-chip circle { fill: var(--aqua); filter: drop-shadow(0 0 4px rgba(102,230,219,.6)); }
+.work-system__outcome-chip text { fill: rgba(210,250,246,.62); font: 650 6px/1 var(--sans); letter-spacing: .14em; }
+.brand-intro.is-motion-live .work-system[data-work-mode="planning"] .work-system__plan-home-check { animation: work-check-draw .85s .3s var(--ease) forwards; }
+.brand-intro.is-motion-live .work-system[data-work-mode="planning"] .work-system__roadmap-flow { animation: work-roadmap-flow 4.4s linear infinite; }
+.brand-intro.is-motion-live .work-system[data-work-mode="planning"] .work-system__milestone circle:first-child { animation: work-milestone-pulse 4.4s ease-in-out infinite; }
+.brand-intro.is-motion-live .work-system[data-work-mode="planning"] .work-system__milestone--two circle:first-child { animation-delay: 1.05s; }
+.brand-intro.is-motion-live .work-system[data-work-mode="planning"] .work-system__milestone--three circle:first-child { animation-delay: 2.1s; }
+.brand-intro.is-motion-live .work-system[data-work-mode="planning"] .work-system__outcome-aura { animation: work-outcome-breathe 3.8s ease-in-out infinite; }
+.brand-intro.is-motion-live .work-system[data-work-mode="planning"] .work-system__outcome-sweep { animation: work-cyra-channel-scan 4.8s linear infinite; }
+.brand-intro.is-motion-live .work-system[data-work-mode="planning"] .work-system__outcome-growth { animation: work-outcome-draw 4.4s ease-in-out infinite; }
+.brand-intro.is-motion-live .work-system[data-work-mode="planning"] .work-system__outcome-core { animation: work-outcome-core 2.8s ease-in-out infinite; }
 .work-system__nodes { fill: none; }
 .work-system__node { opacity: 1; transform: translate(176px,380px); transform-box: view-box; transform-origin: 0 0; transition: opacity .45s ease,transform 1.05s var(--ease); }
 .work-system__node > circle:first-child { fill: rgba(7,16,24,.92); stroke: var(--work-accent); stroke-width: 2; transition: stroke .55s ease; }
@@ -1633,14 +1662,12 @@ main { position: relative; overflow: clip; }
 .work-system[data-work-mode="communication"] .work-system__node--three { transform: translate(360px,254px); }
 .work-system[data-work-mode="communication"] .work-system__node--four { transform: translate(470px,253px); }
 .work-system[data-work-mode="communication"] .work-system__node--five { transform: translate(570px,260px); }
-.work-system[data-work-mode="planning"] .work-system__node--one { opacity: 0; transform: translate(160px,344px); }
-.work-system[data-work-mode="planning"] .work-system__node--two { transform: translate(260px,320px); }
-.work-system[data-work-mode="planning"] .work-system__node--three { transform: translate(438px,220px); }
-.work-system[data-work-mode="planning"] .work-system__node--four { transform: translate(505px,181px); }
-.work-system[data-work-mode="planning"] .work-system__node--five { opacity: 0; transform: translate(574px,142px); }
-.brand-intro.is-motion-live .work-system[data-work-mode="planning"] .work-system__node > circle:first-child { animation: work-waypoint-glow 2.6s ease-in-out infinite; }
-.brand-intro.is-motion-live .work-system[data-work-mode="planning"] .work-system__node--three > circle:first-child { animation-delay: -.86s; }
-.brand-intro.is-motion-live .work-system[data-work-mode="planning"] .work-system__node--four > circle:first-child { animation-delay: -1.72s; }
+.work-system[data-work-mode="planning"] .work-system__node { opacity: 0; }
+.work-system[data-work-mode="planning"] .work-system__node--one { transform: translate(150px,335px); }
+.work-system[data-work-mode="planning"] .work-system__node--two { transform: translate(265px,316px); }
+.work-system[data-work-mode="planning"] .work-system__node--three { transform: translate(360px,282px); }
+.work-system[data-work-mode="planning"] .work-system__node--four { transform: translate(461px,230px); }
+.work-system[data-work-mode="planning"] .work-system__node--five { transform: translate(575px,155px); }
 .work-system__readout { position: absolute; z-index: 4; right: 1.4rem; bottom: 1.4rem; left: 1.4rem; display: flex; gap: 1rem; align-items: center; padding: .85rem 1rem; border: 1px solid rgba(255,255,255,.1); border-radius: 1rem; background: rgba(7,16,24,.58); backdrop-filter: blur(14px); }
 .work-system__readout > span { display: grid; width: 2.5rem; aspect-ratio: 1; place-items: center; color: var(--work-accent); border: 1px solid rgba(var(--work-accent-rgb),.42); border-radius: 50%; font-size: .6rem; font-weight: 700; transition: color .5s ease,border-color .5s ease; }
 .work-system__readout p { display: grid; gap: .08rem; margin: 0; }
@@ -1687,9 +1714,11 @@ main { position: relative; overflow: clip; }
 @keyframes work-message-confirm { 0%,55% { stroke-dashoffset: 1; opacity: .25; } 68%,92%,100% { stroke-dashoffset: 0; opacity: 1; } }
 @keyframes work-communication-return { 0%,48% { stroke-dashoffset: 80; opacity: 0; } 58%,88% { opacity: 1; } 100% { stroke-dashoffset: -410; opacity: 0; } }
 @keyframes work-check-draw { to { stroke-dashoffset: 0; } }
-@keyframes work-target-breathe { 50% { opacity: .32; transform: scale(1.12); } }
-@keyframes work-flag-wave { 50% { transform: skewY(-3deg) scaleX(.96); } }
-@keyframes work-waypoint-glow { 50% { stroke: rgba(198,255,249,.9); filter: drop-shadow(0 0 6px rgba(102,230,219,.62)); } }
+@keyframes work-roadmap-flow { 0% { stroke-dashoffset: 48; opacity: .25; } 14%,82% { opacity: 1; } 100% { stroke-dashoffset: -164; opacity: .25; } }
+@keyframes work-milestone-pulse { 0%,18%,100% { transform: scale(.9); filter: none; } 8%,13% { transform: scale(1.16); stroke: rgba(210,252,248,.92); filter: drop-shadow(0 0 6px rgba(102,230,219,.5)); } }
+@keyframes work-outcome-breathe { 50% { opacity: .34; transform: scale(1.08); } }
+@keyframes work-outcome-draw { 0%,46% { stroke-dashoffset: 1; opacity: .3; } 64%,88%,100% { stroke-dashoffset: 0; opacity: 1; } }
+@keyframes work-outcome-core { 50% { transform: scale(1.35); filter: drop-shadow(0 0 9px rgba(102,230,219,.9)); } }
 @keyframes work-mode-flare { 0% { opacity: .75; transform: translate(-50%,-50%) scale(.35); } 100% { opacity: 0; transform: translate(-50%,-50%) scale(4.5); } }
 @keyframes work-orb-ring { 50% { opacity: .28; transform: scale(1.16); } }
 @keyframes work-orb-shine { 0% { left: -65%; opacity: 0; } 20%,65% { opacity: 1; } 100% { left: 120%; opacity: 0; } }
@@ -1722,11 +1751,11 @@ main { position: relative; overflow: clip; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .brand-intro__flow span,.work-system::before,.work-system__visual::before,.work-system__halo,.work-system__grid,.work-system__ambient-field,.work-system__ambient-field path,.work-system__ambient-dots,.work-system__property-sweep,.work-system__status-pulse,.work-system__status-check,.work-system__status-checkmark,.work-system__continuum-flow,.work-system__request-badge,.work-system__message rect,.work-system__message-signal,.work-system__cyra-sweep,.work-system__message-status,.work-system__message-check,.work-system__communication-return-flow,.work-system__calendar-check,.work-system__target-ring,.work-system__target-flag,.work-system__node > circle:first-child,.work-system__orb::before,.work-system__orb i::before { animation: none !important; }
+  .brand-intro__flow span,.work-system::before,.work-system__visual::before,.work-system__halo,.work-system__grid,.work-system__ambient-field,.work-system__ambient-field path,.work-system__ambient-dots,.work-system__property-sweep,.work-system__status-pulse,.work-system__status-check,.work-system__status-checkmark,.work-system__continuum-flow,.work-system__request-badge,.work-system__message rect,.work-system__message-signal,.work-system__cyra-sweep,.work-system__message-status,.work-system__message-check,.work-system__communication-return-flow,.work-system__plan-home-check,.work-system__roadmap-flow,.work-system__milestone circle:first-child,.work-system__outcome-aura,.work-system__outcome-sweep,.work-system__outcome-growth,.work-system__outcome-core,.work-system__node > circle:first-child,.work-system__orb::before,.work-system__orb i::before { animation: none !important; }
   .brand-intro__flow span { left: 48%; opacity: .8; }
   .work-system[data-work-mode="planning"] .work-system__continuum-flow { stroke-dasharray: none; stroke-dashoffset: 0; }
   .work-system__message-check { stroke-dashoffset: 0; }
   .work-system__communication-return-flow { stroke-dasharray: none; stroke-dashoffset: 0; opacity: .72; }
-  .work-system__calendar-check { stroke-dashoffset: 0; }
+  .work-system__plan-home-check,.work-system__outcome-growth { stroke-dashoffset: 0; }
   .work-system__continuum path,.work-system__node,.work-system__property,.work-system__grid,.work-system__mode,.work-system__communication-stage,.work-system__communication-return,.work-system__communication-arrow,.work-system__conversation,.work-system__plan-stage { transition: none !important; }
 }

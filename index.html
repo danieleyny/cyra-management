@@ -46,7 +46,7 @@
         }
       })();
     </script>
-    <link rel="stylesheet" href="./assets/css/styles.css?v=20261001-12">
+    <link rel="stylesheet" href="./assets/css/styles.css?v=20261001-13">
   </head>
   <body>
     <div class="site-intro" data-site-intro aria-hidden="true">
@@ -283,22 +283,53 @@
               </g>
               <g class="work-system__mode work-system__mode--planning">
                 <g class="work-system__plan-stage work-system__plan-stage--home">
-                  <circle class="work-system__plan-disc" cx="160" cy="344" r="52"/>
-                  <path class="work-system__plan-home" d="M130 347L160 322L190 347V377H169V356H151V377H130Z"/>
-                  <text class="work-system__scene-label" x="160" y="420" text-anchor="middle">NOW</text>
+                  <circle class="work-system__plan-home-aura" cx="150" cy="335" r="63"/>
+                  <rect class="work-system__plan-home-panel" x="98" y="286" width="104" height="94" rx="24"/>
+                  <path class="work-system__plan-home" d="M121 326L150 303L179 326V355H160V337H140V355H121Z"/>
+                  <circle class="work-system__plan-home-status" cx="181" cy="305" r="11"/>
+                  <path class="work-system__plan-home-check" pathLength="1" d="M176 305L180 309L187 300"/>
+                  <g class="work-system__plan-condition">
+                    <circle cx="126" cy="365" r="2.5"/><circle cx="150" cy="365" r="2.5"/><circle cx="174" cy="365" r="2.5"/>
+                  </g>
+                  <text class="work-system__scene-label" x="150" y="407" text-anchor="middle">CURRENT HOME</text>
                 </g>
-                <g class="work-system__plan-stage work-system__plan-stage--calendar">
-                  <rect class="work-system__calendar" x="306" y="222" width="108" height="104" rx="24"/>
-                  <path class="work-system__calendar-lines" d="M306 253H414M334 210V236M386 210V236M330 278H348M358 278H376M386 278H397M330 300H348M358 300H376"/>
-                  <path class="work-system__calendar-check" d="M382 298L391 307L409 286"/>
-                  <text class="work-system__scene-label" x="360" y="357" text-anchor="middle">NEXT</text>
+                <g class="work-system__plan-stage work-system__plan-stage--roadmap">
+                  <rect class="work-system__roadmap-card" x="265" y="205" width="196" height="148" rx="24"/>
+                  <circle class="work-system__roadmap-port work-system__roadmap-port--in" cx="265" cy="316" r="4"/>
+                  <circle class="work-system__roadmap-port work-system__roadmap-port--out" cx="461" cy="230" r="4"/>
+                  <g class="work-system__roadmap-header">
+                    <rect x="286" y="223" width="25" height="23" rx="6"/>
+                    <path d="M286 232H311M293 218V227M304 218V227"/>
+                    <text x="322" y="238">CARE ROADMAP</text>
+                  </g>
+                  <path class="work-system__roadmap-track" d="M294 318C326 315 342 292 360 282C381 269 402 273 432 239"/>
+                  <path class="work-system__roadmap-flow" d="M294 318C326 315 342 292 360 282C381 269 402 273 432 239"/>
+                  <g class="work-system__milestone work-system__milestone--one">
+                    <circle cx="314" cy="311" r="8"/><circle cx="314" cy="311" r="2.5"/>
+                    <text x="314" y="338" text-anchor="middle">ASSESS</text>
+                  </g>
+                  <g class="work-system__milestone work-system__milestone--two">
+                    <circle cx="360" cy="282" r="8"/><circle cx="360" cy="282" r="2.5"/>
+                    <text x="360" y="309" text-anchor="middle">PLAN</text>
+                  </g>
+                  <g class="work-system__milestone work-system__milestone--three">
+                    <circle cx="414" cy="258" r="8"/><circle cx="414" cy="258" r="2.5"/>
+                    <text x="414" y="285" text-anchor="middle">REVIEW</text>
+                  </g>
                 </g>
-                <g class="work-system__plan-stage work-system__plan-stage--target">
-                  <circle class="work-system__target-ring work-system__target-ring--outer" cx="574" cy="142" r="63"/>
-                  <circle class="work-system__target-ring work-system__target-ring--inner" cx="574" cy="142" r="40"/>
-                  <circle class="work-system__target-core" cx="574" cy="142" r="10"/>
-                  <path class="work-system__target-flag" d="M574 142V91M574 95C595 83 606 105 627 93V126C606 138 595 116 574 128"/>
-                  <text class="work-system__scene-label" x="574" y="229" text-anchor="middle">LONG TERM</text>
+                <g class="work-system__plan-stage work-system__plan-stage--outcome">
+                  <circle class="work-system__outcome-aura" cx="575" cy="155" r="66"/>
+                  <circle class="work-system__outcome-ring" cx="575" cy="155" r="52"/>
+                  <circle class="work-system__outcome-sweep" cx="575" cy="155" r="52"/>
+                  <path class="work-system__outcome-shield" d="M575 116C589 124 600 124 600 124V150C600 171 589 183 575 190C561 183 550 171 550 150V124S561 124 575 116Z"/>
+                  <path class="work-system__outcome-growth" pathLength="1" d="M560 165L570 155L578 161L591 143M583 143H591V151"/>
+                  <circle class="work-system__outcome-core" cx="575" cy="155" r="3.5"/>
+                  <g class="work-system__outcome-chip">
+                    <rect x="540" y="199" width="70" height="18" rx="9"/>
+                    <circle cx="551" cy="208" r="2.3"/>
+                    <text x="560" y="211">ON TRACK</text>
+                  </g>
+                  <text class="work-system__scene-label" x="575" y="239" text-anchor="middle">VALUE PROTECTED</text>
                 </g>
               </g>
               <g class="work-system__nodes">
@@ -595,6 +626,6 @@
     </script>
     <script src="./assets/js/config.js?v=20260930-2"></script>
     <script src="./assets/js/data.js?v=20260930-1"></script>
-    <script src="./assets/js/main.js?v=20261001-13"></script>
+    <script src="./assets/js/main.js?v=20261001-14"></script>
   </body>
 </html>
