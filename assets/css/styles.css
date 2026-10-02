@@ -1557,10 +1557,12 @@ main { position: relative; overflow: clip; }
 .work-system[data-work-mode="communication"] .work-system__communication-stage { opacity: 1; transform: translate(0) scale(1); }
 .work-system__communication-return { fill: none; opacity: 0; transition: opacity .55s .12s ease; }
 .work-system[data-work-mode="communication"] .work-system__communication-return { opacity: 1; }
-.work-system__communication-return-shadow { stroke: rgba(102,230,219,.12); stroke-width: 9; stroke-linecap: round; }
-.work-system__communication-return-flow { stroke: url(#work-flow-gradient); stroke-width: 3; stroke-linecap: round; stroke-dasharray: 74 390; stroke-dashoffset: 80; filter: drop-shadow(0 0 6px rgba(102,230,219,.4)); }
-.work-system__communication-arrow { fill: none; stroke: rgba(212,202,255,.75); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; opacity: 0; transition: opacity .5s .18s ease; }
-.work-system[data-work-mode="communication"] .work-system__communication-arrow { opacity: .72; }
+.work-system[data-work-mode="communication"] .work-system__continuum-shadow { stroke: rgba(164,139,255,.12); stroke-width: 4; }
+.work-system[data-work-mode="communication"] .work-system__continuum-flow { stroke-width: 2.25; stroke-dasharray: 10 24; }
+.work-system__communication-return-shadow { stroke: rgba(102,230,219,.1); stroke-width: 4; stroke-linecap: round; }
+.work-system__communication-return-flow { stroke: url(#work-flow-gradient); stroke-width: 2.25; stroke-linecap: round; stroke-dasharray: 62 410; stroke-dashoffset: 80; filter: drop-shadow(0 0 3px rgba(102,230,219,.32)); }
+.work-system__communication-arrow { fill: none; stroke: rgba(222,214,255,.7); stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; opacity: 0; transition: opacity .5s .18s ease; }
+.work-system[data-work-mode="communication"] .work-system__communication-arrow { opacity: .62; }
 .work-system__communication-aura { fill: none; stroke: rgba(164,139,255,.24); stroke-width: 1.5; stroke-dasharray: 5 10; }
 .work-system__communication-disc { fill: #15162a; stroke: rgba(213,199,255,.5); stroke-width: 2; }
 .work-system__communication-head { fill: rgba(242,239,232,.14); stroke: rgba(242,239,232,.82); stroke-width: 2; }
@@ -1570,32 +1572,32 @@ main { position: relative; overflow: clip; }
 .work-system__conversation { opacity: 0; transform: translateY(1rem) scale(.88); transform-box: fill-box; transform-origin: center; transition: opacity .55s .08s ease,transform .9s .08s var(--ease); }
 .work-system[data-work-mode="communication"] .work-system__conversation { opacity: 1; transform: translateY(0) scale(1); }
 .work-system__message { transform-box: fill-box; transform-origin: center; }
-.work-system__message rect { stroke-width: 1.75; }
-.work-system__message--incoming rect { fill: #17172b; stroke: rgba(196,179,255,.54); }
-.work-system__message--outgoing rect { fill: #0d2025; stroke: rgba(154,241,232,.5); }
-.work-system__message-tail { stroke-width: 1.75; stroke-linejoin: round; }
-.work-system__message--incoming .work-system__message-tail { fill: #17172b; stroke: rgba(196,179,255,.54); }
-.work-system__message--outgoing .work-system__message-tail { fill: #0d2025; stroke: rgba(154,241,232,.5); }
+.work-system__message rect { stroke-width: 1.35; }
+.work-system__message--incoming rect { fill: rgba(21,22,42,.94); stroke: rgba(196,179,255,.45); }
+.work-system__message--outgoing rect { fill: rgba(10,30,35,.94); stroke: rgba(154,241,232,.44); }
+.work-system__message-port { stroke: rgba(7,16,24,.92); stroke-width: 2; }
+.work-system__message-port--incoming { fill: var(--electric); filter: drop-shadow(0 0 4px rgba(164,139,255,.56)); }
+.work-system__message-port--outgoing { fill: var(--aqua); filter: drop-shadow(0 0 4px rgba(102,230,219,.5)); }
 .work-system__message-signal { fill: var(--electric); filter: drop-shadow(0 0 7px rgba(164,139,255,.7)); transform-box: fill-box; transform-origin: center; }
 .work-system__message-kicker { fill: rgba(242,239,232,.38); font: 600 8px/1 var(--sans); letter-spacing: .18em; }
 .work-system__message-title { fill: rgba(242,239,232,.88); font: 650 12px/1 var(--sans); letter-spacing: .04em; }
-.work-system__channel-label { fill: rgba(214,203,255,.5); font: 600 8px/1 var(--sans); letter-spacing: .26em; }
+.work-system__channel-chip rect { fill: rgba(7,16,24,.78); stroke: rgba(255,255,255,.1); stroke-width: 1; }
+.work-system__channel-chip circle { fill: var(--aqua); filter: drop-shadow(0 0 4px rgba(102,230,219,.5)); }
+.work-system__channel-chip text { fill: rgba(226,222,241,.58); font: 600 7px/1 var(--sans); letter-spacing: .16em; }
 .work-system__message-status { fill: #09181f; stroke: rgba(102,230,219,.7); stroke-width: 2; transform-box: fill-box; transform-origin: center; }
 .work-system__message-check { fill: none; stroke: var(--aqua); stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 1; stroke-dashoffset: 1; }
 .work-system__cyra-aura { fill: none; stroke: rgba(102,230,219,.22); stroke-width: 1.5; stroke-dasharray: 5 10; }
 .work-system__cyra-ring { fill: rgba(102,230,219,.035); stroke: rgba(154,241,232,.34); stroke-width: 2; }
-.work-system__cyra-sweep { fill: none; stroke: url(#work-flow-gradient); stroke-width: 3; stroke-linecap: round; stroke-dasharray: 44 280; filter: drop-shadow(0 0 6px rgba(102,230,219,.45)); transform-box: fill-box; transform-origin: center; }
+.work-system__cyra-sweep { fill: none; stroke: url(#work-flow-gradient); stroke-width: 2.2; stroke-linecap: round; stroke-dasharray: 36 280; filter: drop-shadow(0 0 4px rgba(102,230,219,.34)); transform-box: fill-box; transform-origin: center; }
 .work-system__cyra-disc { fill: #0d2025; stroke: rgba(171,247,240,.52); stroke-width: 1.5; }
 .work-system__cyra-name { fill: rgba(242,239,232,.9); font: 700 11px/1 var(--sans); letter-spacing: .22em; }
 .work-system__cyra-reply { fill: rgba(102,230,219,.08); stroke: rgba(196,251,246,.68); stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
 .work-system__cyra-reply-lines { fill: none; stroke: rgba(211,255,250,.72); stroke-width: 1.5; stroke-linecap: round; }
 .brand-intro.is-motion-live .work-system[data-work-mode="communication"] .work-system__request-badge { animation: work-communication-request 4.2s ease-in-out infinite; }
-.brand-intro.is-motion-live .work-system[data-work-mode="communication"] .work-system__message--incoming rect,
-.brand-intro.is-motion-live .work-system[data-work-mode="communication"] .work-system__message--incoming .work-system__message-tail { animation: work-message-incoming 4.2s ease-in-out infinite; }
+.brand-intro.is-motion-live .work-system[data-work-mode="communication"] .work-system__message--incoming rect { animation: work-message-incoming 4.2s ease-in-out infinite; }
 .brand-intro.is-motion-live .work-system[data-work-mode="communication"] .work-system__message-signal { animation: work-message-signal 4.2s ease-in-out infinite; }
 .brand-intro.is-motion-live .work-system[data-work-mode="communication"] .work-system__cyra-sweep { animation: work-cyra-channel-scan 4.2s linear infinite; }
-.brand-intro.is-motion-live .work-system[data-work-mode="communication"] .work-system__message--outgoing rect,
-.brand-intro.is-motion-live .work-system[data-work-mode="communication"] .work-system__message--outgoing .work-system__message-tail { animation: work-message-outgoing 4.2s ease-in-out infinite; }
+.brand-intro.is-motion-live .work-system[data-work-mode="communication"] .work-system__message--outgoing rect { animation: work-message-outgoing 4.2s ease-in-out infinite; }
 .brand-intro.is-motion-live .work-system[data-work-mode="communication"] .work-system__message-status { animation: work-message-confirm-ring 4.2s ease-in-out infinite; }
 .brand-intro.is-motion-live .work-system[data-work-mode="communication"] .work-system__message-check { animation: work-message-confirm 4.2s ease-in-out infinite; }
 .brand-intro.is-motion-live .work-system[data-work-mode="communication"] .work-system__communication-return-flow { animation: work-communication-return 4.2s linear infinite; }
@@ -1676,12 +1678,12 @@ main { position: relative; overflow: clip; }
 @keyframes work-status-check { 0%,5%,14%,100% { opacity: .48; } 8%,11% { opacity: 1; filter: drop-shadow(0 0 5px rgba(102,230,219,.72)); } }
 @keyframes work-continuum-flow { to { stroke-dashoffset: -66; } }
 @keyframes work-plan-sweep { 0% { stroke-dashoffset: 110; opacity: 0; } 10%,78% { opacity: 1; } 90%,100% { stroke-dashoffset: -560; opacity: 0; } }
-@keyframes work-communication-request { 0%,24%,100% { transform: scale(.9); filter: none; } 7%,17% { transform: scale(1.13); filter: drop-shadow(0 0 8px rgba(164,139,255,.68)); } }
-@keyframes work-message-incoming { 0%,12%,44%,100% { stroke: rgba(196,179,255,.42); filter: none; } 20%,34% { stroke: rgba(222,212,255,.94); filter: drop-shadow(0 0 7px rgba(164,139,255,.42)); } }
+@keyframes work-communication-request { 0%,24%,100% { transform: scale(.94); filter: none; } 7%,17% { transform: scale(1.08); filter: drop-shadow(0 0 6px rgba(164,139,255,.52)); } }
+@keyframes work-message-incoming { 0%,12%,44%,100% { stroke: rgba(196,179,255,.4); filter: none; } 20%,34% { stroke: rgba(222,212,255,.82); filter: drop-shadow(0 0 4px rgba(164,139,255,.28)); } }
 @keyframes work-message-signal { 0%,12%,44%,100% { opacity: .4; transform: scale(.78); } 20%,34% { opacity: 1; transform: scale(1.16); filter: drop-shadow(0 0 9px rgba(164,139,255,.82)); } }
 @keyframes work-cyra-channel-scan { to { transform: rotate(360deg); } }
-@keyframes work-message-outgoing { 0%,49%,88%,100% { stroke: rgba(154,241,232,.4); filter: none; } 58%,80% { stroke: rgba(191,255,249,.92); filter: drop-shadow(0 0 8px rgba(102,230,219,.38)); } }
-@keyframes work-message-confirm-ring { 0%,52%,100% { opacity: .4; transform: scale(.84); } 62%,84% { opacity: 1; transform: scale(1.12); filter: drop-shadow(0 0 8px rgba(102,230,219,.65)); } }
+@keyframes work-message-outgoing { 0%,49%,88%,100% { stroke: rgba(154,241,232,.38); filter: none; } 58%,80% { stroke: rgba(191,255,249,.82); filter: drop-shadow(0 0 4px rgba(102,230,219,.25)); } }
+@keyframes work-message-confirm-ring { 0%,52%,100% { opacity: .45; transform: scale(.9); } 62%,84% { opacity: 1; transform: scale(1.05); filter: drop-shadow(0 0 5px rgba(102,230,219,.5)); } }
 @keyframes work-message-confirm { 0%,55% { stroke-dashoffset: 1; opacity: .25; } 68%,92%,100% { stroke-dashoffset: 0; opacity: 1; } }
 @keyframes work-communication-return { 0%,48% { stroke-dashoffset: 80; opacity: 0; } 58%,88% { opacity: 1; } 100% { stroke-dashoffset: -410; opacity: 0; } }
 @keyframes work-check-draw { to { stroke-dashoffset: 0; } }
@@ -1720,7 +1722,7 @@ main { position: relative; overflow: clip; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .brand-intro__flow span,.work-system::before,.work-system__visual::before,.work-system__halo,.work-system__grid,.work-system__ambient-field,.work-system__ambient-field path,.work-system__ambient-dots,.work-system__property-sweep,.work-system__status-pulse,.work-system__status-check,.work-system__status-checkmark,.work-system__continuum-flow,.work-system__request-badge,.work-system__message rect,.work-system__message-tail,.work-system__message-signal,.work-system__cyra-sweep,.work-system__message-status,.work-system__message-check,.work-system__communication-return-flow,.work-system__calendar-check,.work-system__target-ring,.work-system__target-flag,.work-system__node > circle:first-child,.work-system__orb::before,.work-system__orb i::before { animation: none !important; }
+  .brand-intro__flow span,.work-system::before,.work-system__visual::before,.work-system__halo,.work-system__grid,.work-system__ambient-field,.work-system__ambient-field path,.work-system__ambient-dots,.work-system__property-sweep,.work-system__status-pulse,.work-system__status-check,.work-system__status-checkmark,.work-system__continuum-flow,.work-system__request-badge,.work-system__message rect,.work-system__message-signal,.work-system__cyra-sweep,.work-system__message-status,.work-system__message-check,.work-system__communication-return-flow,.work-system__calendar-check,.work-system__target-ring,.work-system__target-flag,.work-system__node > circle:first-child,.work-system__orb::before,.work-system__orb i::before { animation: none !important; }
   .brand-intro__flow span { left: 48%; opacity: .8; }
   .work-system[data-work-mode="planning"] .work-system__continuum-flow { stroke-dasharray: none; stroke-dashoffset: 0; }
   .work-system__message-check { stroke-dashoffset: 0; }
