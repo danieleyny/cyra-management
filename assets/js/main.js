@@ -860,7 +860,7 @@
 
   const setupReveals = () => {
     const items = document.querySelectorAll(".reveal");
-    const motionSections = document.querySelectorAll(".brand-intro, .approach, .signal-break, .promise, .contact");
+    const motionSections = document.querySelectorAll(".brand-intro, .residences, .approach, .services, .signal-break, .promise, .about, .contact");
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches || !("IntersectionObserver" in window)) {
       items.forEach((item) => item.classList.add("is-visible"));
       return;
