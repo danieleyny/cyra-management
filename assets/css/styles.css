@@ -1297,8 +1297,8 @@ main { position: relative; overflow: clip; }
 .approach-value__core svg { width: 2rem; fill: none; stroke: #7157d3; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
 .approach-value__core span { margin-top: -1.2rem; color: #73757e; font-size: .46rem; letter-spacing: .13em; text-transform: uppercase; }
 .approach-value__ring { position: absolute; z-index: 1; top: 48%; left: 17%; height: 5.5rem; border: 1px solid rgba(118,85,223,.17); border-left-color: transparent; border-radius: 0 999px 999px 0; transform: translateY(-50%); }
-.approach-value__ring b { position: absolute; top: 50%; right: -.1rem; padding: .35rem .65rem; color: #656876; background: rgba(248,246,242,.92); border: 1px solid rgba(7,16,24,.1); border-radius: 999px; font-size: .43rem; font-weight: 650; letter-spacing: .08em; text-transform: uppercase; transform: translate(50%,-50%); white-space: nowrap; }
-.approach-value__ring i { position: absolute; top: 50%; right: -.25rem; width: .5rem; aspect-ratio: 1; background: var(--electric); border-radius: 50%; box-shadow: 0 0 .9rem rgba(164,139,255,.72); transform: translateY(-50%); }
+.approach-value__ring b { position: absolute; top: 50%; right: -.1rem; padding: .35rem .7rem .35rem 1.15rem; color: #656876; background: rgba(248,246,242,.92); border: 1px solid rgba(7,16,24,.1); border-radius: 999px; font-size: .43rem; font-weight: 650; letter-spacing: .08em; text-transform: uppercase; transform: translate(92%,-50%); white-space: nowrap; }
+.approach-value__ring i { position: absolute; z-index: 2; top: 50%; right: -.1rem; width: .5rem; aspect-ratio: 1; background: var(--electric); border-radius: 50%; box-shadow: 0 0 .9rem rgba(164,139,255,.72); transform: translateY(-50%); }
 .approach-value__ring--one { width: 29%; }
 .approach-value__ring--two { width: 50%; height: 8.3rem; }
 .approach-value__ring--three { width: 70%; height: 11rem; border-color: rgba(102,230,219,.2); border-left-color: transparent; }
@@ -1687,7 +1687,7 @@ main { position: relative; overflow: clip; }
   .approach-property__status li { padding: .5rem .4rem; }
   .approach-value__core { left: 19%; width: 5.2rem; }
   .approach-value__ring { left: 19%; }
-  .approach-value__ring b { padding-inline: .48rem; font-size: .38rem; }
+  .approach-value__ring b { padding: .3rem .48rem .3rem 1rem; font-size: .38rem; }
   .contact-methods > a { font-size: 1.25rem; }
 }
 
