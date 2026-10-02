@@ -1512,10 +1512,6 @@ main { position: relative; overflow: clip; }
 .brand-intro.is-motion-live .work-system__ambient-dots { animation: work-field-twinkle 4.6s ease-in-out infinite; }
 .work-system__continuum { fill: none; }
 .work-system__continuum path { transition: stroke .6s ease; }
-.work-system__continuum-live,.work-system__continuum-ghost { transform-box: fill-box; transform-origin: center; }
-.work-system__continuum-ghost { opacity: 0; pointer-events: none; }
-.work-system.is-path-crossfading .work-system__continuum-ghost { animation: work-path-old-out .9s cubic-bezier(.45,0,.55,1) both; }
-.work-system.is-path-crossfading .work-system__continuum-live { animation: work-path-new-in .9s cubic-bezier(.45,0,.55,1) both; }
 .work-system__oversight-return { opacity: 0; transition: opacity .5s var(--ease),stroke .6s ease !important; }
 .work-system[data-work-mode="oversight"] .work-system__oversight-return { opacity: 1; }
 .work-system__continuum-shadow { stroke: rgba(var(--work-accent-rgb),.13); stroke-width: 10; stroke-linecap: round; }
@@ -1712,8 +1708,6 @@ main { position: relative; overflow: clip; }
 @keyframes work-status-confirm { 0%,18%,100% { opacity: .24; transform: scale(.86); stroke: rgba(255,158,116,.18); } 7%,11% { opacity: .92; transform: scale(1.14); stroke: rgba(102,230,219,.72); filter: drop-shadow(0 0 7px rgba(102,230,219,.45)); } }
 @keyframes work-status-check { 0%,5%,14%,100% { opacity: .48; } 8%,11% { opacity: 1; filter: drop-shadow(0 0 5px rgba(102,230,219,.72)); } }
 @keyframes work-continuum-flow { to { stroke-dashoffset: -66; } }
-@keyframes work-path-old-out { 0%,8% { opacity: 1; } 92%,100% { opacity: 0; } }
-@keyframes work-path-new-in { 0%,8% { opacity: 0; } 92%,100% { opacity: 1; } }
 @keyframes work-plan-sweep { 0% { stroke-dashoffset: 110; opacity: 0; } 10%,78% { opacity: 1; } 90%,100% { stroke-dashoffset: -560; opacity: 0; } }
 @keyframes work-communication-request { 0%,24%,100% { transform: scale(.94); filter: none; } 7%,17% { transform: scale(1.08); filter: drop-shadow(0 0 6px rgba(164,139,255,.52)); } }
 @keyframes work-message-incoming { 0%,12%,44%,100% { stroke: rgba(196,179,255,.4); filter: none; } 20%,34% { stroke: rgba(222,212,255,.82); filter: drop-shadow(0 0 4px rgba(164,139,255,.28)); } }
