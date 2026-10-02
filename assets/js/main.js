@@ -731,6 +731,7 @@
     const system = document.querySelector("[data-work-system]");
     const buttons = [...(system?.querySelectorAll("[data-work-button]") || [])];
     const continuumPaths = [...(system?.querySelectorAll("[data-work-continuum]") || [])];
+    const continuumGhostPaths = [...(system?.querySelectorAll("[data-work-continuum-ghost]") || [])];
     const indexLabel = system?.querySelector("[data-work-index]");
     const titleLabel = system?.querySelector("[data-work-title]");
     if (!system || !buttons.length) return;
@@ -748,6 +749,7 @@
     let timer = 0;
     let restartTimer = 0;
     let changeTimer = 0;
+    let pathSwapTimer = 0;
     let inView = false;
     let held = false;
 
@@ -756,13 +758,28 @@
       timer = 0;
     };
 
-    const morphPath = (mode, animate) => {
+    const morphPath = (mode, animate, previousMode) => {
       const target = pathShapes[mode];
       if (!target || !continuumPaths.length) return;
       cancelAnimationFrame(pathFrame);
+      window.clearTimeout(pathSwapTimer);
+      system.classList.remove("is-path-crossfading");
       if (!animate || reducedMotion) {
         currentPathShape = [...target];
         continuumPaths.forEach((path) => path.setAttribute("d", formatPath(target)));
+        return;
+      }
+
+      const crossfadePair = (previousMode === "oversight" && mode === "communication")
+        || (previousMode === "communication" && mode === "oversight");
+      if (crossfadePair && continuumGhostPaths.length) {
+        const currentPath = formatPath(currentPathShape);
+        continuumGhostPaths.forEach((path) => path.setAttribute("d", currentPath));
+        currentPathShape = [...target];
+        continuumPaths.forEach((path) => path.setAttribute("d", formatPath(target)));
+        void system.offsetWidth;
+        system.classList.add("is-path-crossfading");
+        pathSwapTimer = window.setTimeout(() => system.classList.remove("is-path-crossfading"), 950);
         return;
       }
 
@@ -780,10 +797,13 @@
     };
 
     const activate = (nextIndex, animate = true) => {
-      activeIndex = (nextIndex + buttons.length) % buttons.length;
+      const normalizedIndex = (nextIndex + buttons.length) % buttons.length;
+      if (animate && normalizedIndex === activeIndex) return;
+      const previousMode = buttons[activeIndex]?.dataset.workButton;
+      activeIndex = normalizedIndex;
       const active = buttons[activeIndex];
       system.dataset.workMode = active.dataset.workButton;
-      morphPath(active.dataset.workButton, animate);
+      morphPath(active.dataset.workButton, animate, previousMode);
       buttons.forEach((button, index) => {
         const selected = index === activeIndex;
         button.classList.toggle("is-active", selected);
