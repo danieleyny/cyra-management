@@ -732,7 +732,7 @@
     const buttons = [...(system?.querySelectorAll("[data-work-button]") || [])];
     const continuumPaths = [...(system?.querySelectorAll("[data-work-continuum]") || [])];
     const indexLabel = system?.querySelector("[data-work-index]");
-    const titleLabel = system?.querySelector("[data-work-title]");
+    const descriptionLabel = system?.querySelector("[data-work-description]");
     if (!system || !buttons.length) return;
 
     const pathShapes = {
@@ -790,7 +790,7 @@
         button.setAttribute("aria-pressed", String(selected));
       });
       if (indexLabel) indexLabel.textContent = active.dataset.workIndex;
-      if (titleLabel) titleLabel.textContent = active.dataset.workTitle;
+      if (descriptionLabel) descriptionLabel.textContent = active.dataset.workDescription;
 
       if (!animate || reducedMotion) return;
       window.clearTimeout(changeTimer);
