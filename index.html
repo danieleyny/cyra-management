@@ -46,7 +46,7 @@
         }
       })();
     </script>
-    <link rel="stylesheet" href="./assets/css/styles.css?v=20261001-9">
+    <link rel="stylesheet" href="./assets/css/styles.css?v=20261001-10">
   </head>
   <body>
     <div class="site-intro" data-site-intro aria-hidden="true">
@@ -233,27 +233,35 @@
                 </g>
               </g>
               <g class="work-system__mode work-system__mode--communication">
-                <g class="work-system__contact work-system__contact--resident">
-                  <circle class="work-system__contact-aura" cx="150" cy="260" r="70"/>
-                  <circle class="work-system__contact-disc" cx="150" cy="260" r="48"/>
-                  <circle class="work-system__contact-head" cx="150" cy="244" r="11"/>
-                  <path class="work-system__contact-body" d="M124 289C129 268 138 259 150 259S171 268 176 289"/>
-                  <text class="work-system__scene-label" x="150" y="345" text-anchor="middle">RESIDENT</text>
+                <path class="work-system__communication-arrow work-system__communication-arrow--one" d="M248 244L260 253L248 262"/>
+                <path class="work-system__communication-arrow work-system__communication-arrow--two" d="M460 244L472 253L460 262"/>
+                <g class="work-system__communication-stage work-system__communication-stage--question">
+                  <circle class="work-system__communication-aura" cx="150" cy="260" r="70"/>
+                  <circle class="work-system__communication-disc" cx="150" cy="260" r="48"/>
+                  <circle class="work-system__communication-head" cx="150" cy="244" r="11"/>
+                  <path class="work-system__communication-body" d="M124 289C129 268 138 259 150 259S171 268 176 289"/>
+                  <circle class="work-system__request-badge" cx="184" cy="220" r="15"/>
+                  <path class="work-system__request-lines" d="M177 216H190M177 222H186"/>
+                  <text class="work-system__scene-label" x="150" y="345" text-anchor="middle">RESIDENT QUESTION</text>
                 </g>
-                <g class="work-system__contact work-system__contact--cyra">
-                  <circle class="work-system__contact-aura" cx="570" cy="260" r="70"/>
-                  <circle class="work-system__contact-disc" cx="570" cy="260" r="48"/>
-                  <circle class="work-system__contact-head" cx="570" cy="244" r="11"/>
-                  <path class="work-system__contact-body" d="M544 289C549 268 558 259 570 259S591 268 596 289"/>
-                  <circle class="work-system__contact-badge" cx="605" cy="224" r="14"/>
-                  <path class="work-system__contact-check" d="M598 224L603 229L612 218"/>
-                  <text class="work-system__scene-label" x="570" y="345" text-anchor="middle">CYRA</text>
+                <g class="work-system__communication-stage work-system__communication-stage--hub">
+                  <circle class="work-system__communication-hub-aura" cx="360" cy="260" r="74"/>
+                  <circle class="work-system__communication-hub-ring" cx="360" cy="260" r="58"/>
+                  <circle class="work-system__communication-hub-disc" cx="360" cy="260" r="49"/>
+                  <text class="work-system__communication-brand" x="360" y="248" text-anchor="middle">CYRA</text>
+                  <rect class="work-system__communication-bubble" x="326" y="261" width="68" height="31" rx="15.5"/>
+                  <circle class="work-system__communication-dot work-system__communication-dot--one" cx="344" cy="276" r="3.5"/>
+                  <circle class="work-system__communication-dot work-system__communication-dot--two" cx="360" cy="276" r="3.5"/>
+                  <circle class="work-system__communication-dot work-system__communication-dot--three" cx="376" cy="276" r="3.5"/>
+                  <text class="work-system__scene-label" x="360" y="345" text-anchor="middle">DIRECT RESPONSE</text>
                 </g>
-                <g class="work-system__response-card">
-                  <rect x="308" y="218" width="104" height="76" rx="22"/>
-                  <circle cx="336" cy="256" r="5"/><circle cx="360" cy="256" r="5"/><circle cx="384" cy="256" r="5"/>
-                  <path class="work-system__response-tail" d="M346 294L360 307L374 294"/>
-                  <text class="work-system__scene-label" x="360" y="329" text-anchor="middle">RESPONSE</text>
+                <g class="work-system__communication-stage work-system__communication-stage--answer">
+                  <rect class="work-system__answer-card" x="510" y="213" width="124" height="94" rx="23"/>
+                  <circle class="work-system__answer-status" cx="610" cy="229" r="14"/>
+                  <path class="work-system__answer-check" pathLength="1" d="M603 229L608 234L617 222"/>
+                  <path class="work-system__answer-lines" d="M532 241H585M532 260H602M532 279H574"/>
+                  <circle class="work-system__answer-signoff" cx="596" cy="280" r="5"/>
+                  <text class="work-system__scene-label" x="572" y="345" text-anchor="middle">CLEAR ANSWER</text>
                 </g>
               </g>
               <g class="work-system__mode work-system__mode--planning">
